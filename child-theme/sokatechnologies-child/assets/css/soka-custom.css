@@ -1,0 +1,88 @@
+/**
+ * SokaTechnologies custom styles.
+ *
+ * Mantener este archivo simple, organizado y revisable.
+ */
+
+/* Base helpers */
+.soka-section {
+	padding-block: clamp(3rem, 6vw, 6rem);
+}
+
+.soka-container {
+	width: min(1120px, calc(100% - 2rem));
+	margin-inline: auto;
+}
+
+/* Hero */
+.soka-hero {
+	display: grid;
+	gap: 1.5rem;
+	align-items: center;
+}
+
+.soka-hero__eyebrow {
+	font-size: 0.875rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.soka-hero__title {
+	max-width: 12ch;
+	font-size: clamp(2.25rem, 6vw, 4.5rem);
+	line-height: 1;
+}
+
+.soka-hero__text {
+	max-width: 60ch;
+	font-size: clamp(1rem, 2vw, 1.25rem);
+	line-height: 1.6;
+}
+
+/* Cards */
+.soka-card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1rem;
+}
+
+.soka-card {
+	padding: 1.25rem;
+	border: 1px solid currentColor;
+	border-radius: 1rem;
+}
+
+.soka-card__title {
+	margin-block-start: 0;
+}
+
+/* Buttons */
+.soka-button-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: center;
+}
+
+.soka-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	padding: 0.75rem 1rem;
+	border-radius: 999px;
+	text-decoration: none;
+	font-weight: 700;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+	.soka-section {
+		padding-block: 2.5rem;
+	}
+
+	.soka-hero__title {
+		max-width: 100%;
+	}
+}

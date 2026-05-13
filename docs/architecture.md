@@ -2,28 +2,35 @@
 
 ## Objetivo
 
-Definir una base simple para una web pública corporativa sin atar todavía el repositorio a un framework concreto.
+Definir una base simple para mantener una web pública corporativa en WordPress sin versionar la instalación completa.
 
 ## Principios
 
-- Separación clara entre páginas, secciones, componentes, contenido y estilos.
-- Estructura compatible con una futura implementación estática o híbrida.
-- Documentación primero: las decisiones relevantes deben quedar registradas antes de introducir complejidad.
-- Minimizar acoplamientos tempranos para permitir comparar opciones de stack.
+- WordPress y cPanel son la plataforma operativa; el repositorio conserva solo documentación y personalizaciones controladas.
+- El child theme debe ser pequeño y depender del tema padre real instalado en WordPress.
+- Los cambios de contenido, plugins y configuración se documentan antes de aplicarse en producción.
+- La configuración sensible vive fuera del repositorio.
 
-## Estructura propuesta
+## Estructura principal
 
-- `src/pages`: composición de páginas públicas.
-- `src/sections`: bloques funcionales como hero, servicios, contacto o CTA.
-- `src/components`: piezas reutilizables de interfaz.
-- `src/content`: copy, datos de navegación, metadata y assets estructurados.
-- `src/styles`: tokens, temas y estilos globales.
-- `src/lib`: helpers, utilidades transversales y adaptadores futuros.
-- `public`: activos estáticos como imágenes, iconos o archivos descargables.
+- `docs`: guías y decisiones de mantenimiento.
+- `child-theme/sokatechnologies-child`: child theme mínimo.
+- `snippets`: fragmentos revisables para CSS y PHP.
+- `assets`: recursos de marca y medios aprobados.
+- `checklists`: comprobaciones operativas.
+
+## Fuera de alcance
+
+- WordPress core.
+- Plugins instalados.
+- Tema padre.
+- Base de datos.
+- `wp-config.php`.
+- Uploads, backups y configuración real del hosting.
 
 ## Decisiones abiertas
 
-- Framework y estrategia de renderizado.
-- Sistema de estilos y design tokens.
-- Hosting, CDN y pipeline de despliegue.
-- Integración de formularios, analítica y CMS.
+- Tema padre definitivo.
+- Plugin de formularios, SEO, seguridad y caché.
+- Flujo exacto de staging, revisión y publicación.
+- Política final de analítica, cookies y privacidad.

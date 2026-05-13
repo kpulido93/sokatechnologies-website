@@ -2,25 +2,27 @@
 
 ## Estado actual
 
-El repositorio todavía no define framework, pipeline ni proveedor de hosting. Este documento fija únicamente una base para futuras decisiones de despliegue.
+El despliegue se plantea para WordPress gestionado desde cPanel. Este repositorio no despliega automáticamente ni contiene configuración productiva.
 
-## Supuestos iniciales
+## Alcance del repositorio
 
-- El sitio será público, con foco en disponibilidad, rendimiento y facilidad de mantenimiento.
-- El despliegue debería soportar entornos al menos de preview y producción.
-- La configuración sensible deberá vivir fuera del repositorio.
-- El pipeline mínimo debería incluir validación, build y publicación.
+- Mantener el child theme y snippets revisables.
+- Documentar pasos manuales de instalación, actualización y rollback.
+- Conservar checklists de seguridad y publicación.
+- Evitar credenciales, rutas reales y datos de producción.
 
-## Aspectos a decidir
+## Flujo recomendado
 
-- Proveedor de hosting y CDN.
-- Estrategia de previews por rama o PR.
-- Gestión de dominio, DNS y certificados.
-- Monitorización básica, alertas y rollback.
+1. Preparar o actualizar archivos en el repositorio.
+2. Revisar el diff y validar que no incluye secretos ni WordPress core.
+3. Probar el child theme en staging o entorno local.
+4. Subir únicamente los archivos necesarios al WordPress autorizado.
+5. Activar o verificar cambios desde el panel de WordPress.
+6. Ejecutar el checklist de `docs/deployment-checklist.md`.
 
-## Checklist previa a go-live
+## Pendientes por decidir
 
-- Variables de entorno configuradas fuera del repositorio.
-- Headers y políticas de seguridad revisadas.
-- Rendimiento y accesibilidad validados.
-- Responsable operativo definido para incidencias y cambios urgentes.
+- Existencia de staging gestionado por WP Toolkit.
+- Método exacto para transferir el child theme al hosting.
+- Responsables de aprobación y publicación.
+- Política de rollback y retención de backups.

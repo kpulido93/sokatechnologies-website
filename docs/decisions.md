@@ -19,3 +19,17 @@
 - Estado: aceptada.
 - Motivo: reducir riesgo operativo y de cumplimiento desde el inicio.
 - Consecuencia: `.env.example` usa solo valores ficticios y la documentación evita referencias sensibles.
+
+## 2026-05-13
+
+### D-004: Orientar el repositorio a WordPress sobre cPanel
+
+- Estado: aceptada.
+- Motivo: la web pública se construirá en WordPress usando las herramientas disponibles del hosting cPanel.
+- Consecuencia: el repositorio documenta operación, child theme, assets, snippets y checklists, pero no versiona WordPress core ni configuración productiva.
+
+### D-005: Mantener el child theme como personalización mínima
+
+- Estado: aceptada.
+- Motivo: reducir acoplamiento al tema padre hasta confirmar la elección definitiva.
+- Consecuencia: `Template: parent-theme-folder-name` queda como placeholder y `functions.php` solo carga `assets/css/soka-custom.css`.

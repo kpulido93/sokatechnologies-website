@@ -23,6 +23,41 @@ pnpm-debug.log*
 .env.*.local
 !.env.example
 
+# WordPress core y archivos de instalación
+/wp-admin/
+/wp-includes/
+/wp-content/
+/wordpress/
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+/wp-*.php
+/wp-config.php
+/wp-config-sample.php
+
+# cPanel, backups y datos sensibles
+/.cpanel.yml
+/.cpanel/
+/.htaccess
+/.htpasswd
+/backups/
+/backup/
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.wpress
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
 # Dependencias y builds comunes
 node_modules/
 dist/
@@ -32,6 +67,70 @@ coverage/
 tmp/
 temp/
 
+# WordPress generado en entornos locales
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backups/
+wp-content/backup-db/
+wp-content/debug.log
+
 # Resultados de herramientas
 playwright-report/
 test-results/
+
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# WordPress sensitive files
+wp-config.php
+wp-config-*.php
+
+# WordPress core - this repo must not version full WP
+wp-admin/
+wp-includes/
+index.php
+license.txt
+readme.html
+xmlrpc.php
+wp-*.php
+
+# WordPress generated content
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backups/
+wp-content/ai1wm-backups/
+wp-content/wflogs/
+
+# Database and backups
+*.sql
+*.sqlite
+*.db
+*.bak
+*.backup
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Logs
+*.log
+logs/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# cPanel deployment
+.cpanel.yml
