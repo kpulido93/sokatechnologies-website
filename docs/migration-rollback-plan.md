@@ -322,7 +322,7 @@ Antes de migrar, debe existir una decision clara de rollback.
 - Definir si se importara contenido o se cargara manualmente.
 - Elegir plugin de formulario.
 - Elegir proveedor SMTP.
-- Definir datos reales de contacto aprobados.
+- Confirmar que los canales publicos de `docs/contact-channels.md` siguen aprobados.
 - Definir si se migraran medios existentes.
 - Definir politica de retencion de formularios.
 - Definir responsable y ventana de rollback.

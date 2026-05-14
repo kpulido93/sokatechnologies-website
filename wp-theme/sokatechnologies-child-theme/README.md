@@ -66,6 +66,8 @@ La misma hoja tambien se registra como editor style para que el editor de bloque
 - `soka-card-grid--two`
 - `soka-card-grid-2`
 - `soka-card`
+
+Los grids de tarjetas usan un patron responsive 3/2/1: maximo 3 columnas en desktop, 2 en tablet y 1 en movil.
 - `soka-card__icon`
 - `soka-card__kicker`
 - `soka-card__title`
@@ -143,7 +145,7 @@ El script valida primero que `siteurl` y `home` sean exactamente `http://sokatec
 
 ## Checklist antes de produccion
 
-- [ ] Reemplazar `[Definir correo comercial]` por un correo confirmado.
+- [ ] Confirmar canal comercial publico antes de publicar.
 - [ ] Revisar contenido legal y privacidad antes de publicar textos definitivos.
 - [ ] Confirmar que no hay datos reales de clientes.
 - [ ] Confirmar que no hay secretos, backups, SQL, tokens ni archivos `.env`.

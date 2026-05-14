@@ -4,45 +4,79 @@
 
 Definir como se manejara el contacto comercial en la web WordPress de SokaTechnologies antes de publicar en hosting cPanel.
 
-Este documento solo contiene recomendaciones y placeholders seguros. No incluye credenciales, no instala plugins y no configura produccion.
+Este documento contiene recomendaciones, datos publicos aprobados y placeholders seguros para decisiones internas pendientes. No incluye credenciales, no instala plugins y no configura produccion.
 
 ## Reglas de seguridad
 
-- No incluir correos, telefonos, credenciales ni tokens reales sin aprobacion.
+- No incluir canales de contacto, credenciales ni tokens reales sin aprobacion.
 - No guardar contrasenas SMTP en el repositorio.
 - No tocar `public_html/wp-config.php`.
 - No modificar base de datos desde este documento.
 - No editar plugins directamente.
 - No publicar formularios hasta validar privacidad, anti-spam y entregabilidad.
+- No instalar ni activar plugins en produccion desde este repositorio. En local solo puede hacerse con WP-CLI y una tarea explicita.
 - No pedir informacion sensible que no sea necesaria para una primera conversacion comercial.
 
-## Datos de contacto pendientes
+## Canales publicos de contacto
 
-Antes de publicar hay que definir y aprobar:
+Los canales publicos aprobados se centralizan en `docs/contact-channels.md`. Usar ese archivo como fuente antes de actualizar Contacto, footer, CTAs, paginas legales o formularios.
 
-| Dato | Placeholder seguro | Estado |
+| Dato | Valor | Estado |
 |---|---|---|
-| Email comercial publico | `[Definir correo comercial]` | Pendiente |
-| WhatsApp comercial publico | `[Definir WhatsApp comercial]` | Pendiente |
-| Email interno de notificaciones | `[Definir email interno de notificaciones]` | Pendiente |
+| Email comercial publico | `info@sokatechnologies.com` | Aprobado |
+| WhatsApp comercial publico | `573107482865` | Aprobado |
+| Correo destino del formulario | `info@sokatechnologies.com` | Aprobado para la configuracion inicial |
 | Responsable de responder leads | `[Definir responsable comercial]` | Pendiente |
-| Horario de atencion | `[Definir horario de atencion]` | Pendiente |
-| Paises de atencion | `Panama, Republica Dominicana y Latinoamerica` | Revisar |
+| Horario de atencion | `9:00 a.m. - 6:00 p.m.` | Aprobado |
+| Paises de atencion | `Colombia y Latinoamerica` | Aprobado |
 | URL de politica de privacidad | `[Definir URL de politica de privacidad]` | Pendiente |
 | Proveedor SMTP | `[Definir proveedor SMTP]` | Pendiente |
 
-## Placeholders para desarrollo local
+## Estructura actual de la pagina Contacto
+
+La fuente versionada de la pagina Contacto vive en `content/contacto.html` y mantiene este orden:
+
+1. Hero.
+2. Formulario de diagnostico.
+3. Canal rapido por WhatsApp.
+4. Que enviar para iniciar.
+5. Tipos de diagnostico.
+6. Que ocurre despues.
+7. Nota de confidencialidad.
+8. CTA final.
+
+## Bloque tecnico de formulario
+
+`content/contacto.html` incluye un bloque preparado para el shortcode del formulario de diagnostico. No implementa backend manual, no envia datos por codigo propio y no reemplaza al plugin de formularios.
+
+Dentro del bloque hay un shortcode placeholder que marca el punto exacto donde debe insertarse el shortcode real generado por Fluent Forms Lite:
+
+```text
+[fluentform id="PENDIENTE"]
+```
+
+Cuando el formulario exista en WordPress:
+
+1. Instalar y activar **Fluent Forms Lite** desde WordPress Admin o con WP-CLI solo en el entorno local aprobado.
+2. Crear el formulario de diagnostico con los campos minimos definidos en este documento.
+3. Copiar el shortcode generado por Fluent Forms.
+4. Reemplazar `[fluentform id="PENDIENTE"]` por el shortcode real generado por Fluent Forms.
+5. Probar envio, notificacion, anti-spam, privacidad y responsive antes de publicar.
+
+Codex no debe instalar plugins en produccion ni modificar configuraciones reales de WordPress/cPanel desde este repositorio.
+
+## Valores para desarrollo local
 
 Usar estos textos mientras el sitio siga en local:
 
-- Email visible: `[Definir correo comercial]`
-- WhatsApp visible: `[Definir WhatsApp comercial]`
+- Email visible: `info@sokatechnologies.com`
+- WhatsApp visible: `573107482865`
 - CTA de contacto: `Solicitar diagnostico`
-- Destinatario interno: `[Definir email interno de notificaciones]`
+- Destinatario del formulario: `info@sokatechnologies.com`
 - Politica de privacidad: `[Definir URL de politica de privacidad]`
 - Mensaje legal corto: `[Texto de privacidad pendiente de aprobacion]`
 
-No reemplazar estos placeholders por datos reales hasta que esten aprobados para publicacion.
+No publicar datos internos, credenciales SMTP, tokens ni configuraciones privadas en el repositorio.
 
 ## Recomendacion de plugin de formularios
 
@@ -78,22 +112,25 @@ Referencias oficiales:
 |---|---|---:|---|
 | Nombre | Texto | Si | Nombre de la persona que solicita contacto. |
 | Empresa | Texto | Si | Ayuda a calificar el lead B2B. |
-| Email | Email | Si | Canal principal de respuesta. |
-| Telefono | Telefono/texto | No | Opcional; no bloquear el envio si no se completa. |
+| Correo comercial | Email | Si | Canal principal de respuesta. |
+| WhatsApp | Telefono/texto | Si | Canal secundario de contacto. |
 | Pais | Selector | Si | Usar lista simple o campo texto controlado. |
 | Servicio de interes | Selector | Si | Ver opciones sugeridas abajo. |
-| Mensaje | Area de texto | Si | Pedir contexto del problema, no informacion sensible. |
+| Contexto general del caso | Area de texto | Si | Pedir contexto del problema, no informacion sensible. |
+| Herramientas actuales | Area de texto | Si | Sistemas, hojas, sitio web, hosting, CRM, ERP u otras herramientas usadas hoy. |
+| Resultado esperado | Area de texto | Si | Resultado que la empresa busca lograr. |
+| Aceptacion de privacidad y confidencialidad | Checkbox | Si | Debe estar marcado antes de enviar. |
 
 Opciones sugeridas para `Servicio de interes`:
 
 - Software a medida.
-- Automatizaciones.
-- Sitio web corporativo WordPress.
-- Integraciones.
+- Automatizaciones e integraciones.
+- Sitio web WordPress corporativo.
 - Dashboards y reportes.
 - Infraestructura cloud/on-prem.
 - Soporte y mantenimiento.
-- No estoy seguro; necesito orientacion.
+- Diagnostico inicial.
+- No estoy seguro todavia.
 
 ## Campos que no debemos pedir inicialmente
 
@@ -118,7 +155,7 @@ Si un prospecto necesita compartir informacion sensible, debe hacerse por un can
 Texto recomendado despues de enviar el formulario:
 
 ```text
-Gracias por contactar a SokaTechnologies. Recibimos tu solicitud y revisaremos la informacion para responder con el siguiente paso. Si el caso requiere una reunion de diagnostico, te contactaremos por el canal indicado.
+Gracias por contactar a SokaTechnologies. Revisaremos tu caso y te responderemos en horario de atención.
 ```
 
 No prometer tiempos de respuesta especificos hasta que el equipo defina un SLA comercial.
@@ -128,7 +165,7 @@ No prometer tiempos de respuesta especificos hasta que el equipo defina un SLA c
 Destinatario:
 
 ```text
-[Definir email interno de notificaciones]
+info@sokatechnologies.com
 ```
 
 Asunto sugerido:
@@ -141,11 +178,13 @@ Contenido minimo de la notificacion:
 
 - Nombre.
 - Empresa.
-- Email.
-- Telefono, si fue informado.
+- Correo comercial.
+- WhatsApp.
 - Pais.
 - Servicio de interes.
-- Mensaje.
+- Contexto general del caso.
+- Herramientas actuales.
+- Resultado esperado.
 - URL de origen del formulario.
 - Fecha y hora del envio.
 
@@ -188,7 +227,7 @@ Referencia oficial:
 Texto sugerido junto al boton de envio:
 
 ```text
-Usaremos la informacion enviada para responder tu solicitud comercial y coordinar una posible reunion de diagnostico. No compartiremos estos datos con terceros salvo obligacion legal o proveedores necesarios para operar el sitio. Al enviar el formulario aceptas ser contactado por SokaTechnologies en relacion con tu consulta.
+No compartas contraseñas, tokens, llaves privadas, respaldos, bases de datos ni información sensible. Si el caso requiere revisar información privada, primero definiremos alcance, canal seguro y condiciones de manejo.
 ```
 
 Antes de produccion, este texto debe ser revisado contra la politica de privacidad final y las jurisdicciones aplicables.
@@ -217,7 +256,7 @@ Antes de produccion, este texto debe ser revisado contra la politica de privacid
 
 ## Pendientes antes de publicar
 
-- Definir datos reales de contacto aprobados.
+- Confirmar que los canales publicos siguen vigentes en `docs/contact-channels.md`.
 - Elegir formalmente plugin de formulario.
 - Elegir formalmente proveedor SMTP.
 - Confirmar si se almacenaran entradas en WordPress o solo se enviaran por email.

@@ -26,6 +26,15 @@ Fuente de contenido:
 content/
 ```
 
+Antes de aplicar paginas con imagenes, sincronizar los assets locales:
+
+```powershell
+cd D:\repos\sokatechnologies-website
+.\scripts\sync-local-wordpress-assets.ps1
+```
+
+Este script copia solo archivos propios desde `assets/images/` y `assets/brand/` hacia `public_html/wp-content/uploads/sokatech/`. No borra uploads existentes y no versiona esa carpeta.
+
 Paginas permitidas:
 
 - `Inicio` desde `content/home.html`.
@@ -106,11 +115,13 @@ Despues de aplicar contenido en local, revisar:
 - `http://127.0.0.1:8088/sobre-nosotros/`
 - `http://127.0.0.1:8088/contacto/`
 - `http://127.0.0.1:8088/casos-de-exito/` si la pagina fue creada.
+- `http://127.0.0.1:8088/ruta-inexistente-soka/` para revisar la plantilla 404.
 
 Validar:
 
 - El contenido se renderiza con bloques Gutenberg.
 - El tema local `sokatechnologies` carga estilos.
+- Las imagenes cargan desde `/wp-content/uploads/sokatech/`.
 - No hay errores PHP visibles.
 - El administrador de WordPress sigue funcionando.
 - No aparecen datos sensibles ni clientes reales.
@@ -123,7 +134,7 @@ Este flujo es solo local. No ejecuta despliegues, no toca cPanel y no reemplaza 
 Antes de publicar cualquier contenido:
 
 - [ ] Revisar tono comercial.
-- [ ] Confirmar correo comercial publico para reemplazar `[Definir correo comercial]`.
+- [ ] Confirmar canal comercial publico antes de publicar.
 - [ ] Revisar textos legales.
 - [ ] Confirmar que no hay secretos, tokens, backups, dumps SQL ni datos reales de clientes.
 - [ ] Hacer backup controlado fuera del repositorio.

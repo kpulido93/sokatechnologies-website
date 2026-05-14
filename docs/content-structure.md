@@ -59,11 +59,12 @@ Software, automatizaciones, sitios web e infraestructura para empresas.
 
 ### Columna 4: Contacto
 
-- Email: `[Definir correo comercial]`.
-- WhatsApp: `[Definir WhatsApp comercial]`.
-- Atencion: Panama, Republica Dominicana y Latinoamerica.
+- Email: `info@sokatechnologies.com`.
+- WhatsApp: `573107482865`.
+- Atencion: Colombia y Latinoamerica.
+- CTA rapido: `Solicitar diagnostico por WhatsApp`.
 
-No usar datos de contacto falsos como definitivos. Mantener placeholders hasta confirmar canales comerciales publicos.
+Usar `docs/contact-channels.md` como fuente central antes de cambiar canales publicos. No incluir credenciales, tokens, llaves privadas, backups, dumps SQL ni datos sensibles en formularios, correos o WhatsApp.
 
 ## Aplicacion manual en WordPress
 

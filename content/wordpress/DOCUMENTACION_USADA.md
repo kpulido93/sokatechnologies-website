@@ -107,5 +107,5 @@ Se usaron como equivalentes o fuentes relacionadas:
 - Soluciones presenta Portik como solucion prioritaria para condominios, conjuntos residenciales y administradores de propiedades.
 - AutoInventario aparece solo como solucion tecnica bajo diagnostico para inventario de activos Windows y control de infraestructura de TI. No se vende como producto listo ni como inventario comercial.
 - AutoWhatsApp aparece solo como automatizacion operativa controlada con consentimiento verificable, bajo volumen y uso permitido. No es CTA principal.
-- Contacto usa el placeholder `[Definir correo comercial]` porque no se encontro un correo publico confirmado en la documentacion revisada.
+- Contacto usa una indicación genérica de diagnóstico porque no se encontro un correo publico confirmado en la documentacion revisada.
 - No se creo `politica-privacidad-borrador.html` porque la tarea no requiere publicar contenido legal y la documentacion pide revision legal antes de contenido de privacidad definitivo.

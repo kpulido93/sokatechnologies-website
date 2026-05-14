@@ -15,7 +15,7 @@ Usar la menor cantidad de plugins posible. Cada plugin debe resolver una necesid
 | Seguridad | Hardening, login, proteccion basica | Pendiente |
 | Backups | Respaldos programados y restauracion | Pendiente |
 | SEO | Metadata, sitemap, indexacion | Pendiente |
-| Formularios | Captura de contacto | Pendiente |
+| Formularios | Captura de contacto | Local: Fluent Forms Lite activo; formulario pendiente |
 | Cache/rendimiento | Optimizacion de carga | Pendiente |
 | SMTP | Entrega confiable de correos | Pendiente |
 | Analytics | Medicion basica | Pendiente |
@@ -48,6 +48,12 @@ Usar la menor cantidad de plugins posible. Cada plugin debe resolver una necesid
 | Plugin | Categoria | Motivo | Configuracion sensible | Responsable | Estado |
 |---|---|---|---|---|---|
 | `[pendiente]` | `[pendiente]` | `[pendiente]` | No documentar secretos | `[pendiente]` | Pendiente |
+
+## Plugins recomendados
+
+| Plugin | Categoria | Motivo | Configuracion sensible | Estado |
+|---|---|---|---|---|
+| Fluent Forms Lite | Formularios | Crear el formulario de diagnostico de Contacto e insertar el shortcode real en `content/contacto.html`. | No documentar tokens, claves anti-spam ni credenciales SMTP en el repositorio. | Recomendado; instalado y activo solo en WordPress local con WP-CLI. |
 
 ## Plugins no permitidos
 

@@ -61,7 +61,7 @@ Clases principales:
 - `.soka-section-light`: seccion con fondo claro.
 - `.soka-section-compact`: seccion de menor altura.
 - `.soka-page-header`: cabecera de pagina interna.
-- `.soka-card-grid`, `.soka-card-grid-2`: grids de servicios.
+- `.soka-card-grid`, `.soka-card-grid-2`: grids de servicios con maximo 3 columnas en desktop, 2 en tablet y 1 en movil.
 - `.soka-card`, `.soka-card-featured`: tarjetas.
 - `.soka-benefit-grid`, `.soka-benefit`: beneficios.
 - `.soka-check-list`: lista de checks.
@@ -86,7 +86,7 @@ Al crear contenido, preferir bloques nativos de WordPress con clases `soka-*` en
 
 El CSS reduce la apariencia de plantilla default:
 
-- Header claro, sticky, con marca tipografica y simbolo visual.
+- Header blanco solido, sticky, con marca tipografica, simbolo visual y margen de scroll para no cubrir secciones ancladas.
 - Navegacion con estados hover discretos.
 - Footer oscuro, sobrio y consistente con la marca.
 

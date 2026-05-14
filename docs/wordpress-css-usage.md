@@ -26,6 +26,18 @@ Reglas:
 - Los cambios visuales que deban conservarse deben migrarse o replicarse en la ruta canonica versionada.
 - No modificar WordPress core, tema padre, plugins, `wp-config.php`, `.cpanel.yml` ni archivos de produccion.
 
+## Reglas de layout actuales
+
+- Contenedor principal: `max-width: 1120px`.
+- Contenedores de texto: `max-width: 760px`.
+- Grids de tarjetas: maximo 3 columnas en desktop, 2 en tablet y 1 en movil; las variantes de dos columnas suben a 3 cuando tienen 5 o mas tarjetas.
+- En movil, las tarjetas pasan a una columna.
+- Las tarjetas mantienen `min-width` efectivo de 280px cuando el viewport lo permite.
+- Los headings usan `overflow-wrap: normal`, `word-break: normal` y `hyphens: manual`.
+- Los tamanos principales usan `clamp()` para evitar saltos bruscos entre desktop, tablet y movil.
+- El header sticky usa fondo blanco solido, `z-index` alto y conserva espacio de scroll con `scroll-padding-top` y `scroll-margin-top` en secciones anclables.
+- Las imagenes de pagina usan clases como `soka-hero-media`, `soka-page-image` y `soka-card__media`.
+
 ## Como aplicar clases en bloques
 
 En WordPress Admin:
@@ -120,6 +132,8 @@ Contenedor del grid:
 soka-card-grid
 ```
 
+Comportamiento responsive: 3 columnas como maximo en desktop, 2 en tablet y 1 en movil.
+
 Cada tarjeta:
 
 ```text
@@ -130,6 +144,7 @@ Elementos internos opcionales:
 
 ```text
 soka-card__icon
+soka-card__media
 soka-card__title
 soka-card__text
 soka-card__list
@@ -153,10 +168,11 @@ soka-card
 Estructura recomendada:
 
 1. Icono o inicial con `soka-card__icon`.
-2. Titulo con `soka-card__title`.
-3. Texto breve con `soka-card__text`.
-4. Lista corta con `soka-card__list`.
-5. Enlace discreto con `soka-card__link`.
+2. Imagen opcional con `soka-card__media`.
+3. Titulo con `soka-card__title`.
+4. Texto breve con `soka-card__text`.
+5. Lista corta con `soka-card__list`.
+6. Enlace discreto con `soka-card__link`.
 
 No incluir logos o nombres reales de clientes sin autorizacion.
 

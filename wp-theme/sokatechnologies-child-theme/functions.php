@@ -43,6 +43,29 @@ function soka_enqueue_child_theme_styles() {
 }
 add_action('wp_enqueue_scripts', 'soka_enqueue_child_theme_styles');
 
+function soka_output_open_graph_image() {
+    if (is_admin()) {
+        return;
+    }
+
+    $filename = 'og-sokatechnologies-default.webp';
+    $relative_path = 'uploads/sokatech/' . $filename;
+    $filesystem_path = WP_CONTENT_DIR . '/' . $relative_path;
+
+    if (!file_exists($filesystem_path)) {
+        return;
+    }
+
+    $image_url = content_url($relative_path);
+    $alt_text = 'SokaTechnologies - software, automatizacion e infraestructura B2B';
+
+    echo "\n" . '<meta property="og:image" content="' . esc_url($image_url) . '">' . "\n";
+    echo '<meta property="og:image:alt" content="' . esc_attr($alt_text) . '">' . "\n";
+    echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+    echo '<meta name="twitter:image" content="' . esc_url($image_url) . '">' . "\n";
+}
+add_action('wp_head', 'soka_output_open_graph_image', 20);
+
 function soka_exclude_default_sample_page($excluded_page_ids) {
     $sample_page = get_page_by_path('sample-page');
 

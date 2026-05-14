@@ -150,6 +150,8 @@ Reglas:
 
 - Cada seccion debe responder una pregunta concreta.
 - Alternar fondos claros y blancos para mejorar lectura.
+- Separar secciones principalmente con padding vertical, respiracion y cambios suaves de fondo.
+- Evitar lineas horizontales duras entre secciones principales.
 - Usar bloques oscuros solo cuando aporten jerarquia.
 - Mantener ancho maximo de lectura.
 - Evitar secciones decorativas sin contenido util.
