@@ -1,0 +1,125 @@
+/**
+ * SokaTechnologies forms.
+ *
+ * Use explicit .soka-form classes on reviewed form markup or compatible blocks.
+ */
+
+.soka-form {
+	display: grid;
+	gap: var(--soka-space-md, 1rem);
+	padding: var(--soka-space-xl, 2rem);
+	background: var(--soka-color-white, #ffffff);
+	border: 1px solid var(--soka-color-border, #cbd5e1);
+	border-radius: var(--soka-radius-lg, 0.5rem);
+	box-shadow: var(--soka-shadow-sm, 0 10px 24px rgba(7, 17, 31, 0.08));
+	color: var(--soka-color-text, #0f172a);
+}
+
+.soka-form__row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--soka-space-md, 1rem);
+}
+
+.soka-form__field {
+	display: grid;
+	gap: var(--soka-space-xs, 0.5rem);
+	min-width: 0;
+}
+
+.soka-form__label {
+	color: var(--soka-color-text, #0f172a);
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+.soka-form__control {
+	width: 100%;
+	min-height: 44px;
+	padding: 0.75rem 0.875rem;
+	background: var(--soka-color-white, #ffffff);
+	border: 1px solid var(--soka-color-border, #cbd5e1);
+	border-radius: var(--soka-radius-md, 0.5rem);
+	color: var(--soka-color-text, #0f172a);
+	font: inherit;
+}
+
+.soka-form__control--textarea {
+	min-height: 8rem;
+	resize: vertical;
+}
+
+.soka-form__control:focus {
+	border-color: var(--soka-color-primary, #2563eb);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+	outline: 0;
+}
+
+.soka-form__control::placeholder {
+	color: #64748b;
+}
+
+.soka-form__hint {
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.soka-form__error {
+	margin: 0;
+	color: #b91c1c;
+	font-size: 0.875rem;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.soka-form__success {
+	margin: 0;
+	padding: var(--soka-space-md, 1rem);
+	background: rgba(20, 184, 166, 0.12);
+	border: 1px solid rgba(20, 184, 166, 0.36);
+	border-radius: var(--soka-radius-md, 0.5rem);
+	color: var(--soka-color-petroleum, #0b2438);
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.soka-form__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--soka-space-sm, 0.75rem);
+	align-items: center;
+}
+
+.soka-form__privacy {
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	font-size: 0.875rem;
+	line-height: 1.6;
+}
+
+.soka-form__privacy-link {
+	color: var(--soka-color-primary, #2563eb);
+	font-weight: 700;
+}
+
+.soka-form__privacy-link:hover,
+.soka-form__privacy-link:focus-visible {
+	color: var(--soka-color-primary-hover, #1d4ed8);
+}
+
+@media (max-width: 640px) {
+	.soka-form {
+		padding: var(--soka-space-lg, 1.5rem);
+	}
+
+	.soka-form__row {
+		grid-template-columns: 1fr;
+	}
+
+	.soka-form__actions {
+		align-items: stretch;
+		flex-direction: column;
+	}
+}

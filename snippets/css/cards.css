@@ -1,0 +1,120 @@
+/**
+ * SokaTechnologies cards.
+ *
+ * Designed for services, benefits, process blocks and anonymized cases.
+ */
+
+.soka-card-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--soka-space-lg, 1.5rem);
+}
+
+.soka-card-grid--two {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.soka-card {
+	display: flex;
+	flex-direction: column;
+	gap: var(--soka-space-sm, 0.75rem);
+	min-width: 0;
+	padding: var(--soka-space-xl, 2rem);
+	background: var(--soka-color-white, #ffffff);
+	border: 1px solid var(--soka-color-border, #cbd5e1);
+	border-radius: var(--soka-radius-lg, 0.5rem);
+	box-shadow: var(--soka-shadow-sm, 0 10px 24px rgba(7, 17, 31, 0.08));
+	color: var(--soka-color-text, #0f172a);
+	transition:
+		border-color 160ms ease,
+		box-shadow 160ms ease,
+		transform 160ms ease;
+}
+
+.soka-card:hover {
+	border-color: rgba(37, 99, 235, 0.42);
+	box-shadow: var(--soka-shadow-md, 0 18px 42px rgba(7, 17, 31, 0.12));
+	transform: translateY(-2px);
+}
+
+.soka-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: var(--soka-radius-md, 0.5rem);
+	background: rgba(37, 99, 235, 0.1);
+	color: var(--soka-color-primary, #2563eb);
+}
+
+.soka-card__kicker {
+	margin: 0;
+	color: var(--soka-color-primary, #2563eb);
+	font-size: 0.8125rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	line-height: 1.3;
+}
+
+.soka-card__title {
+	margin: 0;
+	color: var(--soka-color-text, #0f172a);
+	font-size: 1.125rem;
+	line-height: 1.3;
+}
+
+.soka-card__text {
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	line-height: 1.65;
+}
+
+.soka-card__meta {
+	margin: 0;
+	color: var(--soka-color-petroleum, #0b2438);
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.45;
+}
+
+.soka-card__action {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-top: auto;
+	color: var(--soka-color-primary, #2563eb);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.soka-card__action:hover,
+.soka-card__action:focus-visible {
+	color: var(--soka-color-primary-hover, #1d4ed8);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+.soka-card__action:focus-visible {
+	border-radius: var(--soka-radius-sm, 0.375rem);
+	outline: 3px solid rgba(37, 99, 235, 0.24);
+	outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+	.soka-card-grid,
+	.soka-card-grid--two {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.soka-card-grid,
+	.soka-card-grid--two {
+		grid-template-columns: 1fr;
+	}
+
+	.soka-card {
+		padding: var(--soka-space-lg, 1.5rem);
+	}
+}

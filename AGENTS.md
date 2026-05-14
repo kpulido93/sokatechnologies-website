@@ -1,90 +1,92 @@
-```markdown
 # AGENTS.md
 
-## 1. Rol de Codex
+## Rol de Codex
 
-Actúa como asistente técnico para el repositorio `sokatechnologies-website`.
+Codex actua como asistente tecnico para el repositorio `sokatechnologies-website`.
 
-Tu función es ayudar a mantener documentación, child theme, assets, snippets y checklists para la web pública de SokaTechnologies en WordPress/cPanel.
+El trabajo debe limitarse a documentacion, child theme, assets, snippets, checklists y pruebas controladas en el entorno local `public_html/` para la web publica de SokaTechnologies en WordPress/cPanel.
 
-Codex debe trabajar en tareas pequeñas, claras, seguras y revisables.
+## Objetivo del repositorio
 
----
-
-## 2. Objetivo del repositorio
-
-Este repositorio sirve para versionar la parte controlada por SokaTechnologies de la web pública en WordPress.
-
-El repositorio NO debe contener una instalación completa de WordPress.
+Este repositorio versiona la parte controlada por SokaTechnologies para una web en WordPress. No debe contener una instalacion completa de WordPress.
 
 Debe contener:
 
-- Documentación.
-- Child theme.
+- Documentacion.
+- Child theme propio.
 - Assets propios.
 - Snippets revisables.
 - Checklists de seguridad.
-- Checklists de instalación y despliegue.
-- Guías de configuración.
+- Checklists de instalacion y despliegue.
+- Guias de configuracion.
 
----
-
-## 3. Contexto técnico
-
-La web se construirá con WordPress en un hosting con cPanel.
-
-Herramientas disponibles:
-
-- WordPress Management / WP Toolkit.
-- Softaculous.
-- MySQL.
-- phpMyAdmin.
-- MultiPHP Manager.
-- Git Version Control.
-- SSL/TLS.
-- Backups.
-
-El repo no debe asumir acceso directo a producción.
-
----
-
-## 4. Reglas generales
+## Reglas generales
 
 Codex debe:
 
-- Trabajar en tareas pequeñas.
+- Trabajar en tareas pequenas, claras y revisables.
 - Presentar plan antes de cambios relevantes.
 - Modificar solo archivos relacionados con la tarea.
-- Mantener el child theme simple.
-- Mantener documentación clara y accionable.
 - Usar placeholders seguros.
-- Explicar cómo probar cada cambio.
+- Mantener documentacion clara y accionable.
+- Explicar como validar cada cambio.
 - Indicar riesgos y pendientes.
 
 Codex no debe:
 
 - Versionar WordPress core.
 - Subir `wp-config.php`.
-- Subir credenciales.
-- Subir tokens.
-- Subir backups reales.
-- Subir dumps de base de datos.
-- Tocar producción.
-- Crear `.cpanel.yml` sin aprobación explícita.
+- Leer, imprimir o copiar contenido de `public_html/wp-config.php`.
+- Subir credenciales, tokens, llaves privadas o backups.
+- Subir dumps SQL o exportaciones de base de datos.
+- Incluir datos reales de cPanel.
+- Tocar produccion.
+- Crear `.cpanel.yml` sin aprobacion explicita.
 - Instalar plugins.
-- Cambiar configuración real de cPanel.
+- Cambiar configuracion real de cPanel.
+- Crear apps Next/React o dependencias de build innecesarias para este repo.
 - Hacer cambios masivos sin plan previo.
 
----
+## Reglas para `public_html/` local
 
-## 5. Seguridad
+`public_html/` puede existir dentro del repositorio como entorno local de ejecucion de WordPress. Esta carpeta debe seguir ignorada por Git y no es fuente versionada.
+
+Codex puede modificar unicamente:
+
+- `public_html/wp-content/themes/sokatechnologies/`
+- `public_html/wp-content/themes/sokatechnologies/assets/`
+- `content/`
+- `website/`
+- `docs/`
+- `snippets/`
+- `scripts/`
+
+Todo cambio dentro de `public_html/` debe considerarse local y solo sirve para evaluar la web en `http://127.0.0.1:8088`.
+
+Si un cambio del tema local debe conservarse, debe copiarse luego a `wp-theme/sokatechnologies-child-theme/` o documentarse como pendiente de migracion al child theme versionado.
+
+Codex no debe tocar:
+
+- `public_html/wp-config.php`
+- `public_html/wp-admin/`
+- `public_html/wp-includes/`
+- `public_html/wp-content/uploads/`
+- `public_html/wp-content/plugins/`, salvo instruccion explicita.
+- Archivos `.sql`.
+- Backups.
+- Credenciales, tokens, llaves privadas o datos sensibles.
+
+Codex no debe leer ni mostrar el contenido de `public_html/wp-config.php`.
+
+No ejecutar despliegues a produccion desde `public_html/` ni desde ninguna automatizacion local.
+
+## Seguridad
 
 Reglas obligatorias:
 
 - No incluir secretos.
-- No incluir datos del cPanel.
 - No incluir usuarios reales.
-- No incluir contraseñas.
+- No incluir contrasenas.
 - No incluir tokens.
 - No incluir llaves privadas.
 - No incluir URLs internas sensibles.
@@ -93,110 +95,88 @@ Reglas obligatorias:
 - No subir archivos de backup.
 - No subir exportaciones de base de datos.
 
-Si Codex detecta un secreto, debe detenerse, no copiarlo y recomendar rotación.
+Si Codex detecta un secreto, debe detenerse, no copiarlo y recomendar rotacion.
 
----
-
-## 6. Reglas para WordPress
+## Reglas para WordPress
 
 Codex puede ayudar con:
 
-- Documentación.
+- Documentacion.
 - Child theme.
 - CSS.
 - Snippets PHP documentados.
 - Checklists.
 - Estructura de contenido.
 - Recomendaciones de plugins.
-- Guías de configuración.
+- Guias de configuracion.
 
 Codex no debe:
 
 - Modificar WordPress core.
 - Editar plugins de terceros.
 - Editar tema padre directamente.
-- Copiar funciones del tema padre sin revisión.
+- Copiar funciones del tema padre sin revision.
 - Crear snippets PHP riesgosos.
-- Desactivar seguridad.
+- Desactivar controles de seguridad.
 - Proponer plugins innecesarios.
-- Ejecutar acciones en producción.
+- Ejecutar acciones en produccion.
 
----
+## Reglas para child theme
 
-## 7. Reglas para child theme
+La ruta principal del child theme en esta estructura base es:
+
+```text
+wp-theme/sokatechnologies-child-theme/
+```
 
 El child theme debe:
 
-- Estar dentro de `child-theme/sokatechnologies-child/`.
 - Tener `style.css`.
 - Tener `functions.php`.
 - Cargar CSS propio de forma segura.
-- No copiar código del tema padre.
-- Mantener personalizaciones pequeñas.
+- No copiar codigo del tema padre.
+- Mantener personalizaciones pequenas.
 - Documentar dependencias del tema padre.
 
 El campo `Template` en `style.css` debe coincidir exactamente con el nombre de carpeta del tema padre instalado en WordPress.
 
----
+Si existe una ruta previa como `child-theme/`, no moverla ni borrarla sin una tarea explicita de migracion.
 
-## 8. Estilo de código
+El tema local `public_html/wp-content/themes/sokatechnologies/` puede usarse para evaluar cambios en `127.0.0.1:8088`, pero no reemplaza la fuente versionada del child theme.
+
+## Estilo de codigo
 
 Para CSS:
 
 - Usar clases claras.
-- Evitar `!important` salvo justificación.
-- Agrupar estilos por sección.
-- Mantener comentarios útiles.
-- Evitar selectores frágiles.
+- Evitar `!important` salvo justificacion.
+- Agrupar estilos por seccion.
+- Mantener comentarios utiles.
+- Evitar selectores fragiles.
 - Priorizar responsive design.
 
 Para PHP:
 
 - Usar funciones con prefijo `soka_`.
-- Evitar lógica compleja en `functions.php`.
+- Evitar logica compleja en `functions.php`.
 - Sanitizar y escapar datos si se imprimen.
 - No hacer consultas directas innecesarias.
 - No manejar credenciales.
 - No romper el admin de WordPress.
 
----
+## Validacion
 
-## 9. Pruebas y validación
-
-Codex debe indicar cómo validar:
+Cada cambio debe indicar como validar:
 
 - Que el child theme carga.
 - Que CSS no rompe responsive.
 - Que no hay errores PHP visibles.
-- Que no se afectó el panel de administración.
+- Que no se afecto el panel de administracion.
 - Que el sitio sigue navegable.
 - Que los formularios siguen funcionando si aplica.
+- Que no hay datos sensibles.
 
-Validaciones manuales esperadas:
-
-- Revisar home.
-- Revisar página de servicios.
-- Revisar página de contacto.
-- Revisar móvil.
-- Revisar consola del navegador.
-- Revisar logs si hay error.
-- Confirmar que no hay datos sensibles.
-
----
-
-## 10. Documentación
-
-Actualizar documentación cuando cambie:
-
-- Estructura de páginas.
-- Plugins recomendados.
-- Configuración.
-- Seguridad.
-- Child theme.
-- Snippets.
-- Proceso de despliegue.
-
-Documentos principales:
+## Documentacion principal
 
 - `docs/wordpress-setup.md`
 - `docs/content-structure.md`
@@ -204,84 +184,25 @@ Documentos principales:
 - `docs/security.md`
 - `docs/deployment-checklist.md`
 
----
+Actualizar documentacion cuando cambie estructura de paginas, plugins recomendados, configuracion, seguridad, child theme, snippets o proceso de despliegue.
 
-## 11. Cambios grandes
+## Checklist antes de aceptar PR
 
-Codex no debe realizar cambios grandes sin plan.
-
-Son cambios grandes:
-
-- Cambiar tema padre.
-- Rediseñar toda la web.
-- Agregar múltiples snippets PHP.
-- Crear `.cpanel.yml`.
-- Proponer despliegue automático.
-- Cambiar estructura completa del child theme.
-- Agregar dependencias de build.
-- Introducir librerías JS.
-- Cambiar formularios o integraciones.
-
-Para cambios grandes, Codex debe proponer fases pequeñas y esperar aprobación.
-
----
-
-## 12. Formato esperado de respuesta
-
-Antes de modificar:
-
-```md
-## Plan de trabajo
-
-### Objetivo
-[Objetivo concreto]
-
-### Archivos a modificar
-- [archivo]
-
-### Cambios propuestos
-- [cambio]
-
-### Riesgos
-- [riesgo]
-
-### Validación
-- [paso o comando]
-
-Después de modificar:
-
-## Resumen de cambios
-
-### Archivos modificados
-- [archivo]
-
-### Qué cambió
-- [cambio]
-
-### Cómo validar
-- [paso]
-
-### Riesgos o pendientes
-- [pendiente]
-
-### Checklist
+- [ ] La PR resuelve una sola tarea o issue.
 - [ ] No hay secretos.
-- [ ] No se tocó producción.
-- [ ] No se versionó WordPress core.
-- [ ] El cambio es pequeño.
-- [ ] La documentación fue actualizada si aplica.
-13. Checklist antes de aceptar PR
- La PR resuelve una sola issue.
- No hay secretos.
- No hay datos de cPanel.
- No hay tokens.
- No hay wp-config.php.
- No hay backups.
- No hay dumps SQL.
- No hay WordPress core.
- No se creó .cpanel.yml sin aprobación.
- No se editó tema padre.
- No se editaron plugins de terceros.
- El child theme es simple.
- La documentación está actualizada.
- El diff es pequeño y revisable.
+- [ ] No hay datos de cPanel.
+- [ ] No hay tokens.
+- [ ] No hay `wp-config.php`.
+- [ ] No se leyo ni mostro `public_html/wp-config.php`.
+- [ ] No hay backups.
+- [ ] No hay dumps SQL.
+- [ ] No hay WordPress core.
+- [ ] `public_html/` sigue ignorado por Git.
+- [ ] No se versionaron cambios de `public_html/`.
+- [ ] Los cambios locales del tema que deban conservarse se copiaron a `wp-theme/sokatechnologies-child-theme/`.
+- [ ] No se creo `.cpanel.yml` sin aprobacion.
+- [ ] No se edito tema padre.
+- [ ] No se editaron plugins de terceros.
+- [ ] El child theme es simple.
+- [ ] La documentacion esta actualizada si aplica.
+- [ ] El diff es pequeno y revisable.

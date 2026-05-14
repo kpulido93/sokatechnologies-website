@@ -1,0 +1,99 @@
+/**
+ * SokaTechnologies buttons.
+ *
+ * Use on WordPress buttons or reviewed links with explicit .soka-button classes.
+ */
+
+.soka-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 44px;
+	padding: 0.75rem 1rem;
+	border: 1px solid transparent;
+	border-radius: var(--soka-radius-md, 0.5rem);
+	cursor: pointer;
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+	text-decoration: none;
+	transition:
+		background-color 160ms ease,
+		border-color 160ms ease,
+		box-shadow 160ms ease,
+		color 160ms ease,
+		transform 160ms ease;
+}
+
+.soka-button:hover {
+	transform: translateY(-1px);
+}
+
+.soka-button:focus-visible {
+	outline: 3px solid rgba(37, 99, 235, 0.28);
+	outline-offset: 3px;
+	transform: translateY(-1px);
+}
+
+.soka-button[aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: 0.62;
+	transform: none;
+}
+
+.soka-button--primary {
+	background: var(--soka-color-primary, #2563eb);
+	border-color: var(--soka-color-primary, #2563eb);
+	color: var(--soka-color-white, #ffffff);
+	box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+}
+
+.soka-button--primary:hover,
+.soka-button--primary:focus-visible {
+	background: var(--soka-color-primary-hover, #1d4ed8);
+	border-color: var(--soka-color-primary-hover, #1d4ed8);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-button--secondary {
+	background: var(--soka-color-white, #ffffff);
+	border-color: var(--soka-color-border, #cbd5e1);
+	color: var(--soka-color-primary, #2563eb);
+}
+
+.soka-button--secondary:hover,
+.soka-button--secondary:focus-visible {
+	background: #f8fafc;
+	border-color: var(--soka-color-primary, #2563eb);
+	color: var(--soka-color-primary-hover, #1d4ed8);
+}
+
+.soka-button--dark {
+	background: var(--soka-color-dark, #07111f);
+	border-color: var(--soka-color-dark, #07111f);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-button--dark:hover,
+.soka-button--dark:focus-visible {
+	background: var(--soka-color-petroleum, #0b2438);
+	border-color: var(--soka-color-petroleum, #0b2438);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-button--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--soka-color-primary, #2563eb);
+}
+
+.soka-button--ghost:hover,
+.soka-button--ghost:focus-visible {
+	background: rgba(37, 99, 235, 0.08);
+	color: var(--soka-color-primary-hover, #1d4ed8);
+}
+
+.soka-button--full {
+	width: 100%;
+}

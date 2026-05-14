@@ -1,0 +1,89 @@
+/**
+ * Internal page and section snippets.
+ *
+ * Use for service pages, anonymized cases, contact and trust blocks.
+ */
+
+.soka-internal-hero {
+	padding-block: clamp(3rem, 7vw, 5.5rem);
+	background:
+		linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(248, 250, 252, 1)),
+		var(--soka-color-surface, #f8fafc);
+	border-bottom: 1px solid var(--soka-color-border, #cbd5e1);
+}
+
+.soka-internal-hero .soka-container {
+	display: grid;
+	gap: var(--soka-space-lg, 1.5rem);
+	max-width: var(--soka-container-md, 960px);
+}
+
+.soka-internal-hero__eyebrow {
+	margin: 0;
+	color: var(--soka-color-primary, #2563eb);
+	font-size: 0.8125rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+.soka-internal-hero__title {
+	margin: 0;
+	color: var(--soka-color-text, #0f172a);
+	font-size: clamp(2.25rem, 5vw, 4.25rem);
+	line-height: 1.05;
+	letter-spacing: 0;
+}
+
+.soka-internal-hero__text {
+	max-width: 68ch;
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	font-size: clamp(1rem, 2vw, 1.18rem);
+	line-height: 1.7;
+}
+
+.soka-section__header {
+	display: grid;
+	gap: var(--soka-space-sm, 0.75rem);
+	max-width: var(--soka-container-sm, 760px);
+	margin-bottom: var(--soka-space-xl, 2rem);
+}
+
+.soka-section__eyebrow {
+	margin: 0;
+	color: var(--soka-color-primary, #2563eb);
+	font-size: 0.8125rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	text-transform: uppercase;
+}
+
+.soka-section__title {
+	margin: 0;
+	color: var(--soka-color-text, #0f172a);
+	font-size: clamp(1.875rem, 4vw, 3rem);
+	line-height: 1.12;
+}
+
+.soka-section__text {
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	font-size: 1.0625rem;
+	line-height: 1.7;
+}
+
+.soka-section--dark .soka-section__eyebrow,
+.soka-section--dark .soka-internal-hero__eyebrow {
+	color: var(--soka-color-accent, #14b8a6);
+}
+
+.soka-section--dark .soka-section__title,
+.soka-section--dark .soka-internal-hero__title {
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-section--dark .soka-section__text,
+.soka-section--dark .soka-internal-hero__text {
+	color: rgba(255, 255, 255, 0.78);
+}

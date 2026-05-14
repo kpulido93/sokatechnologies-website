@@ -2,52 +2,72 @@
 
 ## Objetivo
 
-Definir controles mínimos de seguridad para la web pública de SokaTechnologies en WordPress/cPanel.
+Definir controles minimos de seguridad para la web publica de SokaTechnologies en WordPress/cPanel.
 
 ## Principios
 
-- Reducir riesgo, no asumir seguridad perfecta.
+- Reducir superficie de ataque.
 - Mantener WordPress, temas y plugins actualizados.
-- Usar contraseñas fuertes.
-- Limitar accesos.
+- Usar contrasenas fuertes y accesos nominales.
+- Limitar permisos.
 - Evitar plugins innecesarios.
 - Configurar backups.
-- No exponer errores en producción.
+- No exponer errores en produccion.
 - No subir secretos al repositorio.
 
-## Controles mínimos
+## Checklist de seguridad basica
 
 ### Accesos
 
-- Usar usuario administrador no obvio.
-- Usar contraseña fuerte.
-- Activar 2FA si el plugin o hosting lo permite.
-- No compartir usuarios personales.
-- Eliminar usuarios innecesarios.
-- Asignar roles mínimos.
+- [ ] Usar usuarios nominales, sin cuentas compartidas.
+- [ ] Usar contrasenas fuertes.
+- [ ] Activar 2FA si el hosting o plugin aprobado lo permite.
+- [ ] Asignar roles minimos.
+- [ ] Revisar o eliminar usuarios inactivos.
+- [ ] Evitar nombres de usuario obvios para administracion.
 
 ### WordPress
 
-- Mantener WordPress actualizado.
-- Mantener tema padre actualizado.
-- Mantener child theme bajo control de versiones.
-- Mantener plugins actualizados.
-- Eliminar temas no usados.
-- Eliminar plugins no usados.
-- Desactivar editor de archivos desde WordPress si aplica.
+- [ ] Mantener WordPress actualizado.
+- [ ] Mantener tema padre actualizado.
+- [ ] Mantener plugins actualizados.
+- [ ] Eliminar plugins no usados.
+- [ ] Eliminar temas no usados.
+- [ ] Desactivar editor de archivos desde WordPress si la politica del sitio lo permite.
+- [ ] Revisar que no haya errores visibles en produccion.
 
-### Hosting / cPanel
+### Hosting/cPanel
 
-- SSL activo.
-- PHP actualizado y soportado por el hosting.
-- `display_errors` desactivado en producción.
-- Backups configurados.
-- Permisos de archivos revisados.
-- Acceso al cPanel limitado.
+- [ ] SSL activo.
+- [ ] PHP en version soportada.
+- [ ] `display_errors` desactivado en produccion.
+- [ ] Backups configurados.
+- [ ] Restauracion de backup verificada cuando sea posible.
+- [ ] Permisos de archivos revisados.
+- [ ] Acceso a cPanel limitado a personas autorizadas.
 
-### Archivos sensibles
+### Formularios
 
-No versionar:
+- [ ] Proteccion anti-spam activa.
+- [ ] Campos minimos necesarios.
+- [ ] Validacion de campos.
+- [ ] Envio de correos probado.
+- [ ] SMTP documentado sin credenciales.
+- [ ] No guardar informacion sensible innecesaria.
+
+### Repositorio
+
+- [ ] No hay `wp-config.php`.
+- [ ] No hay `.env`.
+- [ ] No hay backups.
+- [ ] No hay dumps SQL.
+- [ ] No hay credenciales.
+- [ ] No hay tokens.
+- [ ] No hay llaves privadas.
+- [ ] No hay datos reales de cPanel.
+- [ ] No hay datos reales de clientes.
+
+## Archivos que nunca deben versionarse
 
 - `wp-config.php`
 - `.env`
@@ -57,26 +77,12 @@ No versionar:
 - Credenciales.
 - Tokens.
 - Llaves privadas.
+- Exportaciones del sitio.
+- Archivos subidos por usuarios.
 
-### Formularios
+## Pendientes
 
-- Usar protección anti-spam.
-- No pedir datos innecesarios.
-- Validar campos.
-- Evitar guardar información sensible.
-- Probar envío de correos.
-- Documentar integración SMTP si se usa.
-
-## Checklist rápido
-
-- [ ] SSL activo.
-- [ ] WordPress actualizado.
-- [ ] Plugins actualizados.
-- [ ] Tema padre actualizado.
-- [ ] Plugins innecesarios eliminados.
-- [ ] Temas innecesarios eliminados.
-- [ ] Usuarios revisados.
-- [ ] Backups activos.
-- [ ] `display_errors` apagado en producción.
-- [ ] No hay secretos en el repo.
-- [ ] No hay datos sensibles en contenido público.
+- Definir plugin o medida de seguridad aprobada.
+- Definir politica de backups.
+- Definir responsable de revision mensual.
+- Definir proceso de respuesta ante incidentes.

@@ -1,0 +1,71 @@
+/**
+ * Responsive snippets.
+ *
+ * These rules assume the base snippets are already present.
+ */
+
+@media (max-width: 599px) {
+	.soka-container {
+		width: min(100% - 2rem, var(--soka-container-lg, 1120px));
+	}
+
+	.soka-section {
+		padding-block: clamp(2.25rem, 12vw, 3.5rem);
+	}
+
+	.soka-card-grid {
+		grid-template-columns: 1fr;
+		gap: var(--soka-space-md, 1rem);
+	}
+
+	.soka-card,
+	.soka-form {
+		padding: var(--soka-space-lg, 1.5rem);
+	}
+
+	.soka-button {
+		width: 100%;
+	}
+
+	.soka-internal-hero {
+		padding-block: clamp(2.5rem, 12vw, 4rem);
+	}
+
+	.soka-internal-hero__title {
+		font-size: clamp(2rem, 11vw, 3rem);
+	}
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+	.soka-card-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.soka-button {
+		width: auto;
+	}
+
+	.soka-form {
+		padding: var(--soka-space-xl, 2rem);
+	}
+}
+
+@media (min-width: 900px) {
+	.soka-card-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.soka-internal-hero .soka-container {
+		gap: var(--soka-space-xl, 2rem);
+	}
+}
+
+@media (min-width: 1200px) {
+	.soka-section {
+		padding-block: var(--soka-section-padding, 6rem);
+	}
+
+	.soka-card-grid {
+		gap: var(--soka-space-xl, 2rem);
+	}
+}

@@ -1,0 +1,220 @@
+/**
+ * SokaTechnologies WordPress sections.
+ *
+ * Use these classes on Group, Columns or HTML blocks after review.
+ */
+
+.soka-section {
+	padding-block: var(--soka-space-3xl, 4rem);
+	background: var(--soka-color-surface, #f8fafc);
+	color: var(--soka-color-text, #0f172a);
+}
+
+.soka-section--white {
+	background: var(--soka-color-white, #ffffff);
+}
+
+.soka-section--light {
+	background: var(--soka-color-surface, #f8fafc);
+}
+
+.soka-section--dark {
+	background: var(--soka-color-dark, #07111f);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-section--petroleum {
+	background: var(--soka-color-petroleum, #0b2438);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-section__inner {
+	width: min(100% - 2rem, var(--soka-width-content, 72rem));
+	margin-inline: auto;
+}
+
+.soka-section__inner--narrow {
+	width: min(100% - 2rem, var(--soka-width-narrow, 48rem));
+}
+
+.soka-section__header {
+	display: grid;
+	gap: var(--soka-space-sm, 0.75rem);
+	max-width: var(--soka-width-narrow, 48rem);
+	margin-bottom: var(--soka-space-xl, 2rem);
+}
+
+.soka-section__eyebrow {
+	margin: 0;
+	color: var(--soka-color-primary, #2563eb);
+	font-size: 0.8125rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	line-height: 1.3;
+}
+
+.soka-section__title {
+	margin: 0;
+	color: inherit;
+	font-size: 2.75rem;
+	line-height: 1.12;
+}
+
+.soka-section__lead {
+	margin: 0;
+	color: var(--soka-color-muted, #475569);
+	font-size: 1.0625rem;
+	line-height: 1.7;
+}
+
+.soka-section--dark .soka-section__lead,
+.soka-section--petroleum .soka-section__lead {
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.soka-hero {
+	padding-block: var(--soka-space-3xl, 4rem);
+	background: var(--soka-color-dark, #07111f);
+	color: var(--soka-color-white, #ffffff);
+}
+
+.soka-hero__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.92fr);
+	gap: var(--soka-space-2xl, 3rem);
+	align-items: center;
+	width: min(100% - 2rem, var(--soka-width-content, 72rem));
+	margin-inline: auto;
+}
+
+.soka-hero__content {
+	display: grid;
+	gap: var(--soka-space-lg, 1.5rem);
+	min-width: 0;
+}
+
+.soka-hero__eyebrow {
+	margin: 0;
+	color: var(--soka-color-accent, #14b8a6);
+	font-size: 0.875rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	line-height: 1.3;
+}
+
+.soka-hero__title {
+	margin: 0;
+	font-size: 4rem;
+	line-height: 1.05;
+}
+
+.soka-hero__text {
+	max-width: 42rem;
+	margin: 0;
+	color: rgba(255, 255, 255, 0.78);
+	font-size: 1.125rem;
+	line-height: 1.7;
+}
+
+.soka-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--soka-space-sm, 0.75rem);
+}
+
+.soka-hero__media {
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid rgba(203, 213, 225, 0.22);
+	border-radius: var(--soka-radius-lg, 0.5rem);
+	background: rgba(255, 255, 255, 0.06);
+	box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+.soka-hero__image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.soka-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.86fr);
+	gap: var(--soka-space-2xl, 3rem);
+	align-items: center;
+}
+
+.soka-split__content {
+	display: grid;
+	gap: var(--soka-space-md, 1rem);
+	min-width: 0;
+}
+
+.soka-split__media {
+	min-width: 0;
+	overflow: hidden;
+	border: 1px solid var(--soka-color-border, #cbd5e1);
+	border-radius: var(--soka-radius-lg, 0.5rem);
+	background: var(--soka-color-white, #ffffff);
+}
+
+.soka-split__image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.soka-band {
+	display: grid;
+	gap: var(--soka-space-md, 1rem);
+	padding: var(--soka-space-xl, 2rem);
+	background: var(--soka-color-white, #ffffff);
+	border: 1px solid var(--soka-color-border, #cbd5e1);
+	border-radius: var(--soka-radius-lg, 0.5rem);
+	box-shadow: var(--soka-shadow-sm, 0 10px 24px rgba(7, 17, 31, 0.08));
+}
+
+.soka-band--dark {
+	background: var(--soka-color-petroleum, #0b2438);
+	border-color: rgba(203, 213, 225, 0.22);
+	color: var(--soka-color-white, #ffffff);
+}
+
+@media (max-width: 900px) {
+	.soka-hero__inner,
+	.soka-split {
+		grid-template-columns: 1fr;
+	}
+
+	.soka-section__title {
+		font-size: 2.25rem;
+	}
+
+	.soka-hero__title {
+		font-size: 3rem;
+	}
+}
+
+@media (max-width: 640px) {
+	.soka-section,
+	.soka-hero {
+		padding-block: var(--soka-space-2xl, 3rem);
+	}
+
+	.soka-section__title {
+		font-size: 1.875rem;
+	}
+
+	.soka-hero__title {
+		font-size: 2.25rem;
+	}
+
+	.soka-hero__actions {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.soka-band {
+		padding: var(--soka-space-lg, 1.5rem);
+	}
+}
