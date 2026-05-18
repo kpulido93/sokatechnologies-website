@@ -43,6 +43,47 @@ function soka_enqueue_child_theme_styles() {
 }
 add_action('wp_enqueue_scripts', 'soka_enqueue_child_theme_styles');
 
+function soka_translate_cookieadmin_frontend_strings($translation, $text, $domain) {
+    if ('cookieadmin' !== $domain || is_admin()) {
+        return $translation;
+    }
+
+    static $translations = [
+        'We respect your privacy' => 'Respetamos tu privacidad',
+        'Cookies help us improve your experience, deliver personalized content, and analyze traffic. You can choose which cookies to allow by clicking <b>Customize</b>. Click <b>Accept All</b> to consent or <b>Reject All</b> to decline non-essential cookies.' => 'Usamos cookies para funciones basicas, medicion y mejora del sitio. Puedes elegir que cookies permitir en <b>Personalizar</b>. Pulsa <b>Aceptar todo</b> para permitir cookies no esenciales o <b>Rechazar</b> para mantenerlas desactivadas.',
+        'Your Privacy Matters' => 'Tu privacidad importa',
+        'We use cookies to improve your browsing experience, deliver personalized content and ads, and analyze website traffic. By clicking <b>Accept All</b>, you consent to our use of cookies. You can choose to manage your preferences or opt out of the sale or sharing of your personal information.' => 'Usamos cookies para funciones basicas, medicion y mejora del sitio. Puedes aceptar las no esenciales, rechazarlas o revisar el detalle en <b>Personalizar</b>.',
+        'Personalize Your Cookie Preferences' => 'Personaliza tus preferencias de cookies',
+        'Customize Your Cookie Settings' => 'Personaliza la configuracion de cookies',
+        'We use cookies to ensure smooth navigation and enable essential site functions. You can view detailed information about each cookie category below. <br />Cookies marked as <b>Necessary</b> are stored in your browser because they are essential for basic site functionality. <b>These cookies do not require your consent under GDPR.</b> <br />We also use third-party cookies to analyze site usage, remember your preferences, and deliver relevant content and ads. These will only be activated with your consent. You can choose to enable or disable these cookies, but please note that turning off some types may affect your browsing experience.' => 'Usamos cookies necesarias para el funcionamiento basico del sitio. <br />Las cookies marcadas como <b>Necesarias</b> permanecen activas porque son esenciales y no requieren consentimiento adicional. <br />Las demas categorias solo se activan si las aceptas. Puedes revisar cada grupo y cambiar tu decision cuando lo necesites.',
+        'We use cookies to support essential site functions and help you navigate efficiently. You can find detailed information about each cookie category below. <br /><b>Necessary</b> cookies are required for core site functionality and are always enabled. These do not require your consent. <br />Other cookies, including third-party cookies, are used to analyze usage, remember preferences, and provide relevant ads and content. These cookies are only used if you choose to enable them. You can adjust your preferences at any time. Disabling certain cookies may impact your browsing experience.' => 'Usamos cookies necesarias para el funcionamiento basico del sitio. <br /><b>Necesarias</b> siempre permanecen activas. <br />Las demas categorias solo se usan si las habilitas y puedes ajustarlas en cualquier momento.',
+        'Modify Cookie Preferences' => 'Cambiar preferencias de cookies',
+        'Customize' => 'Personalizar',
+        'Reject All' => 'Rechazar',
+        'Accept All' => 'Aceptar todo',
+        'Save Preferences' => 'Guardar preferencias',
+        'Powered by' => 'Con tecnologia de',
+        'Re-consent' => 'Revisar cookies',
+        'Cookie Preferences' => 'Preferencias de cookies',
+        'Always Active' => 'Siempre activas',
+        'Remark' => 'Opcional',
+        'None' => 'Ninguna',
+        'Necessary Cookies' => 'Cookies necesarias',
+        'Necessary cookies enable essential site features like secure log-ins and consent preference adjustments. They do not store personal data.' => 'Permiten funciones esenciales del sitio, como seguridad y guardar tus preferencias de consentimiento. No almacenan datos personales con fines de marketing.',
+        'Functional Cookies' => 'Cookies funcionales',
+        'Functional cookies support features like content sharing on social media, collecting feedback, and enabling third-party tools.' => 'Ayudan a habilitar funciones adicionales, integraciones o herramientas de terceros cuando son necesarias.',
+        'Analytical Cookies' => 'Cookies analiticas',
+        'Analytical cookies track visitor interactions, providing insights on metrics like visitor count, bounce rate, and traffic sources.' => 'Nos ayudan a medir uso del sitio, visitas, fuentes de trafico y rendimiento general.',
+        'Advertisement Cookies' => 'Cookies publicitarias',
+        'Advertisement cookies deliver personalized ads based on your previous visits and analyze the effectiveness of ad campaigns.' => 'Se usan para contenido o anuncios personalizados y para medir la efectividad de campanas cuando aplique.',
+        'Unclassified Cookies' => 'Cookies sin clasificar',
+        'Unclassified cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.' => 'Corresponden a cookies que todavia estan pendientes de clasificacion con sus proveedores.',
+    ];
+
+    return $translations[$text] ?? $translation;
+}
+add_filter('gettext', 'soka_translate_cookieadmin_frontend_strings', 20, 3);
+
 function soka_has_live_translation_plugin() {
     return defined('TRP_PLUGIN_VERSION')
         || function_exists('trp_custom_language_switcher')
@@ -95,33 +136,91 @@ function soka_add_translation_state_body_class($classes) {
 }
 add_filter('body_class', 'soka_add_translation_state_body_class');
 
-function soka_get_theme_icon_candidate() {
-    $icon_candidates = [
-        [
+function soka_get_theme_icon_assets() {
+    $icon_assets = [
+        'browser_icon' => [
+            'path' => 'assets/icons/favicon-32x32.png',
+            'mime' => 'image/png',
+            'sizes' => '32x32',
+        ],
+        'apple_touch_icon' => [
+            'path' => 'assets/icons/favicon-180x180.png',
+            'mime' => 'image/png',
+            'sizes' => '180x180',
+        ],
+        'android_icon' => [
+            'path' => 'assets/icons/favicon-192x192.png',
+            'mime' => 'image/png',
+            'sizes' => '192x192',
+        ],
+        'site_icon' => [
+            'path' => 'assets/icons/favicon-512x512.png',
+            'mime' => 'image/png',
+            'sizes' => '512x512',
+        ],
+        'shortcut_icon' => [
+            'path' => 'assets/icons/favicon.ico',
+            'mime' => 'image/x-icon',
+            'sizes' => 'any',
+        ],
+        'legacy_png' => [
             'path' => 'assets/images/favicon-sokatechnologies.png',
             'mime' => 'image/png',
             'sizes' => '1254x1254',
         ],
-        [
+        'legacy_isotipo' => [
             'path' => 'assets/images/isotipo-sokatechnologies-s-modular.webp',
             'mime' => 'image/webp',
             'sizes' => '1024x1024',
         ],
     ];
 
-    foreach ($icon_candidates as $candidate) {
-        $filesystem_path = get_stylesheet_directory() . '/' . $candidate['path'];
-        if (file_exists($filesystem_path)) {
-            $candidate['filesystem_path'] = $filesystem_path;
-            $candidate['url'] = get_stylesheet_directory_uri() . '/' . $candidate['path'];
+    $available_assets = [];
+    foreach ($icon_assets as $asset_key => $asset) {
+        $filesystem_path = get_stylesheet_directory() . '/' . $asset['path'];
+        if (!file_exists($filesystem_path)) {
+            continue;
+        }
 
-            return $candidate;
+        $asset['filesystem_path'] = $filesystem_path;
+        $asset['url'] = get_stylesheet_directory_uri() . '/' . $asset['path'];
+        $available_assets[$asset_key] = $asset;
+    }
+
+    return $available_assets;
+}
+
+function soka_get_theme_icon_candidate() {
+    $icon_assets = soka_get_theme_icon_assets();
+    $candidate_priority = [
+        'site_icon',
+        'apple_touch_icon',
+        'browser_icon',
+        'legacy_png',
+        'legacy_isotipo',
+    ];
+
+    foreach ($candidate_priority as $asset_key) {
+        if (!empty($icon_assets[$asset_key])) {
+            return $icon_assets[$asset_key];
         }
     }
 
     return null;
 }
 
+function soka_output_icon_link_tag($rel, $asset, $include_sizes = true) {
+    if (empty($asset['url']) || empty($asset['mime'])) {
+        return;
+    }
+
+    $sizes_attribute = '';
+    if ($include_sizes && !empty($asset['sizes'])) {
+        $sizes_attribute = ' sizes="' . esc_attr($asset['sizes']) . '"';
+    }
+
+    echo '<link rel="' . esc_attr($rel) . '" href="' . esc_url($asset['url']) . '" type="' . esc_attr($asset['mime']) . '"' . $sizes_attribute . '>' . "\n";
+}
 function soka_get_schema_logo_object($organization_name) {
     $logo_object = [
         '@type' => 'ImageObject',
@@ -270,17 +369,36 @@ function soka_output_temporary_site_icon() {
         return;
     }
 
+    $icon_assets = soka_get_theme_icon_assets();
     $selected_icon = soka_get_theme_icon_candidate();
 
-    if ($selected_icon === null) {
+    if (empty($icon_assets) && $selected_icon === null) {
         return;
     }
 
-    $icon_url = $selected_icon['url'];
+    echo "\n";
 
-    echo "\n" . '<link rel="icon" href="' . esc_url($icon_url) . '" type="' . esc_attr($selected_icon['mime']) . '" sizes="' . esc_attr($selected_icon['sizes']) . '">' . "\n";
-    echo '<link rel="shortcut icon" href="' . esc_url($icon_url) . '" type="' . esc_attr($selected_icon['mime']) . '">' . "\n";
-    echo '<link rel="apple-touch-icon" href="' . esc_url($icon_url) . '">' . "\n";
+    if (!empty($icon_assets['browser_icon'])) {
+        soka_output_icon_link_tag('icon', $icon_assets['browser_icon']);
+    } elseif ($selected_icon !== null) {
+        soka_output_icon_link_tag('icon', $selected_icon);
+    }
+
+    if (!empty($icon_assets['android_icon'])) {
+        soka_output_icon_link_tag('icon', $icon_assets['android_icon']);
+    }
+
+    if (!empty($icon_assets['shortcut_icon'])) {
+        soka_output_icon_link_tag('shortcut icon', $icon_assets['shortcut_icon'], false);
+    } elseif ($selected_icon !== null) {
+        soka_output_icon_link_tag('shortcut icon', $selected_icon, false);
+    }
+
+    if (!empty($icon_assets['apple_touch_icon'])) {
+        soka_output_icon_link_tag('apple-touch-icon', $icon_assets['apple_touch_icon']);
+    } elseif ($selected_icon !== null) {
+        soka_output_icon_link_tag('apple-touch-icon', $selected_icon);
+    }
 }
 add_action('wp_head', 'soka_output_temporary_site_icon', 5);
 
