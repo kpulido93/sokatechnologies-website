@@ -1,5 +1,5 @@
-<!-- wp:group {"className":"soka-page-header","layout":{"type":"constrained"}} -->
-<div class="wp-block-group soka-page-header">
+<!-- wp:group {"className":"soka-page-header soka-page-header--contact","layout":{"type":"constrained"}} -->
+<div class="wp-block-group soka-page-header soka-page-header--contact">
 <!-- wp:paragraph {"className":"soka-eyebrow"} -->
 <p class="soka-eyebrow">Contacto</p>
 <!-- /wp:paragraph -->
@@ -9,14 +9,14 @@
 <!-- wp:paragraph {"className":"soka-lead"} -->
 <p class="soka-lead">Cuéntanos qué necesitas mejorar, qué herramientas usas hoy y qué resultado espera tu empresa. Revisaremos el caso y propondremos una ruta por fases.</p>
 <!-- /wp:paragraph -->
-<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"soka-page-image"} -->
-<figure class="wp-block-image size-large soka-page-image"><img src="/wp-content/uploads/sokatech/contacto-diagnostico-consultivo-b2b.webp" alt="Diagnóstico consultivo B2B para contacto comercial"/></figure>
+<!-- wp:image {"sizeSlug":"large","linkDestination":"none","className":"soka-page-image soka-page-image--contact"} -->
+<figure class="wp-block-image size-large soka-page-image soka-page-image--contact"><img src="/wp-content/uploads/sokatech/contacto-diagnostico-consultivo-b2b.webp" alt="Diagnóstico consultivo B2B para contacto comercial"/></figure>
 <!-- /wp:image -->
 </div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"soka-section","layout":{"type":"constrained"}} -->
-<div class="wp-block-group soka-section">
+<!-- wp:group {"className":"soka-section soka-section--contact-form","layout":{"type":"constrained"}} -->
+<div class="wp-block-group soka-section soka-section--contact-form">
 <!-- wp:paragraph {"className":"soka-eyebrow"} -->
 <p class="soka-eyebrow">Formulario de diagnóstico</p>
 <!-- /wp:paragraph -->
@@ -26,20 +26,9 @@
 <!-- wp:paragraph {"className":"soka-content-medium"} -->
 <p class="soka-content-medium">El formulario está pensado para una primera conversación comercial. Incluye solo información general del proceso, sistema o infraestructura que quieres revisar.</p>
 <!-- /wp:paragraph -->
-<!-- wp:group {"className":"soka-form soka-form-placeholder","layout":{"type":"constrained"}} -->
-<div class="wp-block-group soka-form soka-form-placeholder">
-<!-- wp:paragraph {"className":"soka-kicker"} -->
-<p class="soka-kicker">Fluent Forms Lite</p>
-<!-- /wp:paragraph -->
-<!-- wp:heading {"level":3} -->
-<h3>Shortcode del formulario de diagnóstico</h3>
-<!-- /wp:heading -->
-<!-- wp:paragraph -->
-<p>Este bloque está reservado para el formulario real de contacto. Cuando el formulario esté creado en WordPress Admin, reemplaza el ID <strong>PENDIENTE</strong> por el ID generado por Fluent Forms.</p>
-<!-- /wp:paragraph -->
-<!-- wp:shortcode -->
-[fluentform id="PENDIENTE"]
-<!-- /wp:shortcode -->
+<!-- wp:group {"className":"soka-form soka-form--contact-primary","layout":{"type":"constrained"}} -->
+<div class="wp-block-group soka-form soka-form--contact-primary">
+%%SOKA_CONTACT_FORM_BLOCK%%
 <!-- wp:paragraph {"className":"soka-form__hint"} -->
 <p class="soka-form__hint">No compartas contraseñas, tokens, llaves privadas, respaldos, bases de datos ni información sensible. Si el caso requiere revisar información privada, primero definiremos alcance, canal seguro y condiciones de manejo.</p>
 <!-- /wp:paragraph -->

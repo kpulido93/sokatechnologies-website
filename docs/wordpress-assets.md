@@ -50,23 +50,66 @@ El HTML de `content/` referencia las imagenes con rutas web estables:
 
 No usar rutas absolutas del repositorio dentro del contenido publicado.
 
+## Estado actual de logo y favicon en local
+
+- El isotipo fuente disponible es `assets/logos/isotipo-sokatechnologies-s-modular.webp`.
+- La imagen Open Graph disponible es `assets/brand/og-sokatechnologies-default.webp`.
+- Existe un PNG de favicon en `assets/icons/favicon-sokatechnologies.png`.
+- No hay una version SVG del isotipo dentro del repo en este momento.
+- El header del child theme usa una copia temporal del isotipo en `wp-theme/sokatechnologies-child-theme/assets/images/isotipo-sokatechnologies-s-modular.webp`.
+- Si WordPress no tiene `site_icon` configurado, el tema imprime un favicon temporal desde `wp-theme/sokatechnologies-child-theme/assets/images/favicon-sokatechnologies.png` y usa el isotipo WebP como fallback secundario.
+
+Pendiente para produccion:
+
+- Optimizar una version final de `favicon-512.png` o `site-icon-512.png` para publicacion.
+- Preparar una version SVG del logo/isotipo para flujos donde WebP no sea suficiente.
+- Validar el set final con branding antes de publicar.
+
 ## Cargar logo
 
-1. Preparar el logo en `assets/brand/`.
+1. Preparar el logo o isotipo aprobado en `assets/logos/` o `assets/brand/`.
 2. Confirmar que existe version para fondo claro y fondo oscuro si aplica.
-3. Optimizar el SVG o generar PNG fallback si WordPress no permite SVG en el flujo aprobado.
+3. Si el logo final solo existe en WebP, generar SVG y PNG de marca antes de produccion.
 4. En WordPress, ir a Apariencia y usar el area de identidad del sitio o editor del tema.
 5. Cargar el logo aprobado desde la biblioteca de medios.
 6. Verificar header, footer y vista movil.
+
+Implementacion temporal aplicada en local:
+
+- El header usa el isotipo real de SokaTechnologies desde el child theme.
+- La marca textual sigue usando el `Site Title` de WordPress.
+- No depende de plugin ni de WordPress core modificado.
 
 No instalar plugins solo para permitir SVG sin aprobacion explicita.
 
 ## Cargar favicon
 
-1. Preparar `favicon-512.png` en `assets/brand/`.
+1. Preparar `favicon-512.png` o `site-icon-512.png` en `assets/brand/` o validar el PNG aprobado existente en `assets/icons/`.
 2. Verificar que sea cuadrado, legible y sin bordes cortados.
 3. En WordPress, cargarlo como icono del sitio.
 4. Comprobar pestana del navegador, acceso directo movil y vista retina.
+
+Paso manual exacto en WordPress:
+
+1. Ir a `Apariencia > Personalizar > Identidad del sitio`.
+2. Abrir `Icono del sitio`.
+3. Subir el isotipo en PNG cuadrado de al menos `512x512`.
+4. Recortar solo si hace falta.
+5. Publicar cambios.
+6. Vaciar cache del navegador y del plugin de cache si aplica.
+
+WP-CLI local:
+
+WP-CLI esta disponible en este entorno, pero el intento de `wp media import` y configuracion de `site_icon` queda bloqueado porque el PHP local no tiene extensiones `GD` ni `Imagick`.
+
+Comando recomendado cuando el entorno tenga soporte de imagen:
+
+```powershell
+wp media import ../assets/icons/favicon-sokatechnologies.png --title="SokaTechnologies Site Icon" --porcelain
+wp option update site_icon <ATTACHMENT_ID>
+```
+
+Mientras ese bloqueo exista, el tema deja un favicon temporal con `rel="icon"` apuntando al PNG del child theme solo cuando `site_icon` no esta configurado.
 
 ## Cargar Open Graph image
 
@@ -89,7 +132,7 @@ No instalar plugins solo para permitir SVG sin aprobacion explicita.
 
 Revision realizada contra archivos versionados en `assets/`, referencias de `content/`, plantillas del child theme y el script `scripts/sync-local-wordpress-assets.ps1`. No se inspecciona ni versiona `public_html/wp-content/uploads/`.
 
-Todos los assets esperados existen como fuente versionada. El script local sincroniza 12 de 13 assets a `/wp-content/uploads/sokatech/`; el isotipo existe en `assets/logos/`, pero no esta en uso ni en el script de sincronizacion.
+Todos los assets esperados existen como fuente versionada. El script local sincroniza 12 de 13 assets a `/wp-content/uploads/sokatech/`; el isotipo existe en `assets/logos/` y ahora se usa temporalmente desde `wp-theme/sokatechnologies-child-theme/assets/images/`, pero no forma parte del script de sincronizacion a uploads.
 
 | Asset | Estado | Pagina o uso donde aparece | Ruta publica en WordPress | Pendiente de configurar |
 | --- | --- | --- | --- | --- |
@@ -105,7 +148,8 @@ Todos los assets esperados existen como fuente versionada. El script local sincr
 | `sobre-sokatechnologies-socio-tecnologico.webp` | Usado | Sobre nosotros, imagen de pagina en `content/sobre-nosotros.html` | `/wp-content/uploads/sokatech/sobre-sokatechnologies-socio-tecnologico.webp` | Sincronizar/subir en cada entorno antes de publicar. |
 | `404-sokatechnologies-ruta-no-encontrada.webp` | Usado | Plantilla 404 en `wp-theme/sokatechnologies-child-theme/templates/404.html` | `/wp-content/uploads/sokatech/404-sokatechnologies-ruta-no-encontrada.webp` | Sincronizar/subir en cada entorno antes de publicar. |
 | `og-sokatechnologies-default.webp` | Usado | Global: `functions.php` imprime `og:image` y `twitter:image` si el archivo existe en uploads | `/wp-content/uploads/sokatech/og-sokatechnologies-default.webp` | Confirmar que el archivo exista en produccion y revisar duplicados si se usa un plugin SEO aprobado. |
-| `isotipo-sokatechnologies-s-modular.webp` | No usado | No aparece en contenido, plantillas ni `functions.php`; esta en `assets/logos/` | Pendiente: `/wp-content/uploads/sokatech/isotipo-sokatechnologies-s-modular.webp` si se aprueba su uso | Definir si sera logo/site icon o asset descartado. Si se aprueba, agregarlo al flujo de carga/sincronizacion y configurarlo en WordPress. No esta incluido en `scripts/sync-local-wordpress-assets.ps1`. |
+| `isotipo-sokatechnologies-s-modular.webp` | Usado temporalmente | Header del child theme | `wp-theme/sokatechnologies-child-theme/assets/images/isotipo-sokatechnologies-s-modular.webp` | Preparar SVG de marca para produccion si se requiere flujo vectorial. |
+| `favicon-sokatechnologies.png` | Usado temporalmente | Favicon/site icon fallback cuando `site_icon` no esta configurado | `wp-theme/sokatechnologies-child-theme/assets/images/favicon-sokatechnologies.png` | Configurar `site_icon` real cuando el entorno tenga GD o Imagick o hacerlo manualmente desde WordPress Admin. |
 
 ## Checklist antes de cargar
 

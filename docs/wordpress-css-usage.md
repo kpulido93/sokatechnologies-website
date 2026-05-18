@@ -28,15 +28,20 @@ Reglas:
 
 ## Reglas de layout actuales
 
-- Contenedor principal: `max-width: 1120px`.
-- Contenedores de texto: `max-width: 760px`.
+- Contenedor principal: `--soka-container-normal: 1120px`.
+- Contenedor wide: `--soka-container-wide: 1180px`.
+- Contenedores de texto legible: `--soka-readable-width: 760px`.
+- Padding vertical estandar de seccion: `--soka-section-padding: clamp(3rem, 6vw, 5.5rem)`.
+- Gap estandar de grids: `--soka-grid-gap: clamp(1rem, 2.4vw, 1.5rem)`.
 - Grids de tarjetas: maximo 3 columnas en desktop, 2 en tablet y 1 en movil; las variantes de dos columnas suben a 3 cuando tienen 5 o mas tarjetas.
 - En movil, las tarjetas pasan a una columna.
 - Las tarjetas mantienen `min-width` efectivo de 280px cuando el viewport lo permite.
+- Las secciones con fondo (`.soka-hero`, `.soka-page-header`, `.soka-section`, `.soka-section-light`, `.soka-dark-cta`) ocupan todo el ancho disponible; el contenido interior se centra con el contenedor normal.
 - Los headings usan `overflow-wrap: normal`, `word-break: normal` y `hyphens: manual`.
 - Los tamanos principales usan `clamp()` para evitar saltos bruscos entre desktop, tablet y movil.
 - El header sticky usa fondo blanco solido, `z-index` alto y conserva espacio de scroll con `scroll-padding-top` y `scroll-margin-top` en secciones anclables.
 - Las imagenes de pagina usan clases como `soka-hero-media`, `soka-page-image` y `soka-card__media`.
+- `.soka-eyebrow` y `.soka-kicker` usan una banda visual con borde de acento para que las etiquetas de seccion no se pierdan.
 
 ## Como aplicar clases en bloques
 
@@ -101,6 +106,7 @@ Uso:
 - Explicar beneficios.
 - Presentar proceso.
 - Separar contenido largo sin fondos pesados.
+- Mantener el fondo full-width y el contenido alineado con el resto del sitio.
 
 ### Seccion oscura
 
@@ -175,6 +181,18 @@ Estructura recomendada:
 6. Enlace discreto con `soka-card__link`.
 
 No incluir logos o nombres reales de clientes sin autorizacion.
+
+### Texto largo legible
+
+Para parrafos extensos o listas largas, usar una de estas clases:
+
+```text
+soka-content-readable
+soka-content-narrow
+soka-content-medium
+```
+
+Las tres se alinean al ancho legible global (`760px`) para evitar bloques de texto demasiado anchos.
 
 ### CTA final
 

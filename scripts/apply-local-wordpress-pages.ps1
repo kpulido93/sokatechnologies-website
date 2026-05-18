@@ -58,6 +58,9 @@ $Pages = @(
     [ordered]@{ Slug = 'casos-de-exito'; Title = 'Casos de éxito'; File = 'casos-de-exito.html' }
 )
 
+$script:ContactFormBlockToken = '%%SOKA_CONTACT_FORM_BLOCK%%'
+$script:LegacyContactFormShortcodeToken = '%%SOKA_CONTACT_FORM_SHORTCODE%%'
+
 function Invoke-WpText {
     param(
         [Parameter(Mandatory = $true)]
@@ -221,16 +224,20 @@ function Update-PageFromFile {
         [int] $Id,
 
         [Parameter(Mandatory = $true)]
+        [string] $Slug,
+
+        [Parameter(Mandatory = $true)]
         [string] $Title,
 
         [Parameter(Mandatory = $true)]
         [string] $ContentPath
     )
 
-    $php = @'
+$php = @'
 $id = (int) $args[0];
-$path = $args[1];
-$title = $args[2];
+$slug = $args[1];
+$path = $args[2];
+$title = $args[3];
 
 $post = get_post($id);
 if (!$post || $post->post_type !== 'page') {
@@ -247,6 +254,7 @@ if ($content === false) {
 $result = wp_update_post(
     array(
         'ID' => $id,
+        'post_name' => $slug,
         'post_title' => $title,
         'post_content' => $content,
         'post_status' => 'publish',
@@ -264,7 +272,7 @@ if (is_wp_error($result)) {
 echo (int) $result;
 '@
 
-    Invoke-WpEvalFileText -Php $php -Name 'update-page' -Arguments @("$Id", $ContentPath, $Title) | Out-Null
+    Invoke-WpEvalFileText -Php $php -Name 'update-page' -Arguments @("$Id", $Slug, $ContentPath, $Title) | Out-Null
 }
 
 function Create-PageFromFile {
@@ -328,6 +336,95 @@ function Get-PageStatus {
     return Invoke-WpText @('post', 'get', "$Id", '--field=post_status')
 }
 
+function Get-LocalContactFormShortcode {
+    $php = @'
+$shortcode = '';
+
+if (function_exists('wpFluent') && function_exists('wpFluentForm')) {
+    $managedMeta = wpFluent()->table('fluentform_form_meta')
+        ->where('meta_key', '_soka_local_contact_form')
+        ->where('value', 'yes')
+        ->orderBy('form_id', 'asc')
+        ->first();
+
+    if ($managedMeta) {
+        $form = wpFluent()->table('fluentform_forms')
+            ->where('id', (int) $managedMeta->form_id)
+            ->first();
+
+        if ($form) {
+            $shortcode = sprintf('[fluentform id="%d"]', (int) $form->id);
+        }
+    }
+}
+
+echo $shortcode;
+'@
+
+    try {
+        $shortcode = Invoke-WpEvalFileText -Php $php -Name 'local-contact-form-shortcode'
+        if ([string]::IsNullOrWhiteSpace($shortcode)) {
+            return $null
+        }
+
+        return $shortcode.Trim()
+    } catch {
+        return $null
+    }
+}
+
+function Get-LocalContactFormBlockMarkup {
+    param(
+        [string] $Shortcode
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($Shortcode)) {
+        return @"
+<!-- wp:shortcode -->
+$Shortcode
+<!-- /wp:shortcode -->
+"@
+    }
+
+    return @'
+<!-- wp:paragraph {"className":"soka-form-unavailable"} -->
+<p class="soka-form-unavailable">Formulario en configuración. Escríbenos por <a href="https://wa.me/573107482865?text=Hola%2C%20quiero%20solicitar%20un%20diagn%C3%B3stico%20para%20SokaTechnologies.%20Quiero%20revisar%20un%20proceso%2C%20sistema%20o%20infraestructura%20de%20mi%20empresa." target="_blank" rel="noopener noreferrer">WhatsApp</a> o <a href="mailto:info@sokatechnologies.com">correo</a> para solicitar diagnóstico.</p>
+<!-- /wp:paragraph -->
+'@
+}
+
+function Resolve-LocalContentPath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string] $ContentPath,
+
+        [Parameter(Mandatory = $true)]
+        [string] $ContactFormBlockMarkup
+    )
+
+    $rawContent = Get-Content -LiteralPath $ContentPath -Raw
+    $hasBlockToken = $rawContent.IndexOf($script:ContactFormBlockToken, [System.StringComparison]::Ordinal) -ge 0
+    $hasLegacyToken = $rawContent.IndexOf($script:LegacyContactFormShortcodeToken, [System.StringComparison]::Ordinal) -ge 0
+
+    if (-not $hasBlockToken -and -not $hasLegacyToken) {
+        return [pscustomobject]@{
+            Path = $ContentPath
+            IsTemp = $false
+        }
+    }
+
+    $resolvedContent = $rawContent.Replace($script:ContactFormBlockToken, $ContactFormBlockMarkup)
+    $resolvedContent = $resolvedContent.Replace($script:LegacyContactFormShortcodeToken, $ContactFormBlockMarkup)
+    $tempPath = Join-Path ([System.IO.Path]::GetTempPath()) "soka-wordpress-content-$([System.Guid]::NewGuid()).html"
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    [System.IO.File]::WriteAllText($tempPath, $resolvedContent, $utf8NoBom)
+
+    return [pscustomobject]@{
+        Path = $tempPath
+        IsTemp = $true
+    }
+}
+
 Push-Location $PublicHtml
 try {
     Write-Host 'Verificando entorno WordPress local...'
@@ -339,6 +436,15 @@ try {
 
     if (($AllowedUrls -notcontains $siteUrl) -or ($AllowedUrls -notcontains $homeUrl)) {
         throw "Entorno no permitido. siteurl y home deben estar en: $($AllowedUrls -join ', '). No se modifico WordPress."
+    }
+
+    $contactFormShortcode = Get-LocalContactFormShortcode
+    $contactFormBlockMarkup = Get-LocalContactFormBlockMarkup -Shortcode $contactFormShortcode
+
+    if ([string]::IsNullOrWhiteSpace($contactFormShortcode)) {
+        Write-Host 'Formulario local de Contacto no disponible. Se aplicara un bloque honesto con WhatsApp y correo.'
+    } else {
+        Write-Host "Shortcode local de Contacto: $contactFormShortcode"
     }
 
     $plan = @()
@@ -408,8 +514,11 @@ try {
 
     $results = @()
     foreach ($entry in $plan) {
+        $resolvedContent = Resolve-LocalContentPath -ContentPath $entry.ContentPath -ContactFormBlockMarkup $contactFormBlockMarkup
+
+        try {
         if ($entry.Action -eq 'Update') {
-            Update-PageFromFile -Id $entry.PageId -Title $entry.Title -ContentPath $entry.ContentPath
+            Update-PageFromFile -Id $entry.PageId -Slug $entry.Slug -Title $entry.Title -ContentPath $resolvedContent.Path
             $status = Get-PageStatus -Id $entry.PageId
             $results += [pscustomobject]@{
                 ID = $entry.PageId
@@ -422,7 +531,7 @@ try {
         }
 
         if ($entry.Action -eq 'Create') {
-            $createdId = Create-PageFromFile -Slug $entry.Slug -Title $entry.Title -ContentPath $entry.ContentPath
+            $createdId = Create-PageFromFile -Slug $entry.Slug -Title $entry.Title -ContentPath $resolvedContent.Path
             $status = Get-PageStatus -Id $createdId
             $results += [pscustomobject]@{
                 ID = $createdId
@@ -430,6 +539,11 @@ try {
                 Title = $entry.Title
                 Action = 'Created'
                 Status = $status
+            }
+        }
+        } finally {
+            if ($resolvedContent.IsTemp) {
+                Remove-Item -LiteralPath $resolvedContent.Path -Force -ErrorAction SilentlyContinue
             }
         }
     }

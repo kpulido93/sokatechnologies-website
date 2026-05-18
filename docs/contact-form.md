@@ -2,84 +2,83 @@
 
 ## Objetivo
 
-Preparar el formulario funcional de contacto para la web WordPress local de SokaTechnologies sin tocar produccion, sin modificar WordPress core y sin guardar credenciales en el repositorio.
+Preparar el formulario funcional de diagnostico para la web WordPress local de SokaTechnologies sin tocar produccion, sin modificar WordPress core y sin guardar credenciales en el repositorio.
 
 Entorno local permitido: `http://127.0.0.1:8088`.
 
-## Plugin usado
+## Estado local actual
 
-Plugin: **Fluent Forms Lite** (`fluentform`).
+- `WP-CLI` disponible con `wp --info`.
+- `Fluent Forms Lite` (`fluentform`) disponible en el WordPress local.
+- El formulario local se crea o reutiliza con [ensure-local-contact-form.ps1](/D:/repos/sokatechnologies-website/scripts/ensure-local-contact-form.ps1:1).
+- La pagina versionada [contacto.html](/D:/repos/sokatechnologies-website/content/contacto.html:1) ya no muestra un mockup falso ni texto tecnico visible al usuario.
+- El bloque real del formulario se inyecta al aplicar contenido local desde [apply-local-wordpress-pages.ps1](/D:/repos/sokatechnologies-website/scripts/apply-local-wordpress-pages.ps1:1) usando el token interno `%%SOKA_CONTACT_FORM_BLOCK%%`.
 
-Estado local revisado:
+No se instalo ni modifico nada en produccion.
 
-- WP-CLI disponible con `wp --info`.
-- `fluentform` no estaba instalado al iniciar la tarea.
-- Instalacion local realizada con WP-CLI contra `public_html`.
-- Plugin activo en local: `fluentform` version `6.2.2`.
+## Flujo local recomendado
 
-No se instalo nada en produccion.
+1. Ejecutar `.\scripts\ensure-local-contact-form.ps1`.
+2. Confirmar el `ID` y el shortcode devueltos por el script.
+3. Ejecutar `.\scripts\apply-local-wordpress-pages.ps1 -Apply`.
+4. Abrir `http://127.0.0.1:8088/contacto/`.
+5. Enviar una prueba si el entorno local tiene correo saliente configurado.
 
-## Creacion del formulario
+## Que hace el script local
 
-Fluent Forms Lite expone WP-CLI como `wp fluentform`, pero en este entorno solo ofrece comandos de licencia y estadisticas. No hay un comando oficial disponible para crear formularios completos por CLI.
+[ensure-local-contact-form.ps1](/D:/repos/sokatechnologies-website/scripts/ensure-local-contact-form.ps1:1):
 
-Por esa razon, el formulario debe crearse manualmente desde WordPress Admin para no escribir directamente en tablas internas del plugin.
+- Verifica que `siteurl` y `home` sigan siendo `http://127.0.0.1:8088`.
+- Instala y activa `fluentform` solo si falta en local y `WP-CLI` esta disponible.
+- Reutiliza el formulario local administrado si ya existe.
+- Si no existe, crea un formulario `Diagnostico comercial` con los campos definidos en esta guia.
+- Marca el formulario con la meta local `_soka_local_contact_form=yes`.
+- Devuelve el shortcode real para que el script de paginas lo inserte al aplicar `content/`.
 
-Ruta sugerida:
+## Como se inserta el shortcode en Contacto
 
-1. Entrar a WordPress Admin local.
-2. Ir a **Fluent Forms > Forms**.
-3. Crear un formulario nuevo en blanco.
-4. Nombrarlo `Diagnostico comercial`.
-5. Agregar los campos definidos en este documento.
-6. Configurar confirmacion, notificacion por correo y anti-spam desde la interfaz del plugin.
-7. Guardar el formulario.
-8. Copiar el shortcode generado por Fluent Forms.
+El archivo versionado [contacto.html](/D:/repos/sokatechnologies-website/content/contacto.html:1) no guarda un ID duro de base de datos.
 
-## Ubicacion en Contacto
-
-La pagina versionada `content/contacto.html` ya no muestra un mockup de formulario como si fuera funcional.
-
-El bloque preparado usa temporalmente este placeholder:
+Usa este token interno:
 
 ```text
-[fluentform id="PENDIENTE"]
+%%SOKA_CONTACT_FORM_BLOCK%%
 ```
 
-Cuando el formulario real exista, reemplazar `PENDIENTE` por el ID real del formulario.
-
-## Como obtener el shortcode
-
-Desde WordPress Admin local:
-
-1. Abrir **Fluent Forms > Forms**.
-2. Ubicar el formulario `Diagnostico comercial`.
-3. Copiar el shortcode mostrado por el plugin, por ejemplo:
+[apply-local-wordpress-pages.ps1](/D:/repos/sokatechnologies-website/scripts/apply-local-wordpress-pages.ps1:1) lo reemplaza en local por el bloque real del formulario administrado, por ejemplo:
 
 ```text
+<!-- wp:shortcode -->
 [fluentform id="3"]
+<!-- /wp:shortcode -->
 ```
 
-4. Editar la pagina **Contacto**.
-5. Sustituir `[fluentform id="PENDIENTE"]` por el shortcode real.
-6. Actualizar la pagina y probar el envio.
+Si el formulario local no existe todavia, el script ya no inserta un placeholder tecnico. En su lugar aplica un bloque honesto para usuario final:
+
+```text
+Formulario en configuración. Escríbenos por WhatsApp o correo para solicitar diagnóstico.
+```
+
+En ese caso, ejecutar `.\scripts\ensure-local-contact-form.ps1` y volver a aplicar las paginas si se quiere recuperar el formulario principal.
 
 ## Campos del formulario
 
-Campos requeridos para la primera version:
+Campos requeridos:
 
-| Campo | Tipo sugerido | Requerido | Nota |
-| --- | --- | ---: | --- |
-| Nombre | Texto | Si | Persona que solicita contacto. |
-| Empresa | Texto | Si | Contexto comercial B2B. |
-| Correo comercial | Email | Si | Canal principal de respuesta. |
-| WhatsApp | Telefono/texto | Si | Canal secundario de contacto. |
-| Pais | Texto o selector | Si | Pais donde opera la empresa. |
-| Servicio de interes | Selector | Si | Clasifica la solicitud. |
-| Contexto general del caso | Area de texto | Si | Describe problema, proceso o necesidad. |
-| Herramientas actuales | Area de texto | Si | Sistemas, hojas, sitio web, hosting, CRM, ERP u otras herramientas usadas hoy. |
-| Resultado esperado | Area de texto | Si | Resultado que la empresa busca lograr. |
-| Aceptacion de privacidad y confidencialidad | Checkbox | Si | Debe estar marcado antes de enviar. |
+- Nombre
+- Empresa
+- Correo comercial
+- Pais
+- Servicio de interes
+- Contexto general del caso
+- Aceptacion de privacidad y confidencialidad
+
+Campos opcionales:
+
+- WhatsApp
+- Herramientas actuales
+- Resultado esperado
+- Urgencia
 
 ## Servicios
 
@@ -94,105 +93,79 @@ Opciones del campo `Servicio de interes`:
 - Diagnostico inicial
 - No estoy seguro todavia
 
-## Correo destino
-
-Correo destino para notificaciones del formulario:
-
-```text
-info@sokatechnologies.com
-```
-
-Reglas:
-
-- No guardar contrasenas SMTP en el repositorio.
-- No documentar usuarios SMTP, servidores SMTP, API keys ni tokens.
-- Configurar credenciales o proveedor SMTP solo desde WordPress Admin/cPanel en el entorno aprobado.
-- Probar entregabilidad antes de publicar.
-
-Asunto sugerido:
-
-```text
-Nuevo contacto web - {Servicio de interes} - {Empresa}
-```
-
-Contenido minimo de la notificacion:
-
-- Nombre.
-- Empresa.
-- Correo comercial.
-- WhatsApp.
-- Pais.
-- Servicio de interes.
-- Contexto general del caso.
-- Herramientas actuales.
-- Resultado esperado.
-- URL de origen.
-- Fecha y hora del envio.
-
-## Mensaje de confirmacion
-
-Configurar este mensaje despues del envio:
-
-```text
-Gracias por contactar a SokaTechnologies. Revisaremos tu caso y te responderemos en horario de atención.
-```
-
 ## Texto de confidencialidad
 
-Texto visible junto al checkbox o antes del boton de envio:
+Texto visible junto al formulario y alineado con el checkbox de aceptacion:
 
 ```text
 No compartas contraseñas, tokens, llaves privadas, respaldos, bases de datos ni información sensible. Si el caso requiere revisar información privada, primero definiremos alcance, canal seguro y condiciones de manejo.
 ```
 
-## Reglas de seguridad del formulario
+## Mensaje de confirmacion
+
+Configurado para el envio exitoso:
+
+```text
+Gracias por contactar a SokaTechnologies. Revisaremos tu caso y te responderemos en horario de atención.
+```
+
+## Notificacion interna
+
+Destino configurado para la notificacion del formulario:
+
+```text
+info@sokatechnologies.com
+```
+
+Notas:
+
+- No guardar contrasenas SMTP en el repositorio.
+- No documentar usuarios SMTP, servidores SMTP, API keys ni tokens.
+- La entrega real del correo depende de la configuracion de correo saliente del WordPress local.
+- `reply-to` queda apuntando al campo `Correo comercial`.
+
+## Configuracion manual desde WordPress Admin
+
+Si hace falta recrearlo sin script o revisar el formulario:
+
+1. Entrar a WordPress Admin local.
+2. Ir a **Fluent Forms > Forms**.
+3. Crear un formulario nuevo en blanco.
+4. Nombrarlo `Diagnostico comercial`.
+5. Agregar los campos definidos en esta guia.
+6. Configurar el mensaje de confirmacion.
+7. Configurar la notificacion interna hacia `info@sokatechnologies.com`.
+8. No habilitar adjuntos en la primera version.
+9. Copiar el shortcode real.
+10. Si se decide usar el flujo manual permanente, actualizar el token en el contenido aplicando el shortcode real por el script local o documentando el nuevo proceso.
+
+## Reglas de seguridad
 
 - No aceptar adjuntos en la primera version.
 - No pedir contrasenas, tokens, llaves privadas ni accesos.
 - No pedir backups, dumps SQL ni bases de datos.
 - No pedir datos sensibles de clientes o terceros.
-- Activar honeypot si esta disponible.
-- Activar reCAPTCHA, hCaptcha o Turnstile solo despues de revisar privacidad y proveedor.
 - Validar campos requeridos.
 - Revisar que los campos de texto no acepten HTML o scripts.
+- Si se agrega anti-spam, revisar antes su impacto de privacidad.
 
-## Checklist de configuracion
+## Checklist de validacion
 
-- [x] Fluent Forms Lite instalado y activo en local.
-- [ ] Formulario `Diagnostico comercial` creado desde WordPress Admin.
-- [ ] Campos requeridos configurados.
-- [ ] Campo WhatsApp agregado como canal secundario.
-- [ ] Campo de aceptacion de privacidad y confidencialidad agregado.
-- [ ] Texto de confidencialidad visible.
-- [ ] Mensaje de confirmacion configurado.
-- [ ] Notificacion interna configurada hacia `info@sokatechnologies.com`.
-- [ ] Anti-spam revisado.
-- [ ] Adjuntos desactivados.
-- [ ] Shortcode real copiado desde Fluent Forms.
-- [ ] `[fluentform id="PENDIENTE"]` reemplazado por el shortcode real.
+- [x] `WP-CLI` responde en local.
+- [x] `fluentform` esta disponible en el entorno local.
+- [x] Existe un script local para crear o reutilizar el formulario sin tocar produccion.
+- [x] Contacto ya no muestra un formulario falso.
+- [x] Existe un punto claro para insertar el shortcode real sin fijar un ID duro en `content/`.
+- [ ] El formulario fue probado con envio real en este entorno.
+- [ ] La notificacion llega a `info@sokatechnologies.com`.
+- [ ] El correo saliente del entorno local esta verificado.
 
-## Checklist de prueba
+## Comandos utiles
 
-- [ ] Abrir `http://127.0.0.1:8088/contacto/`.
-- [ ] Confirmar que la pagina Contacto no muestra un formulario falso.
-- [ ] Confirmar que el bloque de shortcode esta visible o preparado para el formulario real.
-- [ ] Enviar una prueba desde desktop.
-- [ ] Enviar una prueba desde movil.
-- [ ] Confirmar que los campos requeridos bloquean envios incompletos.
-- [ ] Confirmar que el mensaje de confirmacion aparece despues del envio.
-- [ ] Confirmar que la notificacion llega a `info@sokatechnologies.com`.
-- [ ] Confirmar que el correo no expone credenciales ni datos sensibles.
-- [ ] Confirmar que no se aceptan adjuntos.
-- [ ] Confirmar que el sitio sigue navegable.
-- [ ] Confirmar que WhatsApp sigue visible como canal secundario.
-- [ ] Confirmar que no se modifico `public_html/wp-config.php`.
-- [ ] Confirmar que no se documentaron credenciales, tokens ni datos privados.
-
-## Pendientes antes de produccion
-
-- Crear el formulario real desde WordPress Admin.
-- Sustituir el placeholder por el shortcode real.
-- Revisar texto legal contra la politica de privacidad final.
-- Configurar SMTP desde WordPress/cPanel sin guardar secretos en el repositorio.
-- Probar entregabilidad real de correos.
-- Revisar anti-spam elegido y su impacto de privacidad.
+```powershell
+wp --info
+wp plugin list
+.\scripts\ensure-local-contact-form.ps1
+.\scripts\apply-local-wordpress-pages.ps1 -Apply
+git diff
+```

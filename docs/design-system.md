@@ -49,6 +49,24 @@ Reglas:
 - Eyebrows en mayusculas, sin letter spacing negativo.
 - No escalar fuentes directamente con ancho de viewport.
 
+## Layout global
+
+Tokens base del sistema visual:
+
+- `--soka-container-normal: 1120px`
+- `--soka-container-wide: 1180px`
+- `--soka-readable-width: 760px`
+- `--soka-section-padding: clamp(3rem, 6vw, 5.5rem)`
+- `--soka-grid-gap: clamp(1rem, 2.4vw, 1.5rem)`
+
+Reglas:
+
+- Las secciones con fondo ocupan todo el ancho visible.
+- El contenido interno se centra con el contenedor normal, salvo usos explicitos de `alignwide` o `.soka-container-wide`.
+- El texto largo debe mantenerse en el ancho legible.
+- Las tarjetas usan un maximo de 3 columnas en desktop, 2 en tablet y 1 en movil.
+- `theme.json` mantiene `contentSize: 760px` y `wideSize: 1180px` para acompasar editor y frontend.
+
 ## Componentes CSS
 
 Clases principales:
@@ -60,6 +78,7 @@ Clases principales:
 - `.soka-section`: seccion principal.
 - `.soka-section-light`: seccion con fondo claro.
 - `.soka-section-compact`: seccion de menor altura.
+- `.soka-container-wide`: contenedor ancho para header, footer o bloques `alignwide`.
 - `.soka-page-header`: cabecera de pagina interna.
 - `.soka-card-grid`, `.soka-card-grid-2`: grids de servicios con maximo 3 columnas en desktop, 2 en tablet y 1 en movil.
 - `.soka-card`, `.soka-card-featured`: tarjetas.
