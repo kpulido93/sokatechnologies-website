@@ -1,0 +1,24 @@
+---
+# Manual cPanel deployment for the SokaTechnologies WordPress theme only.
+deployment:
+  tasks:
+    - export EXPECTED_REPO="/home/sokatech/repositories/sokatechnologies-website"
+    - export EXPECTED_THEMESOURCE="$EXPECTED_REPO/wp-theme/sokatechnologies-child-theme"
+    - export EXPECTED_THEMEPATH="/home/sokatech/public_html/wp-content/themes/sokatechnologies"
+    - export REPO_ROOT="$(pwd)"
+    - export THEMESOURCE="$REPO_ROOT/wp-theme/sokatechnologies-child-theme"
+    - export THEMEPATH="/home/sokatech/public_html/wp-content/themes/sokatechnologies"
+    - if [ "$REPO_ROOT" != "$EXPECTED_REPO" ]; then echo "Unexpected repo path $REPO_ROOT"; exit 1; fi
+    - if [ "$THEMESOURCE" != "$EXPECTED_THEMESOURCE" ]; then echo "Unexpected theme source $THEMESOURCE"; exit 1; fi
+    - if [ "$THEMEPATH" != "$EXPECTED_THEMEPATH" ]; then echo "Unsafe theme path $THEMEPATH"; exit 1; fi
+    - if [ ! -d "$THEMESOURCE" ]; then echo "Missing theme source $THEMESOURCE"; exit 1; fi
+    - if [ ! -f "$THEMESOURCE/style.css" ] || [ ! -f "$THEMESOURCE/functions.php" ] || [ ! -f "$THEMESOURCE/theme.json" ]; then echo "Missing required theme files"; exit 1; fi
+    - if find "$THEMESOURCE" -mindepth 1 \( -type f -o -type d \) -name '.*' ! -name '.gitkeep' | grep -q .; then echo "Blocked dotfile or dot-directory detected inside theme source"; exit 1; fi
+    - if find "$THEMESOURCE" -type f \( -name ".env" -o -name ".env.*" -o -name "wp-config.php" -o -name "*.sql" -o -name "*.sql.gz" -o -name "*.zip" -o -name "*.tar" -o -name "*.tar.gz" -o -name "*.tgz" -o -name "*.bak" -o -name "*.backup" -o -name "*.old" -o -name "*.log" \) | grep -q .; then echo "Blocked sensitive file detected inside theme source"; exit 1; fi
+    - if find "$THEMESOURCE" \( -path "$THEMESOURCE/docs" -o -path "$THEMESOURCE/docs/*" -o -path "$THEMESOURCE/scripts" -o -path "$THEMESOURCE/scripts/*" -o -path "$THEMESOURCE/.tmp" -o -path "$THEMESOURCE/.tmp/*" -o -path "$THEMESOURCE/backups" -o -path "$THEMESOURCE/backups/*" -o -path "$THEMESOURCE/plugins" -o -path "$THEMESOURCE/plugins/*" -o -path "$THEMESOURCE/uploads" -o -path "$THEMESOURCE/uploads/*" -o -path "$THEMESOURCE/public_html" -o -path "$THEMESOURCE/public_html/*" \) | grep -q .; then echo "Blocked directory detected inside theme source"; exit 1; fi
+    - /bin/mkdir -p "$THEMEPATH"
+    - /bin/cp "$THEMESOURCE/style.css" "$THEMEPATH/style.css"
+    - /bin/cp "$THEMESOURCE/functions.php" "$THEMEPATH/functions.php"
+    - /bin/cp "$THEMESOURCE/theme.json" "$THEMEPATH/theme.json"
+    - for DIR in assets/css assets/icons assets/images templates parts patterns; do if [ -d "$THEMESOURCE/$DIR" ]; then /bin/mkdir -p "$THEMEPATH/$DIR" || exit 1; find "$THEMESOURCE/$DIR" -mindepth 1 ! -name '.*' | while IFS= read -r ITEM; do REL="${ITEM#$THEMESOURCE/}"; DEST="$THEMEPATH/$REL"; if [ -d "$ITEM" ]; then /bin/mkdir -p "$DEST" || exit 1; else DESTDIR="${DEST%/*}"; /bin/mkdir -p "$DESTDIR" || exit 1; /bin/cp "$ITEM" "$DEST" || exit 1; fi; done; fi; done
+    - /bin/echo "SokaTechnologies theme copied to $THEMEPATH"
