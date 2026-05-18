@@ -2,76 +2,95 @@
 
 ## Objetivo
 
-Definir una estrategia inicial para publicar la web de SokaTechnologies en espanol e ingles dentro de WordPress, sin duplicar contenido manualmente en el repositorio ni instalar plugins desde Codex.
+Preparar la web de SokaTechnologies para operar en espanol e ingles dentro de WordPress, usando TranslatePress en el entorno local y sin duplicar contenido manualmente dentro del repositorio.
 
-Este documento es una guia para implementacion manual desde WordPress Admin en un entorno aprobado.
+Este documento deja el estado real del local y los pasos manuales pendientes para completar la configuracion desde WordPress Admin.
 
 ## Idiomas
 
 | Rol | Idioma | Codigo recomendado | Estado |
 | --- | --- | --- | --- |
-| Idioma principal | Espanol | `es` | Base del contenido actual. |
-| Idioma secundario | Ingles | `en` | Traduccion comercial priorizada. |
+| Idioma principal | Espanol | `es_ES` | Idioma base del contenido actual. |
+| Idioma secundario | Ingles | `en_US` | Idioma objetivo para traduccion comercial. |
 
-El contenido fuente del repositorio se mantiene en espanol. Las traducciones inglesas deben gestionarse desde WordPress con el plugin aprobado, no como una segunda copia HTML dentro de `content/`.
+El repositorio sigue manteniendo el contenido fuente en espanol. La capa EN debe gestionarse desde WordPress con TranslatePress.
 
-## Plugin recomendado
+## Plugin aprobado
 
-Plugin recomendado: **TranslatePress**.
+Plugin aprobado: **TranslatePress - Translate Multilingual sites with AI Translation** (`translatepress-multilingual`).
 
 Motivo:
 
-- Permite traducir desde una interfaz visual en WordPress.
-- Mantiene el contenido base en el idioma principal.
-- Permite URLs por idioma.
+- Permite traducir visualmente desde WordPress.
+- Mantiene una sola fuente de contenido.
+- Soporta rutas por idioma.
 - Evita duplicar paginas manualmente.
-- Permite publicar traducciones por fases.
+- Permite activar ingles por fases.
 
-No instalar TranslatePress desde Codex ni desde scripts del repositorio. La instalacion debe hacerse manualmente desde WordPress Admin en el entorno aprobado.
+## Estado actual local
+
+Verificacion realizada en `http://127.0.0.1:8088` el `2026-05-18`:
+
+- `wp --info` funciona en el WordPress local.
+- TranslatePress quedo instalado y activo solo en local.
+- `wp option get trp_settings --format=json` muestra `es_ES` como idioma por defecto.
+- Aun no existe un segundo idioma publicado en TranslatePress.
+- `http://127.0.0.1:8088/en/` sigue respondiendo `404`.
+
+Decision aplicada en el tema:
+
+- El selector de idioma debe permanecer oculto mientras TranslatePress no tenga un segundo idioma real configurado.
+- No se deben mostrar enlaces a `/en/` ni botones `ES | EN` hasta que `/en/` responda correctamente.
+- No se activaron servicios de traduccion automatica ni funciones pagas.
+
+## Configuracion manual pendiente en WordPress Admin
+
+Ruta exacta:
+
+1. Ir a `Ajustes -> TranslatePress`.
+2. En `General`, confirmar `Default Language = Espanol (es_ES)`.
+3. En `All Languages`, agregar `English (United States)` como idioma secundario.
+4. Guardar cambios.
+5. Confirmar que el slug de ingles queda en `en` para que la URL use `/en/`.
+6. Mantener `Use subdirectory for default language` desactivado para conservar espanol en `/`.
+7. Mantener desactivada cualquier opcion de traduccion automatica que requiera API key o plan pago.
+8. Abrir `http://127.0.0.1:8088/en/` y confirmar que ya no responde `404`.
+9. Solo despues de eso, habilitar un selector de idioma real conectado a TranslatePress.
+
+## Selector de idioma
+
+Regla actual:
+
+- No mostrar selector de idioma mientras no exista una segunda lengua publicada.
+
+Implementacion recomendada cuando `/en/` funcione:
+
+1. Mantener el idioma principal en `/`.
+2. Mantener ingles en `/en/`.
+3. Usar un selector compacto `ES` / `EN` en el header.
+4. Agregar un respaldo en footer solo si no recarga demasiado la interfaz.
+5. No usar placeholders ni enlaces falsos.
+
+Recomendacion para TranslatePress:
+
+- Mantener desactivado el `Language Switcher Floating` hasta validar que la segunda lengua funciona.
+- Si se activa luego, revisar que no choque con el CTA de Contacto ni con el footer.
 
 ## URLs esperadas
-
-Estrategia recomendada: mantener espanol como idioma por defecto y usar prefijo para ingles.
 
 | Pagina | Espanol | Ingles esperado |
 | --- | --- | --- |
 | Inicio | `/` | `/en/` |
-| Servicios | `/servicios/` | `/en/services/` o `/en/servicios/` segun configuracion final de slugs |
+| Servicios | `/servicios/` | `/en/services/` o `/en/servicios/` |
 | Soluciones | `/soluciones/` | `/en/solutions/` o `/en/soluciones/` |
 | Casos de exito | `/casos-de-exito/` | `/en/success-stories/` o `/en/casos-de-exito/` |
 | Sobre nosotros | `/sobre-nosotros/` | `/en/about-us/` o `/en/sobre-nosotros/` |
 | Contacto | `/contacto/` | `/en/contact/` o `/en/contacto/` |
-| Politica de privacidad | `/politica-privacidad/` | `/en/privacy-policy/` o `/en/politica-privacidad/` |
-| Terminos de uso | `/terminos-uso/` | `/en/terms-of-use/` o `/en/terminos-uso/` |
 
 Decision recomendada:
 
-- Usar slugs traducidos para paginas principales si TranslatePress y el plan instalado lo permiten.
-- Si la version instalada no permite traducir slugs, aceptar slugs espanoles bajo `/en/` y traducir contenido visible.
-- No crear paginas duplicadas manualmente solo para cambiar slugs.
-
-## Selector de idioma
-
-Ubicacion recomendada:
-
-1. Header principal, al final del menu, con opciones cortas `ES` y `EN`.
-2. Footer, columna Empresa o Contacto, como respaldo para usuarios que lleguen al final de la pagina.
-
-Reglas visuales:
-
-- Mantener el selector compacto.
-- No desplazar CTAs principales.
-- No usar banderas como unico indicador; preferir texto `ES` / `EN`.
-- Verificar que el selector funcione en desktop y movil.
-
-Implementacion visual preparada:
-
-- `wp-theme/sokatechnologies-child-theme/parts/header.html` incluye un selector pasivo `ES | EN`.
-- `ES` aparece como idioma activo.
-- `EN` aparece como opcion visual deshabilitada.
-- El selector no usa enlaces para evitar apuntar a URLs inglesas que todavia no existen.
-- La logica real de cambio de idioma debe reemplazarse o conectarse con TranslatePress desde WordPress Admin.
-- Cuando TranslatePress este activo y `/en/` exista, se debe validar si conviene usar el selector del plugin o adaptar el markup del tema.
+- Usar slugs traducidos si la configuracion final de TranslatePress lo permite.
+- Si no, aceptar slugs espanoles dentro de `/en/` sin duplicar paginas manualmente.
 
 ## Paginas a traducir primero
 
@@ -91,32 +110,14 @@ Prioridad 3:
 
 7. Politica de privacidad.
 8. Terminos de uso.
-9. Paginas de servicios especificos si se publican como paginas independientes.
-
-Motivo: Inicio, Servicios y Contacto cubren propuesta de valor, oferta y conversion. Las paginas legales deben traducirse despues de validar textos legales definitivos.
-
-## Que no traducir todavia
-
-No traducir en la primera fase:
-
-- Borradores de blog.
-- Documentacion interna.
-- Checklists tecnicos del repositorio.
-- Snippets.
-- Prompts de Codex.
-- Casos de exito no aprobados.
-- Contenido legal pendiente de revision.
-- Textos de plugins que no esten visibles al publico.
-- Mensajes internos de administracion de WordPress.
-- Configuraciones tecnicas, nombres de campos internos o slugs usados solo por scripts locales.
 
 ## Criterios de traduccion
 
 - Mantener tono B2B sobrio y claro.
 - Priorizar claridad comercial sobre traduccion literal.
 - No inventar clientes, certificaciones, ubicaciones o experiencia no documentada.
-- No traducir nombres de producto o marca salvo que exista version oficial.
-- Mantener advertencias de no enviar credenciales ni informacion sensible.
+- No traducir nombres de marca salvo que exista version oficial.
+- Mantener advertencias de no compartir credenciales ni informacion sensible.
 - Revisar CTAs para que suenen naturales en ingles.
 
 CTAs sugeridos:
@@ -129,27 +130,19 @@ CTAs sugeridos:
 | Solicitar diagnostico por WhatsApp | Request a diagnostic review via WhatsApp |
 | Enviar correo | Send email |
 
-## Checklist de implementacion manual
+## Checklist manual de activacion
 
-- [ ] Confirmar que el sitio base esta completo en espanol.
-- [ ] Hacer backup del entorno aprobado antes de instalar plugins.
-- [ ] Instalar TranslatePress desde WordPress Admin.
-- [ ] Configurar espanol como idioma principal.
-- [ ] Configurar ingles como idioma secundario.
-- [ ] Confirmar estructura de URL para ingles.
-- [ ] Revisar el selector visual `ES | EN` del header.
-- [ ] Reemplazar o conectar el selector visual con la logica real de TranslatePress.
-- [ ] Agregar selector de idioma al footer si aplica.
+- [x] Verificar WP-CLI en local.
+- [x] Instalar y activar TranslatePress solo en local.
+- [x] Confirmar que no se toco produccion.
+- [x] Mantener oculto el selector mientras `/en/` no funcione.
+- [ ] Configurar `English (United States)` como idioma secundario en TranslatePress.
+- [ ] Confirmar que `/en/` responde `200`.
+- [ ] Habilitar selector real de idioma.
 - [ ] Traducir Inicio.
 - [ ] Traducir Servicios.
 - [ ] Traducir Contacto.
-- [ ] Revisar CTAs en ingles.
-- [ ] Revisar mensajes de confidencialidad en ingles.
-- [ ] Probar navegacion ES/EN en desktop.
-- [ ] Probar navegacion ES/EN en movil.
-- [ ] Confirmar que no se crean paginas duplicadas innecesarias.
-- [ ] Confirmar que no se agregaron credenciales, tokens ni configuraciones sensibles al repositorio.
-- [ ] Documentar cualquier decision de slugs si difiere de esta estrategia.
+- [ ] Revisar desktop y movil en ambos idiomas.
 
 ## Checklist de QA
 
@@ -159,14 +152,12 @@ CTAs sugeridos:
 - [ ] Header y footer se mantienen legibles en ambos idiomas.
 - [ ] Los botones principales siguen visibles y claros.
 - [ ] El formulario de Contacto mantiene campos y mensajes entendibles en ingles.
-- [ ] WhatsApp mantiene numero limpio y mensaje prellenado revisado.
-- [ ] No aparecen textos mixtos ES/EN en secciones principales.
-- [ ] No se tradujeron datos tecnicos internos ni contenido no aprobado.
+- [ ] No aparecen enlaces rotos hacia `/en/`.
 - [ ] No se modifico `public_html/wp-config.php`.
 
-## Pendientes antes de produccion
+## Pendientes antes de publicar EN
 
-- Revisar traducciones con una persona responsable de tono comercial.
-- Revisar paginas legales antes de traducirlas o publicarlas en ingles.
-- Confirmar si se usaran slugs traducidos o slugs espanoles bajo `/en/`.
-- Confirmar compatibilidad con cache, SEO y sitemap despues de activar TranslatePress.
+- Completar la configuracion manual de TranslatePress en Admin.
+- Confirmar si los slugs ingleses seran traducidos o si se mantendran slugs espanoles bajo `/en/`.
+- Revisar compatibilidad con cache, SEO y sitemap despues de activar ingles.
+- Validar traducciones con una persona responsable del tono comercial.
