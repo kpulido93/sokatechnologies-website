@@ -1,0 +1,32 @@
+---
+type Props = {
+  eyebrow?: string;
+  title: string;
+  lead: string;
+  actions?: { href: string; label: string; variant?: "primary" | "secondary" }[];
+};
+
+const { eyebrow = "Demo corporativa", title, lead, actions = [] } = Astro.props;
+---
+
+<section class="page-intro" data-animate="hero">
+  <div class="container">
+    <div class="page-intro__surface">
+      <div class="page-intro__content">
+        <p class="eyebrow" data-hero-eyebrow>{eyebrow}</p>
+        <h1 data-hero-title>{title}</h1>
+        <p class="lead" data-hero-lead>{lead}</p>
+
+        {actions.length > 0 && (
+          <div class="action-row" data-hero-actions>
+            {actions.map((action) => (
+              <a class:list={["button", action.variant === "secondary" ? "button--secondary" : "button--primary"]} href={action.href}>
+                {action.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

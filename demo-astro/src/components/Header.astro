@@ -1,0 +1,50 @@
+---
+import { navLinks } from "../data/site";
+
+type Props = {
+  currentPath: string;
+};
+
+const { currentPath } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container">
+    <div class="site-header__top">
+      <a class="brand" href="/">
+        <span class="brand__badge">S</span>
+        <span class="brand__text">
+          <strong>SokaTechnologies</strong>
+          <small>Demo Astro aislada</small>
+        </span>
+      </a>
+
+      <p class="header-kicker">Sistema visual B2B 2026</p>
+    </div>
+
+    <div class="site-header__nav-shell">
+      <nav aria-label="Principal" class="site-nav">
+        <ul class="site-nav__list">
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? currentPath === "/"
+                : currentPath === link.href || currentPath.startsWith(`${link.href}/`);
+
+            return (
+              <li>
+                <a class:list={["site-nav__link", { "is-active": isActive }]} href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <a class="button button--primary header-cta" href="/diagnostico">
+        Solicitar diagnostico
+      </a>
+    </div>
+  </div>
+</header>

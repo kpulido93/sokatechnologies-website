@@ -1,0 +1,324 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const marketProblems = [
+  {
+    title: "Registros dispersos y seguimiento inconsistente",
+    body: "En muchas porterias, la informacion termina repartida entre cuadernos, mensajes y controles parciales que dificultan revisar que paso y cuando."
+  },
+  {
+    title: "Poca visibilidad para administracion",
+    body: "Cuando el control operativo depende solo del turno o de reportes manuales, la administracion pierde contexto y capacidad de respuesta."
+  },
+  {
+    title: "Demasiada operacion sobre procesos informales",
+    body: "Novedades, ingresos y tareas basicas quedan expuestos a errores por falta de una base comun y ordenada."
+  }
+];
+
+const solutions = [
+  {
+    meta: "Control operativo",
+    title: "Bitacora mas clara del dia a dia",
+    body: "Portik busca ordenar ingresos, novedades y seguimiento operativo basico para que la porterIa trabaje con mas consistencia."
+  },
+  {
+    meta: "Visibilidad",
+    title: "Informacion mas facil de revisar",
+    body: "La administracion puede consultar registros y actividad sin depender de reconstruir el contexto desde varios canales."
+  },
+  {
+    meta: "Base inicial",
+    title: "Un MVP para validar adopcion",
+    body: "La primera version se plantea como una base controlada y realista, no como una promesa inflada de plataforma total."
+  }
+];
+
+const mvpModules = [
+  {
+    meta: "Modulo 01",
+    title: "Registro de visitantes y entradas manuales",
+    body: "Registro basico de ingresos y novedades asociadas, pensado para dar orden al seguimiento operativo diario."
+  },
+  {
+    meta: "Modulo 02",
+    title: "Bitacora de incidencias y novedades",
+    body: "Seguimiento simple de eventos, observaciones y situaciones que la administracion necesita revisar con contexto."
+  },
+  {
+    meta: "Modulo 03",
+    title: "Unidades y contactos basicos",
+    body: "Base inicial para organizar residentes, unidades y datos operativos esenciales sin convertir el MVP en un ERP."
+  },
+  {
+    meta: "Modulo 04",
+    title: "Panel administrativo y reportes basicos",
+    body: "Vista operativa inicial para consultar actividad reciente, incidencias y trazabilidad sobre la operacion diaria."
+  }
+];
+
+const benefits = [
+  "Mas orden en la operacion diaria de porteria",
+  "Mejor trazabilidad de eventos y novedades",
+  "Menos dependencia de registros informales",
+  "Base inicial para evaluar crecimiento del producto"
+];
+
+const exclusions = [
+  "No incluye OCR ni lectura automatica de documentos",
+  "No incluye integracion con hardware o barreras",
+  "No incluye pagos, cobranzas ni conciliacion financiera",
+  "No incluye app movil nativa en el MVP",
+  "No incluye biometria ni promesas de control fisico avanzado"
+];
+
+const pilotSteps = [
+  {
+    meta: "Paso 01",
+    title: "Diagnostico corto del caso",
+    body: "Revisar como opera hoy la comunidad o condominio y que parte del control tiene mas urgencia de ordenarse."
+  },
+  {
+    meta: "Paso 02",
+    title: "Piloto controlado",
+    body: "Definir un alcance concreto para validar adopcion, utilidad operativa y necesidades reales de una primera version."
+  },
+  {
+    meta: "Paso 03",
+    title: "Revision de siguiente fase",
+    body: "Usar el aprendizaje del piloto para decidir si conviene ampliar modulos, reforzar reporting o ajustar flujo operativo."
+  }
+];
+---
+
+<BaseLayout
+  title="Portik para porteria, control operativo y administracion basica"
+  description="Portik es la propuesta de SokaTechnologies para porteria, control operativo y administracion basica de condominios y comunidades cerradas."
+>
+  <section class="page-intro js-hero" aria-labelledby="portik-hero-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="two-column">
+          <div class="page-intro__content">
+            <p class="eyebrow js-hero-eyebrow">Producto prioritario</p>
+            <h1 id="portik-hero-title" class="js-hero-title">
+              Portik para porteria, control operativo y administracion basica.
+            </h1>
+            <p class="lead js-hero-subtitle">
+              Portik se presenta como una propuesta inicial para comunidades o condominios que necesitan mas orden en
+              registros, novedades y seguimiento diario, sin prometer funcionalidades fuera del MVP.
+            </p>
+            <div class="action-row">
+              <a class="button button--primary js-hero-cta" href="/diagnostico">
+                Explorar piloto
+              </a>
+              <a class="button button--secondary js-hero-cta" href="/contacto">
+                Hablar con Soka
+              </a>
+            </div>
+          </div>
+
+          <aside class="card product-panel js-hero-visual" aria-label="Panel visual simulado de Portik">
+            <p class="card__meta js-hero-visual-item">Panel simulado</p>
+            <h2 class="card__title js-hero-visual-item">MVP enfocado en orden operativo.</h2>
+            <p class="card__body js-hero-visual-item">
+              La propuesta comercial parte de una base clara: control diario, visibilidad minima para administracion y
+              validacion real antes de ampliar alcance.
+            </p>
+            <div class="product-panel__chips">
+              <span class="product-chip js-hero-visual-item">Visitantes</span>
+              <span class="product-chip js-hero-visual-item">Novedades</span>
+              <span class="product-chip js-hero-visual-item">Unidades</span>
+              <span class="product-chip js-hero-visual-item">Panel admin</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="mercado-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Problema del mercado</p>
+        <h2 id="mercado-title">Cuando el control diario depende de procesos informales, administrar se vuelve mas dificil.</h2>
+        <p>
+          La propuesta de Portik no parte de exagerar tecnologia. Parte de un problema operativo frecuente: poca trazabilidad,
+          registros inconsistentes y dificultad para revisar lo que ocurre en la operacion cotidiana.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {marketProblems.map((item) => (
+          <article class="card js-reveal-card">
+            <h3 class="card__title">{item.title}</h3>
+            <p class="card__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="resuelve-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Que resuelve Portik</p>
+        <h2 id="resuelve-title">Una base inicial para ordenar la operacion y dar mas contexto a la administracion.</h2>
+        <p>
+          El MVP se enfoca en control operativo y administracion basica. No intenta resolver todo desde el primer dia; busca
+          validar utilidad, orden y adopcion con un alcance realista.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {solutions.map((item) => (
+          <article class="card js-reveal-card">
+            <p class="card__meta">{item.meta}</p>
+            <h3 class="card__title">{item.title}</h3>
+            <p class="card__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section js-portik-story" aria-labelledby="mvp-title">
+    <div class="container">
+      <div class="section-heading js-portik-story-intro">
+        <p class="eyebrow">Modulos del MVP</p>
+        <h2 id="mvp-title">Un storytelling comercial corto para explicar lo que entra en la primera version.</h2>
+        <p>
+          Esta seccion resume el MVP como una historia simple: capturar actividad clave, organizarla mejor y darle a la
+          administracion una vista inicial mas util.
+        </p>
+      </div>
+
+      <div class="story-layout">
+        <div class="story-layout__content">
+          <div class="card-grid story-grid">
+            {mvpModules.map((module) => (
+              <article class="card story-card js-portik-module-card">
+                <p class="card__meta">{module.meta}</p>
+                <h3 class="card__title">{module.title}</h3>
+                <p class="card__body">{module.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <aside class="card story-panel js-portik-panel" aria-label="Vista simulada de modulos Portik">
+          <p class="card__meta">Vista simulada</p>
+          <h3 class="card__title">Panel comercial de MVP</h3>
+          <p class="card__body">
+            La animacion de esta zona solo refuerza lectura comercial: los modulos aparecen, se organizan y muestran una
+            historia de producto sin bloquear el contenido.
+          </p>
+
+          <div class="story-panel__stack">
+            <div class="story-panel__item js-portik-panel-item">
+              <strong>Visitantes</strong>
+              <span>Registro operativo basico</span>
+            </div>
+            <div class="story-panel__item js-portik-panel-item">
+              <strong>Novedades</strong>
+              <span>Bitacora revisable</span>
+            </div>
+            <div class="story-panel__item js-portik-panel-item">
+              <strong>Unidades</strong>
+              <span>Base inicial organizada</span>
+            </div>
+            <div class="story-panel__item js-portik-panel-item">
+              <strong>Administracion</strong>
+              <span>Consulta y seguimiento</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="beneficios-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Beneficios</p>
+        <h2 id="beneficios-title">Lo que Portik busca mejorar desde una primera fase controlada.</h2>
+        <p>
+          La promesa debe ser realista: menos desorden operativo, mas claridad sobre lo que pasa y una base mejor para tomar
+          decisiones sobre crecimiento futuro.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {benefits.map((item) => (
+          <article class="card js-reveal-card">
+            <h3 class="card__title">{item}</h3>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="no-incluye-title">
+    <div class="container narrow">
+      <div class="card js-reveal">
+        <p class="card__meta">Que no incluye el MVP</p>
+        <h2 id="no-incluye-title" class="card__title">La propuesta comercial necesita limites claros desde el inicio.</h2>
+        <p class="card__body">
+          Portik se presenta como una solucion de control operativo y administracion basica. Estas capacidades quedan
+          explicitamente fuera del MVP para evitar sobreprometer:
+        </p>
+        <ul class="bullet-list">
+          {exclusions.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="piloto-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Propuesta de piloto</p>
+        <h2 id="piloto-title">Un piloto sirve para validar utilidad real antes de ampliar alcance.</h2>
+        <p>
+          La mejor forma de presentar Portik es como un piloto controlado: problema claro, una comunidad o contexto definido
+          y aprendizaje suficiente para decidir la siguiente fase.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {pilotSteps.map((item) => (
+          <article class="card js-reveal-card">
+            <p class="card__meta">{item.meta}</p>
+            <h3 class="card__title">{item.title}</h3>
+            <p class="card__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cta-portik-title">
+    <div class="container">
+      <div class="page-intro__surface js-final-cta">
+        <div class="page-intro__content">
+          <p class="eyebrow">CTA</p>
+          <h2 id="cta-portik-title">Si Portik encaja con el problema, el siguiente paso es revisar un piloto.</h2>
+          <p class="lead">
+            La conversacion no tiene que partir de tecnologia avanzada. Puede partir de una necesidad concreta de control,
+            seguimiento y administracion basica mejor organizada.
+          </p>
+          <div class="action-row">
+            <a class="button button--primary" href="/diagnostico">
+              Solicitar diagnostico
+            </a>
+            <a class="button button--secondary" href="/contacto">
+              Hablar sobre Portik
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

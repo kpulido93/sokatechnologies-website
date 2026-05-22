@@ -1,0 +1,200 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const caseStudies = [
+  {
+    meta: "Caso anonimizado 01",
+    title: "Empresa de servicios en Republica Dominicana",
+    overview:
+      "Escenario orientado a una operacion con coordinacion administrativa y seguimiento de servicios que dependian de demasiados pasos manuales.",
+    context:
+      "La empresa necesitaba ordenar solicitudes, estados de atencion y reportes internos sin seguir dependiendo de hojas dispersas, correos y mensajes informales entre equipos.",
+    problem:
+      "La falta de un flujo comun hacia dificil saber que estaba pendiente, quien tenia cada caso y que tareas seguian abiertas al cierre de cada semana.",
+    approach:
+      "El enfoque propuesto combina diagnostico del proceso, un sistema interno sencillo para seguimiento operativo, automatizaciones puntuales e indicadores para supervisar tiempos, estados y carga de trabajo.",
+    improvement:
+      "Se espera una operacion mas clara para coordinacion y gerencia: menos retrabajo administrativo, mas trazabilidad de cada solicitud y reportes mas consistentes para seguimiento.",
+    technologies: [
+      "Portal web interno para seguimiento operativo",
+      "Automatizaciones e integraciones livianas",
+      "Dashboards y reportes de gestion",
+      "Infraestructura cloud con acceso controlado"
+    ],
+    confidentiality:
+      "Los nombres, procesos exactos, volumenes y herramientas concretas se omiten para proteger la operacion y la identidad del cliente."
+  },
+  {
+    meta: "Caso anonimizado 02",
+    title: "Empresa regulada en Panama",
+    overview:
+      "Caso enfocado en orden interno, back-office, reportes y trazabilidad para una organizacion que opera con mayores exigencias de control.",
+    context:
+      "La prioridad no era exponer una solucion comercial publica, sino reforzar sistemas internos, seguimiento documental, reportes operativos y criterios de acceso sobre procesos sensibles.",
+    problem:
+      "La evidencia operativa estaba fragmentada, algunos reportes exigian armado manual y existia dependencia de controles poco uniformes para permisos, auditoria y continuidad.",
+    approach:
+      "La propuesta se limita a componentes internos: back-office, registro de actividad, reportes, lineamientos de infraestructura, seguridad basica, control de accesos y soporte para revision de cumplimiento.",
+    improvement:
+      "El tipo de mejora esperado es mayor orden operativo, mejor capacidad de auditoria interna, reportes mas confiables y una base tecnica mas estable para continuidad y cumplimiento.",
+    technologies: [
+      "Sistema interno de back-office",
+      "Capas de reporteria ejecutiva y operativa",
+      "Controles de acceso y trazabilidad",
+      "Lineamientos de infraestructura, seguridad y soporte"
+    ],
+    confidentiality:
+      "No se incluyen referencias al sector especifico, normativa concreta, proveedores, ubicaciones exactas ni datos que permitan identificar la entidad."
+  },
+  {
+    meta: "Caso anonimizado 03",
+    title: "Empresa B2B con presencia digital limitada",
+    overview:
+      "Escenario comercial para una empresa con servicios solidos, pero con una web poco clara y una narrativa digital que no transmitia suficiente confianza.",
+    context:
+      "La captacion dependia demasiado de referencias directas y reuniones previas porque la presencia online no ayudaba a explicar valor, diferenciales ni siguiente paso comercial.",
+    problem:
+      "El mensaje estaba disperso, la oferta se entendia poco desde fuera y la experiencia digital no convertia interes en conversaciones de diagnostico o contacto calificado.",
+    approach:
+      "Se plantea una reorganizacion de mensajes, paginas de servicios, CTA, formularios y contenido base para construir una presencia corporativa mas clara, sobria y orientada a conversion B2B.",
+    improvement:
+      "La mejora esperada es una imagen mas profesional, una oferta mas entendible para gerencia y un recorrido comercial mas simple para abrir conversaciones utiles.",
+    technologies: [
+      "Sitio corporativo y landings de servicios",
+      "Formularios y CTA orientados a diagnostico",
+      "Analitica basica para seguimiento comercial",
+      "Base de contenido para servicios y casos"
+    ],
+    confidentiality:
+      "Se omiten dominios, capturas, metricas y materiales reales. El caso se presenta solo como referencia de enfoque y tipo de transformacion."
+  }
+];
+---
+
+<BaseLayout
+  title="Casos anonimizados de mejora operativa y presencia digital"
+  description="Casos anonimizados de SokaTechnologies sobre software interno, reporting, cumplimiento y presencia digital para empresas B2B."
+>
+  <section class="page-intro" aria-labelledby="casos-hero-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="page-intro__content">
+          <p class="eyebrow js-reveal">Casos anonimizados</p>
+          <h1 id="casos-hero-title" class="js-reveal">Experiencia comunicada con criterio, sin exponer nombres ni datos sensibles.</h1>
+          <p class="lead js-reveal">
+            Esta pagina resume tipos de retos que SokaTechnologies puede abordar: operaciones con seguimiento disperso,
+            entornos regulados que necesitan mas control interno y empresas B2B que requieren una presencia digital mas clara.
+          </p>
+          <div class="action-row js-reveal">
+            <a class="button button--primary" href="/diagnostico">
+              Solicitar diagnostico
+            </a>
+            <a class="button button--secondary" href="/servicios">
+              Ver servicios
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="lectura-casos-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Como leer estos casos</p>
+        <h2 id="lectura-casos-title">La intencion es transmitir confianza comercial, no revelar operaciones reales.</h2>
+        <p>
+          Cada ejemplo presenta contexto, tipo de problema, enfoque de solucion y mejora esperada de manera controlada. La
+          informacion esta resumida para mostrar criterio tecnico y de negocio sin exponer clientes, URLs, capturas ni datos
+          internos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="casos-lista-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Casos iniciales</p>
+        <h2 id="casos-lista-title">Tres escenarios de referencia para operaciones, cumplimiento y presencia digital B2B.</h2>
+        <p>
+          Los casos buscan ayudar a gerencia y equipos de decision a visualizar el tipo de acompanamiento que puede ofrecer
+          SokaTechnologies cuando el reto exige mas orden, trazabilidad, soporte o claridad comercial.
+        </p>
+      </div>
+
+      <div class="stack">
+        {caseStudies.map((item) => (
+          <article class="card js-reveal-card">
+            <p class="card__meta">{item.meta}</p>
+            <h2 class="card__title">{item.title}</h2>
+            <p class="card__body">{item.overview}</p>
+
+            <div class="stack">
+              <div>
+                <p class="eyebrow">Contexto general</p>
+                <p class="card__body">{item.context}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Problema</p>
+                <p class="card__body">{item.problem}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Enfoque de solucion</p>
+                <p class="card__body">{item.approach}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Resultado esperado</p>
+                <p class="card__body">{item.improvement}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Tecnologias generales</p>
+                <ul class="bullet-list">
+                  {item.technologies.map((technology) => (
+                    <li>{technology}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p class="eyebrow">Nota de confidencialidad</p>
+                <p class="card__body">{item.confidentiality}</p>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <a class="button button--secondary" href="/diagnostico">
+                Evaluar un caso similar
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="casos-cta-title">
+    <div class="container narrow">
+      <div class="card js-reveal">
+        <p class="card__meta">Siguiente paso</p>
+        <h2 id="casos-cta-title" class="card__title">Si tu situacion se parece a alguno de estos escenarios, conviene empezar por un diagnostico.</h2>
+        <p class="card__body">
+          Un diagnostico permite ordenar el contexto, detectar fricciones reales y definir si el siguiente paso debe ser
+          software a medida, automatizacion, reporting, infraestructura o una mejora de la presencia digital.
+        </p>
+        <div class="action-row">
+          <a class="button button--primary" href="/diagnostico">
+            Solicitar diagnostico
+          </a>
+          <a class="button button--secondary" href="/contacto">
+            Hablar con Soka
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+import { navLinks } from "../data/site";
+
+const footerLinks = navLinks.filter((link) => link.href !== "/");
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__intro">
+        <p class="eyebrow">SokaTechnologies demo</p>
+        <h2 class="site-footer__heading">Una base visual mas clara, confiable y corporativa para vender tecnologia B2B.</h2>
+        <p class="footer-copy">
+          Esta demo vive separada de WordPress y permite validar tono, jerarquia visual y conversion antes de mover decisiones
+          a la web principal.
+        </p>
+      </div>
+
+      <div class="site-footer__column">
+        <p class="footer-title">Explorar</p>
+        <ul class="footer-nav">
+          {footerLinks.map((link) => (
+            <li>
+              <a class="footer-link" href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="site-footer__column">
+        <p class="footer-title">Principios</p>
+        <ul class="footer-list">
+          <li>Mensaje orientado a resultados</li>
+          <li>Diseno premium sin experimentalismo</li>
+          <li>Arquitectura aislada de WordPress</li>
+          <li>Sin formularios conectados todavia</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

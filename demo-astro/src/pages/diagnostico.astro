@@ -1,0 +1,84 @@
+---
+import ContactForm from "../components/ContactForm.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Diagnostico preliminar para procesos, sistemas e infraestructura"
+  description="Solicita un diagnostico preliminar con SokaTechnologies para ordenar contexto, prioridades y el siguiente paso en software, automatizacion o infraestructura."
+>
+  <section class="page-intro" aria-labelledby="diagnostico-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="page-intro__content">
+          <p class="eyebrow">Diagnostico preliminar</p>
+          <h1 id="diagnostico-title">Solicita una lectura inicial antes de definir alcance o tecnologia.</h1>
+          <p class="lead">
+            Un diagnostico ayuda a ordenar contexto, impacto, prioridad y siguiente paso. No es una promesa tecnica cerrada:
+            es una conversacion para decidir si conviene software a medida, automatizacion, reporting, infraestructura o una
+            mejora de presencia digital.
+          </p>
+          <div class="action-row">
+            <a class="button button--primary" href="/contacto">
+              Ir a contacto
+            </a>
+            <a class="button button--secondary" href="/servicios">
+              Revisar servicios
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="diagnostico-contenido-title">
+    <div class="container two-column">
+      <div class="stack">
+        <div class="section-heading section-heading--compact">
+          <p class="eyebrow">Que evaluamos</p>
+          <h2 id="diagnostico-contenido-title">La meta es entender el problema correcto antes de hablar de solucion.</h2>
+          <p>
+            Esta fase sirve para aterrizar el tipo de necesidad, revisar si hay una friccion operativa concreta y definir que
+            clase de trabajo tendria mas sentido como siguiente paso comercial o tecnico.
+          </p>
+        </div>
+
+        <article class="card">
+          <p class="card__meta">1. Contexto</p>
+          <h2 class="card__title">Proceso, equipo y punto principal de friccion.</h2>
+          <p class="card__body">
+            Queremos entender que flujo se esta viendo afectado, que equipos participan y por que el problema ya esta
+            impactando tiempo, control o continuidad.
+          </p>
+        </article>
+
+        <article class="card">
+          <p class="card__meta">2. Prioridad</p>
+          <h2 class="card__title">Urgencia, alcance aproximado y expectativa realista.</h2>
+          <p class="card__body">
+            Revisamos si el caso pide una respuesta inmediata, una planificacion de trimestre o una exploracion inicial para
+            ordenar mejor la decision.
+          </p>
+        </article>
+
+        <article class="card">
+          <p class="card__meta">3. Siguiente paso</p>
+          <h2 class="card__title">Una recomendacion comercial mas clara para avanzar.</h2>
+          <p class="card__body">
+            El resultado esperado de esta etapa es una lectura inicial: que tipo de servicio o solucion parece mas razonable
+            y que conversacion conviene tener despues.
+          </p>
+        </article>
+      </div>
+
+      <ContactForm
+        formId="diagnostico"
+        title="Solicitar diagnostico preliminar"
+        lead="Comparte solo el contexto general del caso. Este formulario sigue siendo parte de la demo y no envia ni guarda datos todavia."
+        submitLabel="Diagnostico demo sin envio activo"
+        descriptionLabel="Descripcion breve del problema"
+        descriptionPlaceholder="Explica el proceso, el cuello de botella, el tipo de impacto y el resultado que te gustaria mejorar sin compartir informacion sensible."
+      />
+    </div>
+  </section>
+</BaseLayout>

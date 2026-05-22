@@ -1,0 +1,376 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const resultAreas = [
+  {
+    meta: "Ahorro de tiempo",
+    title: "Menos tareas manuales",
+    body: "Diseñamos soluciones para reducir seguimiento disperso, doble digitacion y pasos repetitivos dentro de la operacion."
+  },
+  {
+    meta: "Reduccion de errores",
+    title: "Mas consistencia operativa",
+    body: "Ordenamos procesos, validaciones y flujos para que la informacion circule con menos friccion y menos improvisacion."
+  },
+  {
+    meta: "Trazabilidad",
+    title: "Estados y datos mas claros",
+    body: "Priorizamos control, seguimiento y visibilidad para equipos que necesitan saber que paso, cuando y con que contexto."
+  },
+  {
+    meta: "Continuidad",
+    title: "Soporte y evolucion",
+    body: "La tecnologia no se plantea como entrega aislada, sino como base mantenible para soporte, mejoras y crecimiento."
+  }
+];
+
+const problems = [
+  {
+    title: "Procesos repartidos entre hojas, correos y mensajes",
+    body: "Cuando la operacion depende de demasiados canales, crece el ruido y baja la capacidad de seguimiento."
+  },
+  {
+    title: "Reportes que exigen trabajo manual cada semana",
+    body: "Si los datos se consolidan a mano, el tiempo del equipo se va en preparar informacion en lugar de usarla."
+  },
+  {
+    title: "Sistemas o sitios sin suficiente soporte",
+    body: "La falta de mantenimiento termina afectando confianza, continuidad y capacidad de respuesta."
+  }
+];
+
+const services = [
+  {
+    meta: "Software a medida",
+    title: "Sistemas internos alineados con la operacion",
+    body: "Portales, herramientas y procesos digitales construidos para ordenar trabajo real, no para encajar a la fuerza."
+  },
+  {
+    meta: "Automatizaciones",
+    title: "Menos tareas repetitivas",
+    body: "Flujos que conectan acciones, validaciones y reportes para ahorrar tiempo y reducir errores evitables."
+  },
+  {
+    meta: "Dashboards y reportes",
+    title: "Lectura mas clara del negocio",
+    body: "Estructuramos informacion para que la direccion y los equipos puedan revisar indicadores con menos friccion."
+  },
+  {
+    meta: "Sitios web corporativos",
+    title: "Presencia digital mas confiable",
+    body: "Webs B2B enfocadas en explicar valor, generar confianza y facilitar conversaciones comerciales."
+  },
+  {
+    meta: "Infraestructura",
+    title: "Base tecnica con mas control",
+    body: "Soporte sobre entornos, accesos, continuidad y orden operativo para que el negocio no dependa de parches."
+  },
+  {
+    meta: "Soporte y mantenimiento",
+    title: "Acompanamiento despues de la entrega",
+    body: "Priorizamos una relacion de mejora continua, ajustes controlados y soporte para sistemas que deben seguir funcionando."
+  }
+];
+
+const processSteps = [
+  {
+    meta: "01",
+    title: "Diagnostico del proceso",
+    body: "Partimos del flujo actual, los cuellos de botella y el impacto operativo antes de hablar de herramientas."
+  },
+  {
+    meta: "02",
+    title: "Alcance y propuesta",
+    body: "Definimos una ruta clara de trabajo, prioridades, entregables y criterios de aceptacion antes de ejecutar."
+  },
+  {
+    meta: "03",
+    title: "Diseño y desarrollo",
+    body: "Construimos una solucion entendible, mantenible y alineada con la operacion real del equipo."
+  },
+  {
+    meta: "04",
+    title: "Pruebas y despliegue",
+    body: "Revisamos comportamiento, consistencia y salida controlada para reducir sorpresas al entrar en uso."
+  },
+  {
+    meta: "05",
+    title: "Soporte y mejora continua",
+    body: "Acompanamos la evolucion posterior con ajustes, continuidad y criterio tecnico para sostener el resultado."
+  }
+];
+
+const anonymizedCases = [
+  {
+    meta: "Caso anonimizado 01",
+    title: "Operacion administrativa con seguimiento disperso",
+    body: "Escenario orientado a centralizar informacion, clarificar estados y reducir dependencias de control manual."
+  },
+  {
+    meta: "Caso anonimizado 02",
+    title: "Equipo que necesita reportes mas confiables",
+    body: "Escenario enfocado en ordenar datos y preparar una base mas util para decisiones, revision y trazabilidad."
+  },
+  {
+    meta: "Caso anonimizado 03",
+    title: "Empresa B2B con presencia digital poco clara",
+    body: "Escenario pensado para reforzar confianza, explicar la oferta con mas criterio y facilitar el contacto comercial."
+  }
+];
+---
+
+<BaseLayout
+  title="Software, automatizacion e infraestructura para operaciones B2B"
+  description="SokaTechnologies ayuda a empresas B2B a reducir trabajo manual, mejorar trazabilidad y sostener operaciones con software, automatizacion e infraestructura."
+>
+  <section class="page-intro js-hero" aria-labelledby="home-hero-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="two-column">
+          <div class="page-intro__content">
+            <p class="eyebrow js-hero-eyebrow">SokaTechnologies para operaciones B2B</p>
+            <h1 id="home-hero-title" class="js-hero-title">
+              Software, automatizacion e infraestructura para operar con mas control.
+            </h1>
+            <p class="lead js-hero-subtitle">
+              Ayudamos a empresas a reducir trabajo manual, ordenar procesos, mejorar reportes y sostener sistemas con una
+              base tecnica mas clara, mantenible y profesional.
+            </p>
+
+            <div class="action-row">
+              <a class="button button--primary js-hero-cta" href="/diagnostico">
+                Solicitar diagnostico
+              </a>
+              <a class="button button--secondary js-hero-cta" href="/servicios">
+                Ver servicios
+              </a>
+            </div>
+          </div>
+
+          <aside class="card hero-visual js-hero-visual" aria-label="Resumen de propuesta de valor">
+            <p class="card__meta js-hero-visual-item">Lo que prioriza Soka</p>
+            <h2 class="card__title js-hero-visual-item">Tecnologia que mejora operaciones reales.</h2>
+            <p class="card__body js-hero-visual-item">
+              El enfoque combina digitalizacion, soporte y claridad comercial para que la tecnologia se convierta en una
+              capacidad del negocio, no en una carga adicional.
+            </p>
+            <ul class="bullet-list hero-visual__list">
+              <li class="hero-visual__item js-hero-visual-item">Menos friccion entre equipos y herramientas</li>
+              <li class="hero-visual__item js-hero-visual-item">Procesos con mas trazabilidad y control</li>
+              <li class="hero-visual__item js-hero-visual-item">Reportes mas utiles para seguimiento y decision</li>
+              <li class="hero-visual__item js-hero-visual-item">Soporte continuo sobre soluciones mantenibles</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="resultados-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Resultados que importan</p>
+        <h2 id="resultados-title">Tecnologia orientada a ahorro de tiempo, claridad y continuidad.</h2>
+        <p>
+          La Home debe comunicar beneficios de negocio antes que complejidad tecnica: menos errores, mas trazabilidad, mejor
+          lectura operativa y soporte para seguir creciendo.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {resultAreas.map((item) => (
+          <article class="card js-reveal-card">
+            <p class="card__meta">{item.meta}</p>
+            <h3 class="card__title">{item.title}</h3>
+            <p class="card__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="problemas-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Problemas que resolvemos</p>
+        <h2 id="problemas-title">Cuando la operacion crece, el desorden empieza a costar mas.</h2>
+        <p>
+          Muchas empresas no necesitan mas herramientas al azar. Necesitan ordenar procesos, conectar informacion y reducir
+          dependencia de seguimiento manual para operar con mas confianza.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {problems.map((problem) => (
+          <article class="card js-reveal-card">
+            <h3 class="card__title">{problem.title}</h3>
+            <p class="card__body">{problem.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="servicios-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Servicios principales</p>
+        <h2 id="servicios-title">Capacidades para ordenar, automatizar y sostener la operacion.</h2>
+        <p>
+          SokaTechnologies combina desarrollo, automatizacion, dashboards, presencia corporativa e infraestructura con una
+          lectura clara del contexto de negocio.
+        </p>
+      </div>
+
+      <div class="card-grid js-services-grid">
+        {services.map((service) => (
+          <article class="card js-reveal-card js-service-card">
+            <p class="card__meta">{service.meta}</p>
+            <h3 class="card__title">{service.title}</h3>
+            <p class="card__body">{service.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section js-process" aria-labelledby="proceso-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Como trabajamos</p>
+        <h2 id="proceso-title">Primero entendemos el proceso. Despues proponemos la solucion.</h2>
+        <p>
+          La experiencia debe reforzar que Soka no vende improvisacion. Vende criterio, alcance claro y continuidad sobre
+          tecnologia que se pueda mantener.
+        </p>
+      </div>
+
+      <div class="process-flow" aria-label="Timeline del proceso de trabajo">
+        <span class="process-flow__line-track" aria-hidden="true"></span>
+        <span class="process-flow__line-progress js-process-line" aria-hidden="true"></span>
+
+        {processSteps.map((step) => (
+          <article class="card process-step js-process-step">
+            <span class="process-step__marker" aria-hidden="true">
+              <span class="process-step__dot js-process-dot"></span>
+            </span>
+            <p class="card__meta process-step__meta">{step.meta}</p>
+            <h3 class="card__title">{step.title}</h3>
+            <p class="card__body">{step.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="portik-title">
+    <div class="container">
+      <div class="two-column">
+        <div class="stack">
+          <div class="section-heading section-heading--compact js-reveal">
+            <p class="eyebrow">Portik destacado</p>
+            <h2 id="portik-title">Un ejemplo de como una necesidad operativa puede convertirse en una oferta mas clara.</h2>
+            <p>
+              Portik funciona aqui como bloque de producto destacado: una forma de mostrar que Soka tambien puede estructurar
+              soluciones especificas con narrativa comercial, posicionamiento y foco en adopcion.
+            </p>
+          </div>
+
+          <div class="card js-portik-highlight">
+            <p class="card__meta">Por que incluirlo en la Home</p>
+            <h3 class="card__title">Da contexto de producto sin romper la narrativa corporativa.</h3>
+            <p class="card__body">
+              Este bloque ayuda a conectar servicios, solucion y posible expansion futura, sin convertir la Home en una pagina
+              experimental ni saturada.
+            </p>
+          </div>
+        </div>
+
+        <div class="stack">
+          <article class="card js-reveal-card">
+            <p class="card__meta">Operacion</p>
+            <h3 class="card__title">Mas visibilidad sobre procesos y seguimiento.</h3>
+            <p class="card__body">
+              Presenta una solucion con foco en orden, claridad y control, no solo en funcionalidad tecnica.
+            </p>
+          </article>
+
+          <article class="card js-reveal-card">
+            <p class="card__meta">Comercial</p>
+            <h3 class="card__title">Puente entre servicio y producto.</h3>
+            <p class="card__body">
+              Permite mostrar que Soka puede construir activos propios y no solo ejecutar tareas puntuales.
+            </p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="casos-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Casos anonimizados</p>
+        <h2 id="casos-title">Experiencia comunicada con criterio y sin datos sensibles.</h2>
+        <p>
+          Los ejemplos deben reforzar confianza comercial sin depender de nombres reales, cifras no verificadas ni detalles
+          confidenciales de clientes.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        {anonymizedCases.map((item) => (
+          <article class="card js-reveal-card">
+            <p class="card__meta">{item.meta}</p>
+            <h3 class="card__title">{item.title}</h3>
+            <p class="card__body">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="diagnostico-title">
+    <div class="container narrow">
+      <div class="card js-reveal">
+        <p class="card__meta">CTA de diagnostico</p>
+        <h2 id="diagnostico-title" class="card__title">Podemos revisar un proceso concreto y ayudarte a ordenar el siguiente paso.</h2>
+        <p class="card__body">
+          El diagnostico no promete resultados cerrados. Sirve para entender contexto, prioridad y tipo de solucion mas
+          razonable antes de comprometer alcance tecnico.
+        </p>
+        <div class="action-row">
+          <a class="button button--primary" href="/diagnostico">
+            Solicitar diagnostico
+          </a>
+          <a class="button button--secondary" href="/contacto">
+            Hablar con Soka
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cta-final-title">
+    <div class="container">
+      <div class="page-intro__surface js-final-cta">
+        <div class="page-intro__content">
+          <p class="eyebrow">Cierre</p>
+          <h2 id="cta-final-title">Menos trabajo manual. Mas control, soporte y continuidad para la operacion.</h2>
+          <p class="lead">
+            La Home debe cerrar con una idea simple: SokaTechnologies ayuda a convertir procesos dispersos en soluciones mas
+            claras, profesionales y sostenibles para empresas B2B.
+          </p>
+          <div class="action-row">
+            <a class="button button--primary" href="/diagnostico">
+              Empezar con un diagnostico
+            </a>
+            <a class="button button--secondary" href="/servicios">
+              Explorar servicios
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import Seo from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+type Props = {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  robots?: string;
+  ogType?: "website" | "article";
+  image?: string;
+};
+
+const {
+  title,
+  description = "SokaTechnologies ayuda a empresas B2B a ordenar procesos, automatizar tareas y sostener operaciones con una base tecnica mas clara.",
+  canonicalPath,
+  robots = "index,follow",
+  ogType = "website",
+  image
+} = Astro.props;
+const pathname = Astro.url.pathname;
+const site = Astro.site?.toString() ?? "https://sokatechnologies.com";
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <Seo
+      title={title}
+      description={description}
+      pathname={pathname}
+      site={site}
+      canonicalPath={canonicalPath}
+      robots={robots}
+      ogType={ogType}
+      image={image}
+    />
+    <meta name="theme-color" content="#0f6a79" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <Header currentPath={pathname} />
+      <main class="site-main">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <script>
+      import { initAnimations } from "../scripts/animations/initAnimations";
+
+      const startAnimations = () => {
+        const cleanup = initAnimations(document);
+        window.addEventListener("pagehide", cleanup, { once: true });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", startAnimations, { once: true });
+      } else {
+        startAnimations();
+      }
+    </script>
+  </body>
+</html>

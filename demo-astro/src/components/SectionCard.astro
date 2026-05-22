@@ -1,0 +1,15 @@
+---
+type Props = {
+  title: string;
+  body: string;
+  meta?: string;
+};
+
+const { title, body, meta } = Astro.props;
+---
+
+<article class="card" data-animate="card">
+  {meta && <p class="card__meta">{meta}</p>}
+  <h2 class="card__title">{title}</h2>
+  <p class="card__body">{body}</p>
+</article>

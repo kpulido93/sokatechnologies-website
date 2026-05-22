@@ -1,0 +1,119 @@
+---
+type Props = {
+  formId: string;
+  title: string;
+  lead: string;
+  submitLabel?: string;
+  serviceOptions?: string[];
+  servicePlaceholder?: string;
+  descriptionLabel?: string;
+  descriptionPlaceholder?: string;
+};
+
+const {
+  formId,
+  title,
+  lead,
+  submitLabel = "Formulario demo sin envio activo",
+  serviceOptions = [
+    "Diagnostico general",
+    "Software a medida",
+    "Automatizaciones e integraciones",
+    "Dashboards y reportes",
+    "Sitio web corporativo",
+    "Infraestructura cloud/on-prem",
+    "Soporte y mantenimiento",
+    "Portik"
+  ],
+  servicePlaceholder = "Selecciona un frente de trabajo",
+  descriptionLabel = "Descripcion breve del problema",
+  descriptionPlaceholder = "Describe el contexto general, el punto de friccion y el resultado que te gustaria mejorar sin compartir informacion sensible."
+} = Astro.props;
+
+const formKey = formId.toLowerCase().replace(/[^a-z0-9-]/g, "-");
+const email = "info@sokatechnologies.com";
+const whatsappHref =
+  "https://wa.me/573107482865?text=Hola%2C%20quiero%20solicitar%20un%20diagnostico%20para%20SokaTechnologies.%20Quiero%20revisar%20un%20proceso%2C%20sistema%20o%20infraestructura%20de%20mi%20empresa.";
+---
+
+<form
+  class="card form-card"
+  method="post"
+  action="#"
+  novalidate
+  aria-labelledby={`${formKey}-title`}
+  aria-describedby={`${formKey}-lead ${formKey}-demo ${formKey}-privacy`}
+>
+  <p class="card__meta">Formulario demo</p>
+  <h2 id={`${formKey}-title`} class="card__title">{title}</h2>
+  <p id={`${formKey}-lead`} class="card__body">{lead}</p>
+
+  <div class="field-grid">
+    <label class="field" for={`${formKey}-name`}>
+      <span>Nombre</span>
+      <input id={`${formKey}-name`} name="name" type="text" autocomplete="name" placeholder="Tu nombre" />
+    </label>
+
+    <label class="field" for={`${formKey}-company`}>
+      <span>Empresa</span>
+      <input id={`${formKey}-company`} name="company" type="text" autocomplete="organization" placeholder="Nombre de la empresa" />
+    </label>
+  </div>
+
+  <div class="field-grid">
+    <label class="field" for={`${formKey}-email`}>
+      <span>Email</span>
+      <input id={`${formKey}-email`} name="email" type="email" autocomplete="email" placeholder="empresa@dominio.com" />
+    </label>
+
+    <label class="field" for={`${formKey}-country`}>
+      <span>Pais</span>
+      <input id={`${formKey}-country`} name="country" type="text" autocomplete="country-name" placeholder="Pais o region" />
+    </label>
+  </div>
+
+  <label class="field" for={`${formKey}-service`}>
+    <span>Servicio de interes</span>
+    <select id={`${formKey}-service`} name="service">
+      <option value="">{servicePlaceholder}</option>
+      {serviceOptions.map((service) => (
+        <option value={service}>{service}</option>
+      ))}
+    </select>
+  </label>
+
+  <label class="field" for={`${formKey}-summary`}>
+    <span>{descriptionLabel}</span>
+    <textarea
+      id={`${formKey}-summary`}
+      name="summary"
+      rows="6"
+      placeholder={descriptionPlaceholder}
+    ></textarea>
+  </label>
+
+  <label class="field field--checkbox" for={`${formKey}-consent`}>
+    <input id={`${formKey}-consent`} name="consent" type="checkbox" />
+    <span>Acepto que SokaTechnologies me contacte por los datos compartidos para responder esta solicitud de demo.</span>
+  </label>
+
+  <p id={`${formKey}-demo`} class="form-note">
+    Este formulario es parte de la demo. Todavia no envia, guarda ni conecta datos a ningun backend.
+  </p>
+  <p id={`${formKey}-privacy`} class="form-note">
+    Comparte solo contexto general. No incluyas contrasenas, tokens, accesos, llaves privadas, respaldos, datos de clientes
+    ni otra informacion sensible en el primer contacto.
+  </p>
+
+  <div class="action-row">
+    <button class="button button--primary" type="button" aria-disabled="true">
+      {submitLabel}
+    </button>
+    <a class="button button--secondary" href={`mailto:${email}`}>
+      Enviar correo
+    </a>
+    <a class="button button--secondary" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+      WhatsApp comercial
+    </a>
+  </div>
+</form>

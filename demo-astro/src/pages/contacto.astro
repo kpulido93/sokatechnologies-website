@@ -1,0 +1,76 @@
+---
+import ContactForm from "../components/ContactForm.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Contacto comercial para software, automatizacion y diagnostico"
+  description="Contacta a SokaTechnologies para conversar sobre software a medida, automatizacion, reporting, infraestructura o presencia digital."
+>
+  <section class="page-intro" aria-labelledby="contacto-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="page-intro__content">
+          <p class="eyebrow">Contacto comercial</p>
+          <h1 id="contacto-title">Conversemos sobre el proceso, sistema o presencia digital que quieres mejorar.</h1>
+          <p class="lead">
+            Este punto de contacto esta pensado para iniciar una conversacion B2B con contexto general. La demo no envia
+            datos todavia, pero deja claro que informacion sirve para avanzar y que datos no deben compartirse.
+          </p>
+          <div class="action-row">
+            <a class="button button--primary" href="/diagnostico">
+              Solicitar diagnostico
+            </a>
+            <a class="button button--secondary" href="/servicios">
+              Ver servicios
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contacto-contenido-title">
+    <div class="container two-column">
+      <div class="stack">
+        <div class="section-heading section-heading--compact">
+          <p class="eyebrow">Antes de escribir</p>
+          <h2 id="contacto-contenido-title">Queremos entender el reto sin pedir informacion sensible.</h2>
+          <p>
+            El objetivo de este formulario no es capturar todo el proyecto de una vez. Solo busca abrir una conversacion
+            ordenada para identificar el frente de trabajo, el tipo de problema y el siguiente paso mas razonable.
+          </p>
+        </div>
+
+        <article class="card">
+          <p class="card__meta">Comparte esto</p>
+          <h2 class="card__title">Contexto suficiente para entender si vale la pena avanzar.</h2>
+          <ul class="bullet-list">
+            <li>Nombre, empresa y pais.</li>
+            <li>Servicio o frente de interes.</li>
+            <li>Descripcion breve del problema o necesidad.</li>
+            <li>Impacto esperado o urgencia aproximada.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <p class="card__meta">Proteccion basica</p>
+          <h2 class="card__title">En el primer contacto no necesitamos accesos ni informacion critica.</h2>
+          <ul class="bullet-list">
+            <li>No compartas contrasenas, tokens, llaves privadas ni accesos a sistemas.</li>
+            <li>No envies respaldos, bases de datos ni archivos sensibles.</li>
+            <li>No incluyas datos reales de clientes, empleados o residentes.</li>
+            <li>Si el caso requiere revision sensible, primero se define alcance.</li>
+          </ul>
+        </article>
+      </div>
+
+      <ContactForm
+        formId="contacto"
+        title="Deja un contexto general"
+        lead="Completa este formulario visual para mostrar como seria el punto de captacion. Si necesitas un canal real hoy, usa el correo o WhatsApp aprobados que aparecen debajo."
+        submitLabel="Formulario demo sin envio activo"
+      />
+    </div>
+  </section>
+</BaseLayout>

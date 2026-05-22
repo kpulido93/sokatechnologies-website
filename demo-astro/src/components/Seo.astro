@@ -1,0 +1,55 @@
+---
+type Props = {
+  title: string;
+  description: string;
+  pathname: string;
+  site?: string;
+  canonicalPath?: string;
+  siteName?: string;
+  robots?: string;
+  ogType?: "website" | "article";
+  image?: string;
+};
+
+const {
+  title,
+  description,
+  pathname,
+  site = "https://sokatechnologies.com",
+  canonicalPath = pathname,
+  siteName = "SokaTechnologies",
+  robots = "index,follow",
+  ogType = "website",
+  image
+} = Astro.props;
+
+const siteUrl = new URL(site);
+const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
+const pageTitle = `${title} | ${siteName}`;
+const imageUrl = image ? new URL(image, siteUrl).toString() : null;
+const twitterCard = imageUrl ? "summary_large_image" : "summary";
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+
+{
+  imageUrl && (
+    <>
+      <meta property="og:image" content={imageUrl} />
+      <meta name="twitter:image" content={imageUrl} />
+    </>
+  )
+}

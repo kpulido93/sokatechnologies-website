@@ -1,0 +1,188 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const services = [
+  {
+    meta: "Software a medida",
+    title: "Sistemas internos alineados con tu operacion",
+    problem:
+      "Cuando el equipo depende de demasiadas hojas, mensajes y pasos manuales, el control se vuelve lento y fragil.",
+    result:
+      "Mas claridad sobre el proceso, menos friccion operativa y una base digital mas util para escalar con orden.",
+    deliverables: [
+      "Levantamiento del flujo actual y alcance funcional",
+      "Portal o sistema interno ajustado al proceso real",
+      "Roles, estados y seguimiento operativo"
+    ],
+    cta: "Hablar sobre software a medida"
+  },
+  {
+    meta: "Automatizaciones e integraciones",
+    title: "Menos tareas repetitivas y menos errores evitables",
+    problem:
+      "Si la informacion viaja a mano entre herramientas, se pierde tiempo, consistencia y capacidad de reaccion.",
+    result:
+      "Procesos mas fluidos, menos retrabajo y una operacion que depende menos de copiar, pegar y perseguir datos.",
+    deliverables: [
+      "Mapeo de tareas repetitivas y puntos de friccion",
+      "Automatizaciones entre herramientas y flujos",
+      "Validaciones y notificaciones operativas"
+    ],
+    cta: "Evaluar automatizaciones"
+  },
+  {
+    meta: "Dashboards y reportes",
+    title: "Informacion mas clara para seguimiento y decision",
+    problem:
+      "Cuando los reportes se arman manualmente, la direccion termina reaccionando tarde y con poca confianza en los datos.",
+    result:
+      "Lectura mas util del negocio, seguimiento mas rapido y una base mejor para priorizar decisiones operativas.",
+    deliverables: [
+      "Definicion de indicadores y fuentes",
+      "Reportes operativos y ejecutivos",
+      "Vistas consolidadas para seguimiento"
+    ],
+    cta: "Revisar necesidades de reporting"
+  },
+  {
+    meta: "Sitios web corporativos",
+    title: "Una presencia digital que transmite mas confianza B2B",
+    problem:
+      "Muchas webs explican poco, se ven genericas o no ayudan a convertir interes en una conversacion comercial.",
+    result:
+      "Un sitio mas claro, profesional y orientado a explicar valor, generar confianza y facilitar el contacto.",
+    deliverables: [
+      "Arquitectura de mensajes y paginas clave",
+      "Landing o sitio corporativo orientado a conversion",
+      "Base de contenido para servicios y CTA"
+    ],
+    cta: "Hablar sobre la web corporativa"
+  },
+  {
+    meta: "Infraestructura cloud/on-prem",
+    title: "Mas control sobre la base tecnica del negocio",
+    problem:
+      "Cuando accesos, entornos o continuidad no estan ordenados, cualquier incidencia termina costando mas tiempo y riesgo.",
+    result:
+      "Mayor estabilidad operativa, menos dependencia de improvisacion y una base mas segura para sostener sistemas.",
+    deliverables: [
+      "Revision de entorno y puntos de riesgo",
+      "Ajustes de continuidad y orden tecnico",
+      "Lineamientos de soporte, acceso y operacion"
+    ],
+    cta: "Revisar infraestructura"
+  },
+  {
+    meta: "Soporte y mantenimiento",
+    title: "Continuidad despues de implementar",
+    problem:
+      "Un sistema o sitio sin seguimiento termina perdiendo calidad, capacidad de respuesta y confianza interna.",
+    result:
+      "Mas continuidad, mejor priorizacion de mejoras y un ritmo de evolucion mas sano para el negocio.",
+    deliverables: [
+      "Soporte correctivo y ajustes controlados",
+      "Mejoras priorizadas sobre la base existente",
+      "Acompanamiento tecnico y seguimiento"
+    ],
+    cta: "Hablar sobre soporte continuo"
+  }
+];
+---
+
+<BaseLayout
+  title="Servicios B2B de software, automatizacion e infraestructura"
+  description="Conoce los servicios B2B de SokaTechnologies: software a medida, automatizaciones, dashboards, sitios corporativos, infraestructura y soporte."
+>
+  <section class="page-intro" aria-labelledby="servicios-title">
+    <div class="container">
+      <div class="page-intro__surface">
+        <div class="page-intro__content">
+          <p class="eyebrow js-reveal">Servicios B2B</p>
+          <h1 id="servicios-title" class="js-reveal">Tecnologia enfocada en ordenar, automatizar y sostener la operacion.</h1>
+          <p class="lead js-reveal">
+            SokaTechnologies presenta su oferta desde el impacto de negocio: menos trabajo manual, mejor trazabilidad, reportes
+            mas utiles, presencia digital mas clara y soporte para seguir creciendo con control.
+          </p>
+          <div class="action-row js-reveal">
+            <a class="button button--primary" href="/diagnostico">
+              Solicitar diagnostico
+            </a>
+            <a class="button button--secondary" href="/contacto">
+              Hablar con Soka
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="oferta-title">
+    <div class="container">
+      <div class="section-heading js-reveal">
+        <p class="eyebrow">Oferta principal</p>
+        <h2 id="oferta-title">Servicios pensados para gerencia, operaciones y equipos que necesitan mas claridad.</h2>
+        <p>
+          La propuesta no se queda en tecnologia por tecnologia. Cada bloque busca explicar que problema se atiende, que
+          resultado se espera y que tipo de entregables suelen entrar en una solucion bien planteada.
+        </p>
+      </div>
+
+      <div class="card-grid js-services-grid">
+        {services.map((service) => (
+          <article class="card js-reveal-card js-service-card">
+            <p class="card__meta">{service.meta}</p>
+            <h3 class="card__title">{service.title}</h3>
+
+            <div class="stack">
+              <div>
+                <p class="eyebrow">Problema que resuelve</p>
+                <p class="card__body">{service.problem}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Resultado esperado</p>
+                <p class="card__body">{service.result}</p>
+              </div>
+
+              <div>
+                <p class="eyebrow">Entregables tipicos</p>
+                <ul class="bullet-list">
+                  {service.deliverables.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <a class="button button--primary" href="/diagnostico">
+                {service.cta}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cierre-servicios-title">
+    <div class="container narrow">
+      <div class="card js-reveal">
+        <p class="card__meta">Siguiente paso</p>
+        <h2 id="cierre-servicios-title" class="card__title">Si el reto todavia no esta del todo definido, el mejor inicio es un diagnostico.</h2>
+        <p class="card__body">
+          Un diagnostico ayuda a ordenar el contexto, priorizar el problema correcto y definir si conviene automatizar, crear
+          software, mejorar reporting, reforzar infraestructura o trabajar una base de soporte mas estable.
+        </p>
+        <div class="action-row">
+          <a class="button button--primary" href="/diagnostico">
+            Solicitar diagnostico
+          </a>
+          <a class="button button--secondary" href="/contacto">
+            Hablemos del caso
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
