@@ -69,7 +69,7 @@ __archive_review__/
 /wp-content/themes/
 
 # cPanel
-.cpanel.yml
+# .cpanel.yml stays versioned for reviewed deployment tasks.
 .cpanel/
 .htaccess
 .htpasswd

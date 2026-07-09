@@ -2,235 +2,222 @@
 
 ## Objetivo
 
-Definir un proceso seguro para publicar la web WordPress de SokaTechnologies desde el entorno local hacia un hosting compartido con cPanel cuando el diseno y el contenido esten aprobados.
+Definir un checklist operativo y seguro para publicar en produccion la web WordPress validada localmente de SokaTechnologies en `sokatechnologies.com` usando cPanel, sin perder configuracion, sin subir archivos indebidos y con rollback preparado antes de cualquier cambio.
 
-Este documento es una guia de preparacion. No autoriza despliegues automaticos ni contiene credenciales.
+Este documento solo describe pasos manuales. No autoriza despliegues automaticos, no pide credenciales y no debe usarse para tocar produccion sin backup previo.
 
-## Reglas principales
+## Estado base aprobado
 
-- No ejecutar despliegues a produccion desde Codex.
-- No crear `.cpanel.yml` sin aprobacion explicita.
-- No incluir credenciales, tokens, llaves privadas, dumps SQL, backups ni datos reales de cPanel.
-- No leer ni mostrar el contenido de `public_html/wp-config.php`.
-- No asumir servidor dedicado, acceso root, Docker, CI/CD ni permisos fuera de un hosting compartido con cPanel.
-- `public_html/` es un entorno local ignorado por Git para validar en `http://127.0.0.1:8088`; no es fuente versionada ni mecanismo de despliegue.
-- Solo se conservan cambios del tema si tambien se copian a `wp-theme/sokatechnologies-child-theme/`.
+- Fuente validada: rama `dev`.
+- Validacion funcional local: `http://127.0.0.1:8088`.
+- Hosting destino: cPanel con WordPress Management, Softaculous, SSL/TLS, JetBackup, MySQL y phpMyAdmin.
+- Tema hijo versionado: `wp-theme/sokatechnologies-child-theme/`.
+- Tema padre requerido por el child theme: `twentytwentyfive`.
 
 ## Alcance publicable
 
-Se puede preparar para entrega manual:
+Se puede trasladar a produccion:
 
-- Child theme propio en `wp-theme/sokatechnologies-child-theme/`.
-- CSS, `theme.json`, partes de template y assets propios del tema.
-- Contenido aprobado en `content/` o `website/wordpress/`.
-- Snippets revisados, si aplican.
-- Documentacion operativa.
+- Child theme versionado en `wp-theme/sokatechnologies-child-theme/`.
+- Assets propios ya incluidos dentro del child theme.
+- Contenido aprobado, recreado o importado por WordPress Admin segun el metodo aprobado.
+- Ajustes manuales de WordPress, tema y plugins hechos directamente en el entorno productivo.
+- Plugins aprobados e instalados desde fuentes oficiales.
 
-No se debe publicar desde este repo:
+No se debe subir ni versionar como parte de la publicacion:
 
-- WordPress core.
-- `wp-config.php`.
+- `public_html/` del repo local.
+- `public_html/wp-config.php`.
 - `wp-admin/`.
 - `wp-includes/`.
-- Plugins completos de terceros.
-- Tema padre completo.
-- Instalaciones completas o parciales de `public_html/`.
-- `uploads/`.
-- Base de datos sin un proceso de migracion aprobado.
-- Backups, `.sql`, `.zip` sensibles o credenciales.
+- WordPress core.
+- Plugins completos copiados desde el entorno local.
+- `uploads/` locales sin revision previa.
+- Backups, `.sql`, `.zip` operativos, caches o archivos temporales.
+- Credenciales, tokens, llaves privadas o datos reales de cPanel.
 
-## 1. Revision de contenido
+## Riesgos antes de publicar
 
-- [ ] Confirmar que las paginas principales estan completas: Inicio, Servicios, Soluciones, Casos de exito, Sobre nosotros, Blog y Contacto.
-- [ ] Revisar ortografia, tono B2B y consistencia de marca.
-- [ ] Confirmar que no hay nombres reales de clientes sin aprobacion.
-- [ ] Confirmar que no hay precios definitivos si no fueron aprobados.
-- [ ] Confirmar que no hay datos internos, credenciales, usuarios reales ni informacion sensible.
-- [ ] Revisar que los placeholders visibles esten resueltos o identificados antes de publicar.
+- Publicar desde una carpeta equivocada, por ejemplo el `public_html/` local, y arrastrar core, plugins o archivos no aprobados.
+- Sobrescribir una instalacion activa sin punto de restauracion valido en JetBackup.
+- Activar el child theme sin tener instalado el tema padre `twentytwentyfive`.
+- Mover contenido o media sin revisar URLs, enlaces a `localhost` o rutas locales.
+- Cambiar plugins o tema sin documentar su configuracion previa y sin evidencia de rollback.
+- Publicar formulario sin validar correo saliente, anti-spam y destinatario final.
+- Dejar el banner de cookies incompleto o en ingles aunque el layout este listo.
+- Confiar solo en el fallback del favicon sin cargar el `Site Icon` final en WordPress.
+- Dejar schema o SEO con placeholders, por ejemplo redes sociales vacias o nombre incompleto.
+- No regrabar permalinks y romper slugs o paginas ya enlazadas.
 
-## 2. Revision de menu
+## Checklist previa al cambio
 
-- [ ] Confirmar menu principal: Inicio, Servicios, Soluciones, Casos de exito, Sobre nosotros, Blog, Contacto.
-- [ ] Confirmar que no aparece `Sample Page`.
-- [ ] Confirmar que cada enlace apunta a una pagina publicada.
-- [ ] Confirmar que el orden del menu coincide con `docs/content-structure.md`.
-- [ ] Revisar menu en desktop, tablet y movil.
+### 1. Backup antes de cambios
 
-## 3. Revision de footer
+- [ ] Crear backup completo de archivos y base de datos desde JetBackup o herramienta equivalente del hosting.
+- [ ] Verificar que el backup se pueda restaurar y que aparezca con fecha/hora correctas.
+- [ ] Confirmar alcance del backup: archivos del sitio, base de datos y configuracion restaurable.
+- [ ] Guardar evidencia minima del backup: fecha, herramienta usada y responsable.
+- [ ] Si el sitio ya esta publicado, capturar pantallas del estado actual de tema activo, plugins activos y ajustes clave.
+- [ ] No seguir si no existe backup previo confirmado.
 
-- [ ] Confirmar que el footer no muestra enlaces genericos de WordPress.
-- [ ] Confirmar columnas: SokaTechnologies, Servicios, Empresa y Contacto.
-- [ ] Reemplazar placeholders de email y WhatsApp solo con datos aprobados.
-- [ ] Confirmar que el texto de cobertura geografica es correcto.
-- [ ] Revisar enlaces del footer en desktop, tablet y movil.
+### 2. SSL y dominio
 
-## 4. Revision responsive
+- [ ] Confirmar que `sokatechnologies.com` y, si aplica, `www.sokatechnologies.com` apuntan al hosting correcto.
+- [ ] Confirmar que el certificado SSL/TLS esta emitido y vigente.
+- [ ] Confirmar que el dominio carga por `https://`.
+- [ ] Confirmar redireccion de `http` a `https`.
+- [ ] Verificar que no hay contenido mixto previsto por URLs absolutas antiguas.
 
-- [ ] Probar Home en ancho movil, tablet y desktop.
-- [ ] Probar Servicios, Soluciones, Casos de exito, Sobre nosotros y Contacto.
-- [ ] Confirmar que no hay texto solapado.
-- [ ] Confirmar que botones y enlaces son tactiles en movil.
-- [ ] Confirmar que tarjetas, columnas y CTA se reorganizan correctamente.
-- [ ] Confirmar que el header y el footer no rompen el layout.
+### 3. PHP y stack del hosting
 
-## 5. Revision de enlaces
+- [ ] Revisar en cPanel la version PHP activa para el dominio.
+- [ ] Confirmar compatibilidad de esa version con WordPress, `twentytwentyfive`, el child theme y los plugins aprobados.
+- [ ] Revisar limites operativos basicos: `memory_limit`, `upload_max_filesize`, `post_max_size` y `max_execution_time`.
+- [ ] Confirmar extensiones PHP necesarias para WordPress y plugins aprobados.
+- [ ] No cambiar configuraciones globales del hosting si no son necesarias para esta publicacion.
 
-- [ ] Revisar enlaces internos de menu, footer, CTA y tarjetas.
-- [ ] Confirmar que no hay enlaces hacia `localhost`, `127.0.0.1` o rutas locales.
-- [ ] Confirmar que no hay enlaces rotos.
-- [ ] Confirmar que los enlaces externos abren correctamente.
-- [ ] Confirmar que telefonos, email y WhatsApp usan valores aprobados.
+### 4. Plugins necesarios
 
-## 6. Revision de formularios
+- [ ] Confirmar lista final de plugins aprobados antes de tocar produccion.
+- [ ] Instalar plugins solo desde WordPress Admin, WordPress Management o fuentes oficiales.
+- [ ] No copiar `public_html/wp-content/plugins/` desde el entorno local.
+- [ ] Validar al menos estos componentes funcionales segun el estado local:
+- [ ] `Fluent Forms Lite` si el formulario de contacto se publicara con el mismo flujo.
+- [ ] `CookieAdmin` si se mantendra el banner de cookies validado localmente.
+- [ ] `SiteSEO` o el plugin SEO aprobado si se mantendra el comportamiento actual de schema.
+- [ ] Plugin SMTP, anti-spam o backup solo si fueron aprobados para produccion.
+- [ ] Documentar cualquier diferencia final en `docs/plugins.md`.
 
-- [ ] Definir que plugin o mecanismo de formulario se usara en produccion.
-- [ ] Confirmar que el formulario envia correos al destinatario aprobado.
-- [ ] Probar envio exitoso.
-- [ ] Probar mensajes de error.
-- [ ] Confirmar que no se exponen emails internos innecesarios.
-- [ ] Confirmar proteccion antispam compatible con cPanel compartido.
-- [ ] Confirmar politica de privacidad si se recolectan datos personales.
+### 5. Tema hijo, tema padre y assets
 
-## 7. Revision SEO basica
+- [ ] Confirmar que el tema padre `twentytwentyfive` esta instalado en produccion.
+- [ ] Preparar un ZIP limpio unicamente del contenido de `wp-theme/sokatechnologies-child-theme/` si el metodo elegido requiere subida por WordPress Admin.
+- [ ] Verificar que el child theme incluye `style.css`, `functions.php`, `theme.json`, CSS y assets necesarios.
+- [ ] Confirmar que los favicons optimizados y logos necesarios existen dentro del child theme.
+- [ ] No subir la raiz del repo, `docs/`, `scripts/` ni el `public_html/` local al directorio publico.
+- [ ] Activar el child theme solo cuando el tema padre y plugins dependientes ya esten listos.
 
-- [ ] Configurar titulo del sitio y descripcion corta.
-- [ ] Revisar title/meta description de paginas principales.
-- [ ] Confirmar un solo H1 por pagina principal.
-- [ ] Confirmar jerarquia clara de H2 y H3.
-- [ ] Revisar slugs limpios: `/servicios/`, `/soluciones/`, `/casos-de-exito/`, `/sobre-nosotros/`, `/contacto/`.
-- [ ] Confirmar que la Home esta configurada como pagina frontal.
-- [ ] Revisar sitemap si se usa plugin SEO.
-- [ ] Confirmar indexacion solo cuando el sitio este listo para publicarse.
+### 6. Formulario
 
-## 8. Revision de imagenes
+- [ ] Confirmar el plugin o mecanismo definitivo del formulario de contacto en produccion.
+- [ ] Confirmar destinatario aprobado para notificaciones, actualmente `info@sokatechnologies.com`.
+- [ ] Confirmar que no se piden contrasenas, tokens, llaves privadas ni adjuntos sensibles.
+- [ ] Revisar mensaje de confirmacion y validaciones del formulario.
+- [ ] Configurar anti-spam compatible con hosting compartido.
+- [ ] Verificar que el correo saliente de WordPress esta listo antes del corte.
 
-- [ ] Confirmar que las imagenes tienen licencia o aprobacion de uso.
-- [ ] Optimizar peso antes de subir.
-- [ ] Usar nombres de archivo descriptivos.
-- [ ] Agregar texto alternativo util.
-- [ ] Evitar imagenes con datos sensibles visibles.
-- [ ] Confirmar que no se suben archivos fuente innecesarios.
+### 7. Cookies
 
-## 9. Backup local
+- [ ] Confirmar si produccion usara `CookieAdmin` o el sistema de consentimiento aprobado.
+- [ ] Replicar la configuracion funcional validada: `GDPR`, `Box`, `Bottom Right`, `Center`.
+- [ ] Confirmar textos en espanol para titulo, botones y modal.
+- [ ] Confirmar que el banner no oculta CTA criticos en desktop ni movil.
+- [ ] Confirmar que enlaces a politica de privacidad y politica de cookies apunten a paginas reales si ya existen.
+- [ ] No ocultar branding del plugin por CSS o hacks no aprobados.
 
-- [ ] Confirmar que el estado local funciona en `http://127.0.0.1:8088`.
-- [ ] Confirmar que `public_html/` sigue ignorado por Git.
-- [ ] Exportar contenido local solo si el proceso fue aprobado.
-- [ ] Guardar backup local fuera del repo.
-- [ ] No versionar backups ni dumps SQL.
-- [ ] Documentar fecha, alcance y responsable del backup.
+### 8. Favicon / Site Icon
 
-## 10. Exportacion y migracion
+- [ ] Subir `favicon-512x512.png` aprobado como `Site Icon` desde WordPress Admin.
+- [ ] Confirmar que el navegador recibe el icono correcto por HTTPS.
+- [ ] Confirmar que el fallback del child theme sigue disponible si WordPress todavia no tiene `Site Icon`.
+- [ ] Confirmar que ya no se sirve como favicon principal el PNG grande original.
+- [ ] Revisar favicon en desktop y movil.
 
-- [ ] Definir si se migrara solo tema/contenido o instalacion completa.
-- [ ] Preparar ZIP limpio del child theme desde `wp-theme/sokatechnologies-child-theme/` si aplica.
-- [ ] Exportar paginas con herramienta aprobada si se requiere migrar contenido.
-- [ ] Revisar que la exportacion no incluya usuarios, credenciales, logs ni datos sensibles.
-- [ ] No migrar `wp-config.php` local.
-- [ ] No migrar `uploads/` sin revision previa.
-- [ ] Mantener una copia de rollback antes de tocar produccion.
+### 9. SEO y schema
 
-## 11. Instalacion WordPress en cPanel
+- [ ] Configurar nombre de organizacion como `SokaTechnologies`.
+- [ ] Confirmar que no existan perfiles sociales ficticios ni placeholders en el plugin SEO.
+- [ ] Validar que el schema de organizacion no expone `https://x.com/` vacio ni campos incompletos.
+- [ ] Confirmar pagina frontal, titulo del sitio, descripcion corta y slugs finales.
+- [ ] Confirmar que el logo/schema apunten a un asset valido.
+- [ ] Revisar indexacion, sitemap y metadatos basicos segun el plugin SEO aprobado.
 
-- [ ] Crear o preparar instalacion WordPress desde herramientas del hosting o instalador aprobado.
-- [ ] Confirmar dominio o subdominio destino.
-- [ ] Confirmar ruta de instalacion en cPanel.
-- [ ] Instalar el tema padre requerido, por ejemplo `twentytwentyfive`, si el child theme depende de el.
-- [ ] Subir e instalar el child theme propio.
-- [ ] Activar el child theme solo despues de verificar dependencias.
-- [ ] No editar WordPress core.
+### 10. Permalinks y ajustes finales
 
-## 12. SSL
+- [ ] Confirmar estructura de enlaces permanentes prevista para produccion.
+- [ ] Confirmar que la Home apunta a la pagina correcta.
+- [ ] Confirmar pagina de blog si aplica.
+- [ ] Confirmar menus, footer y widgets segun el estado aprobado.
+- [ ] Eliminar referencias a `localhost`, `127.0.0.1` o rutas locales.
+- [ ] Dejar caches limpias o purgarlas despues de publicar si existe cache activa.
 
-- [ ] Activar SSL desde cPanel o proveedor del hosting.
-- [ ] Confirmar que el dominio responde por HTTPS.
-- [ ] Forzar HTTPS desde la configuracion aprobada del sitio o hosting.
-- [ ] Revisar que no haya contenido mixto.
-- [ ] Confirmar redireccion de HTTP a HTTPS.
+## Publicacion en cPanel
 
-## 13. PHP
+Secuencia recomendada para una publicacion manual segura:
 
-- [ ] Confirmar version PHP compatible con WordPress, tema y plugins.
-- [ ] Revisar limites basicos disponibles en hosting compartido: memoria, upload max size y tiempo de ejecucion.
-- [ ] Confirmar extensiones PHP requeridas por WordPress.
-- [ ] Evitar cambios globales no necesarios en cPanel.
-- [ ] Registrar cualquier ajuste aplicado sin incluir datos sensibles.
+1. Confirmar nuevamente el backup valido en JetBackup antes de tocar archivos, base de datos o configuracion.
+2. Entrar a cPanel y verificar el estado del dominio, SSL/TLS y version PHP del sitio destino.
+3. Si WordPress aun no existe en produccion, crear la instalacion con WordPress Management o Softaculous en el dominio correcto. Si ya existe, no reinstalar encima sin backup confirmado.
+4. Confirmar que el tema padre `twentytwentyfive` esta instalado.
+5. Subir el child theme `sokatechnologies-child-theme` por `Appearance > Themes > Add New > Upload Theme` o por File Manager solo dentro de `public_html/wp-content/themes/`.
+6. No subir `public_html/` del repo local, no subir plugins locales, no subir backups, no subir `.sql` ni `.zip` ajenos al tema.
+7. Instalar o activar solo los plugins aprobados desde fuentes oficiales.
+8. Activar el child theme `SokaTechnologies`.
+9. Cargar o recrear el contenido aprobado en WordPress Admin.
+10. Subir assets faltantes desde Media Library solo si no viajan ya dentro del child theme y si son necesarios para contenido o SEO.
+11. Configurar formulario, correo saliente y anti-spam.
+12. Configurar banner de cookies y revisar textos.
+13. Configurar `Site Icon`, logo de schema y ajustes SEO.
+14. Guardar enlaces permanentes desde `Settings > Permalinks` sin cambiar a una estructura no aprobada.
+15. Revisar rapidamente el front antes de cerrar la ventana de cambio.
 
-## 14. Base de datos
+## Smoke test post-publicacion
 
-- [ ] Crear base de datos y usuario desde cPanel solo durante la instalacion aprobada.
-- [ ] No documentar credenciales.
-- [ ] Confirmar prefijo de tablas y configuracion de WordPress sin exponer secretos.
-- [ ] Hacer backup antes de cualquier importacion.
-- [ ] Probar importacion en staging o entorno seguro si esta disponible.
-- [ ] No ejecutar reemplazos masivos sin backup y validacion.
-
-## 15. Plugins minimos
-
-- [ ] Instalar solo plugins necesarios.
-- [ ] Priorizar formulario, SEO, seguridad/cache si aplica y backup.
-- [ ] Evitar plugins duplicados por funcion.
-- [ ] Confirmar compatibilidad con hosting compartido.
-- [ ] Activar y configurar uno por uno.
-- [ ] Documentar plugins aprobados en `docs/plugins.md`.
-
-## 16. Seguridad
-
-- [ ] Usar usuarios individuales, no cuentas compartidas.
-- [ ] Aplicar contrasenas fuertes y 2FA si el hosting o WordPress lo permite.
-- [ ] Mantener WordPress, tema padre y plugins actualizados.
-- [ ] Desactivar edicion de archivos desde admin si la politica del sitio lo requiere.
-- [ ] Confirmar permisos de archivos compatibles con cPanel.
-- [ ] Confirmar que no hay backups publicos en `public_html/`.
-- [ ] Confirmar que no hay dumps SQL accesibles por web.
-- [ ] Confirmar que no se publico ningun archivo sensible del repo.
-
-## 17. Pruebas post-publicacion
-
-- [ ] Abrir Home por HTTPS.
-- [ ] Probar navegacion principal y footer.
-- [ ] Probar paginas principales.
-- [ ] Probar formulario de contacto.
-- [ ] Revisar responsive en movil y desktop.
-- [ ] Revisar consola del navegador.
-- [ ] Revisar errores PHP visibles.
-- [ ] Revisar enlaces permanentes.
-- [ ] Confirmar que el admin de WordPress carga correctamente.
-- [ ] Confirmar que no aparece contenido generico como `Sample Page`.
-
-## 18. Backup post-publicacion
-
-- [ ] Crear backup completo desde cPanel o herramienta aprobada despues de validar.
-- [ ] Incluir archivos y base de datos si el proceso lo permite.
-- [ ] Guardar backup fuera del directorio publico.
-- [ ] No subir backup al repo.
-- [ ] Registrar fecha, alcance y ubicacion segura del backup sin credenciales.
-
-## 19. Checklist mensual
-
-- [ ] Revisar actualizaciones de WordPress, tema padre y plugins.
-- [ ] Hacer backup antes de actualizar.
-- [ ] Probar Home, Contacto y paginas principales despues de actualizar.
-- [ ] Revisar formularios y entregabilidad de correo.
-- [ ] Revisar SSL y vencimiento.
-- [ ] Revisar usuarios administradores.
-- [ ] Revisar plugins inactivos o innecesarios.
-- [ ] Revisar backups antiguos y politica de retencion.
-- [ ] Revisar errores en logs si el hosting los expone.
-- [ ] Revisar rendimiento basico y peso de imagenes nuevas.
+- [ ] Abrir `https://sokatechnologies.com/` en ventana privada.
+- [ ] Confirmar que la Home carga por HTTPS y sin alertas de certificado.
+- [ ] Confirmar que header, menu principal y footer cargan correctamente.
+- [ ] Confirmar que el tema activo es el child theme `SokaTechnologies`.
+- [ ] Confirmar que las paginas principales responden: Inicio, Servicios, Soluciones, Casos de exito, Sobre nosotros, Blog y Contacto.
+- [ ] Confirmar que no quedan enlaces a `localhost`, `127.0.0.1` o assets rotos.
+- [ ] Confirmar que el formulario de contacto abre, valida y envia correctamente.
+- [ ] Confirmar que llega la notificacion al destino aprobado o, como minimo, que WordPress muestra envio exitoso y existe trazabilidad de prueba.
+- [ ] Confirmar que el banner de cookies aparece en espanol y que `Personalizar` abre el modal sin desbordes.
+- [ ] Confirmar que favicon y `Site Icon` se ven correctamente en la pestana del navegador.
+- [ ] Confirmar que el schema de organizacion existe y no contiene placeholders.
+- [ ] Confirmar que no hay errores visibles de PHP ni errores criticos en pantalla.
+- [ ] Confirmar que no hay contenido mixto en consola del navegador.
+- [ ] Confirmar que el admin de WordPress sigue accesible.
+- [ ] Confirmar responsive basico en movil y desktop para Home y Contacto.
+- [ ] Confirmar que guardar de nuevo `Permalinks` no cambia slugs esperados ni rompe navegacion.
 
 ## Rollback
 
-Opciones de reversa si una publicacion falla:
+No intentar rollback improvisado. Usar un orden simple y documentado.
 
-- Restaurar backup del hosting.
-- Restaurar version anterior del child theme.
-- Desactivar child theme y activar tema padre temporalmente si el admin sigue accesible.
-- Revertir contenido desde backup o revision de WordPress.
-- Revertir PR o commit del repo si el problema viene de archivos versionados.
+### Disparadores de rollback
 
-Antes de revertir, documentar que fallo, que se cambio y que backup se usara.
+- El sitio deja de cargar o entra en error critico.
+- El admin de WordPress deja de ser accesible.
+- El tema activo rompe layout, navegacion o contenido clave.
+- El formulario no funciona y no hay correccion rapida y segura.
+- El cambio deja expuestos placeholders, enlaces rotos, contenido mixto o configuracion incompleta.
 
-## Notas sobre Git en cPanel
+### Orden de rollback recomendado
 
-cPanel permite configurar despliegues mediante `.cpanel.yml`, pero este archivo puede enviar archivos hacia directorios productivos. No usarlo hasta aprobar una estrategia segura, revisable y con rollback probado.
+1. Pausar nuevos cambios y registrar que fallo.
+2. Si el problema esta solo en el tema y el admin sigue accesible, reactivar temporalmente el tema anterior o el tema padre seguro.
+3. Si el problema no se resuelve rapido, restaurar desde JetBackup el punto previo a la publicacion.
+4. Restaurar archivos y base de datos como un solo conjunto si hubo cambios en ambas capas.
+5. Revalidar SSL, tema activo, plugins activos, permalinks y formulario despues de la restauracion.
+6. Documentar causa, hora de restauracion, backup usado y siguientes acciones antes de reintentar.
+
+### Evidencia minima tras rollback
+
+- Fecha y hora del incidente.
+- Alcance de lo restaurado.
+- Herramienta usada, por ejemplo JetBackup.
+- Responsable que ejecuto la reversa.
+- Estado final del sitio tras restaurar.
+
+## Registro minimo de publicacion
+
+Antes de cerrar la ventana de cambio, dejar constancia de:
+
+- Fecha y hora de publicacion.
+- Rama o commit publicado.
+- Responsable del cambio.
+- Backup previo usado como punto de retorno.
+- Plugins instalados o modificados.
+- Tema activo final.
+- Resultado del smoke test.
+- Necesidades pendientes para la siguiente iteracion.
