@@ -1,0 +1,70 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import { services } from "../data/services";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { processSteps } from "../lib/site";
+---
+
+<BaseLayout
+  title="Servicios | SokaTechnologies"
+  description="Suite B2B de software a medida, automatización, dashboards, sitios web corporativos, infraestructura y soporte."
+  canonicalPath="/servicios/"
+>
+  <section class="page-hero section">
+    <p class="eyebrow">Servicios</p>
+    <h1>Servicios tecnológicos para operar con más control.</h1>
+    <p>
+      SokaTechnologies ayuda a convertir procesos manuales, datos dispersos y sistemas frágiles
+      en soluciones digitales mantenibles con enfoque consultivo B2B.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+      <a class="button button-ghost" href="/contacto/" data-link-shift>Hablar sobre tu operación</a>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Suite B2B"
+      title="No vendemos tecnologías aisladas: trabajamos por problema, resultado y continuidad."
+      body="Cada servicio está orientado a trazabilidad, reducción de errores, velocidad operativa, visibilidad y soporte posterior cuando aplica."
+    />
+
+    <div class="service-grid">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Método"
+      title="Antes de implementar, entendemos el proceso."
+      body="Eso permite definir mejor el alcance, reducir ambigüedad y construir una solución proporcional al objetivo."
+    />
+
+    <div class="mini-process-grid">
+      {
+        processSteps.map((step) => (
+          <article class="mini-process-card js-reveal-card" data-card-interaction>
+            <span>{step.index}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Diagnóstico</p>
+      <h2>Si el alcance no está claro, vale más definir primero que construir sobre supuestos.</h2>
+      <p>
+        El primer paso recomendado es revisar el proceso, los usuarios, las herramientas actuales
+        y los riesgos antes de proponer una solución cerrada.
+      </p>
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+    </div>
+  </section>
+</BaseLayout>

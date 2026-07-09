@@ -1,0 +1,125 @@
+---
+import VisualFrame from "./VisualFrame.astro";
+---
+
+<VisualFrame eyebrow="Automatización" title="Flujo abstracto de tareas y validaciones" status="orquestación ligera">
+  <div class="visual-stat-strip">
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Origen</span>
+      <strong>Formulario o evento</strong>
+      <small>captura controlada desde web, correo o proceso interno</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Reglas</span>
+      <strong>Validación útil</strong>
+      <small>filtros, prioridad y rutas de atención según contexto</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Acción</span>
+      <strong>Tarea asignada</strong>
+      <small>colas internas, checklist y confirmación de ejecución</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Seguimiento</span>
+      <strong>Estado visible</strong>
+      <small>evidencia mínima para evitar retrabajo y silencios</small>
+    </article>
+  </div>
+
+  <section class="visual-card js-visual-card" data-card-interaction>
+    <div class="visual-card__head">
+      <div>
+        <p class="visual-label">Storyline</p>
+        <strong>Ruta de automatización</strong>
+      </div>
+      <span class="visual-chip">GSAP friendly</span>
+    </div>
+
+    <div class="visual-flow js-visual-flow">
+      <article class="visual-flow__node js-visual-node" data-card-interaction>
+        <p class="visual-label">01</p>
+        <strong>Origen</strong>
+        <p>entrada manual o integración controlada</p>
+      </article>
+      <span class="visual-flow__connector" aria-hidden="true"></span>
+      <article class="visual-flow__node js-visual-node" data-card-interaction>
+        <p class="visual-label">02</p>
+        <strong>Validación</strong>
+        <p>campos obligatorios, reglas y contexto operativo</p>
+      </article>
+      <span class="visual-flow__connector" aria-hidden="true"></span>
+      <article class="visual-flow__node js-visual-node" data-card-interaction>
+        <p class="visual-label">03</p>
+        <strong>Enrutamiento</strong>
+        <p>prioridad, responsable y cola adecuada</p>
+      </article>
+      <span class="visual-flow__connector" aria-hidden="true"></span>
+      <article class="visual-flow__node js-visual-node" data-card-interaction>
+        <p class="visual-label">04</p>
+        <strong>Acción</strong>
+        <p>tarea, confirmación y registro de avance</p>
+      </article>
+      <span class="visual-flow__connector" aria-hidden="true"></span>
+      <article class="visual-flow__node js-visual-node" data-card-interaction>
+        <p class="visual-label">05</p>
+        <strong>Cierre</strong>
+        <p>salida visible para equipo, operación y reporte</p>
+      </article>
+    </div>
+  </section>
+
+  <div class="visual-grid visual-grid--two">
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Buenas prácticas</p>
+          <strong>Controles recomendados</strong>
+        </div>
+        <span class="visual-chip">uso interno</span>
+      </div>
+
+      <ul class="visual-list">
+        <li>
+          <span>Eventos trazables</span>
+          <strong>sí</strong>
+        </li>
+        <li>
+          <span>Reintentos controlados</span>
+          <strong>sí</strong>
+        </li>
+        <li>
+          <span>Excepciones visibles</span>
+          <strong>sí</strong>
+        </li>
+      </ul>
+    </section>
+
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Carga relativa</p>
+          <strong>Puntos de paso</strong>
+        </div>
+        <span class="visual-chip">genérico</span>
+      </div>
+
+      <ul class="visual-bar-list">
+        <li>
+          <span class="visual-bar-label">captura</span>
+          <strong>ligera</strong>
+          <div class="visual-bar"><span style="--meter-size: 34%;"></span></div>
+        </li>
+        <li>
+          <span class="visual-bar-label">reglas</span>
+          <strong>media</strong>
+          <div class="visual-bar"><span style="--meter-size: 58%;"></span></div>
+        </li>
+        <li>
+          <span class="visual-bar-label">seguimiento</span>
+          <strong>constante</strong>
+          <div class="visual-bar"><span style="--meter-size: 72%;"></span></div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</VisualFrame>

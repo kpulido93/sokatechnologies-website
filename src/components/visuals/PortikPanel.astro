@@ -1,0 +1,110 @@
+---
+import VisualFrame from "./VisualFrame.astro";
+---
+
+<VisualFrame eyebrow="Portik" title="Control de portería y novedades" status="producto propio">
+  <div class="visual-stat-strip">
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Accesos</span>
+      <strong>Visitantes y proveedores</strong>
+      <small>ingresos planificados, seguimiento por franja y registro útil</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Movilidad</span>
+      <strong>Vehículos y parqueos</strong>
+      <small>autorizaciones básicas, espacios y control de novedades</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Comunidad</span>
+      <strong>Reservas y avisos</strong>
+      <small>bloques comunes, bitácora y trazabilidad de turnos</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Operación</span>
+      <strong>Turno visible</strong>
+      <small>resumen del día sin depender de mensajería dispersa</small>
+    </article>
+  </div>
+
+  <div class="visual-grid visual-grid--two">
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Módulos MVP</p>
+          <strong>Cobertura operativa</strong>
+        </div>
+        <span class="visual-chip">portería</span>
+      </div>
+
+      <div class="visual-pill-group">
+        <span class="visual-pill">predios</span>
+        <span class="visual-pill">personas</span>
+        <span class="visual-pill">vehículos</span>
+        <span class="visual-pill">visitantes</span>
+        <span class="visual-pill">parqueaderos</span>
+        <span class="visual-pill">reservas</span>
+        <span class="visual-pill">bitácora</span>
+        <span class="visual-pill">novedades</span>
+      </div>
+
+      <div class="visual-module-grid">
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Torre</span>
+          <strong>Accesos programados</strong>
+          <small>franja mañana y visitas confirmadas</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Bahías</span>
+          <strong>Uso organizado</strong>
+          <small>parqueos disponibles y reservas activas</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Turno</span>
+          <strong>Bitácora clara</strong>
+          <small>apertura, incidencias y cierre del turno</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Gestión</span>
+          <strong>Reportes simples</strong>
+          <small>lectura operativa para administración</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Resumen del día</p>
+          <strong>Actividad visible</strong>
+        </div>
+        <span class="visual-chip">sin datos reales</span>
+      </div>
+
+      <ul class="visual-list">
+        <li>
+          <span>Visitante programado</span>
+          <strong>confirmado</strong>
+        </li>
+        <li>
+          <span>Proveedor autorizado</span>
+          <strong>franja mañana</strong>
+        </li>
+        <li>
+          <span>Reserva de espacio común</span>
+          <strong>vigente</strong>
+        </li>
+        <li>
+          <span>Novedad de turno</span>
+          <strong>seguimiento</strong>
+        </li>
+      </ul>
+
+      <div class="visual-stack">
+        <p class="visual-note">Ocupación de módulos activos</p>
+        <div class="visual-meter">
+          <span style="--meter-size: 68%;"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</VisualFrame>

@@ -1,0 +1,28 @@
+---
+interface Props {
+  label: string;
+  valueAttr: string;
+  noteAttr: string;
+  initialValue?: string;
+  initialNote?: string;
+  valueClass?: string;
+}
+
+const {
+  label,
+  valueAttr,
+  noteAttr,
+  initialValue = "--",
+  initialNote = "",
+  valueClass = "metric-value"
+} = Astro.props;
+
+const valueProps = { [valueAttr]: "" };
+const noteProps = { [noteAttr]: "" };
+---
+
+<article class="audit-score-card">
+  <span class="card-label">{label}</span>
+  <strong class={valueClass} {...valueProps}>{initialValue}</strong>
+  <p class="catalog-status audit-score-note" {...noteProps}>{initialNote}</p>
+</article>

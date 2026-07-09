@@ -1,0 +1,32 @@
+---
+interface Props {
+  title?: string;
+  summary?: string;
+  rationale?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = "Recomendación Soka",
+  summary = "Aquí aparecerá la ruta sugerida según los hallazgos visibles.",
+  rationale = "La recomendación se basa en señales públicas y en el contexto declarado en el formulario.",
+  ctaLabel = "Solicitar diagnóstico",
+  ctaHref = "/diagnostico/"
+} = Astro.props;
+---
+
+<li class="audit-result-item audit-recommendation-card">
+  <div class="audit-recommendation-copy">
+    <strong class="audit-result-title audit-recommendation-title">{title}</strong>
+    <p class="catalog-status audit-recommendation-summary">{summary}</p>
+    <p class="catalog-status audit-recommendation-rationale">{rationale}</p>
+  </div>
+
+  <div class="audit-recommendation-footer">
+    <div class="audit-pill-row audit-recommendation-tags"></div>
+    <a class="audit-inline-link audit-recommendation-link" href={ctaHref}>
+      {ctaLabel}
+    </a>
+  </div>
+</li>

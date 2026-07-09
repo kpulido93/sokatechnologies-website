@@ -1,0 +1,42 @@
+---
+import ContactForm from "../components/ContactForm.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Contacto | SokaTechnologies"
+  description="Abrir conversación con SokaTechnologies para revisar software, automatización, dashboards, infraestructura, soporte o Portik."
+  canonicalPath="/contacto/"
+>
+  <section class="page-hero section">
+    <p class="eyebrow">Contacto</p>
+    <h1>Hablemos de tu proceso, sistema o necesidad tecnológica.</h1>
+    <p>
+      La primera conversación busca entender el problema, revisar el contexto operativo y definir
+      si tiene sentido avanzar a diagnóstico, propuesta, piloto o revisión técnica.
+    </p>
+  </section>
+
+  <ContactForm
+    title="Solicita una conversación inicial"
+    body="Comparte el contexto general del problema, el área afectada, las herramientas actuales y la urgencia. No envíes credenciales, datos sensibles ni accesos."
+    buttonLabel="Enviar solicitud inicial"
+  />
+
+  <section class="section js-section">
+    <div class="trust-grid">
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <h3>Qué revisamos</h3>
+        <p>Objetivo del proyecto, flujo actual, usuarios involucrados, herramientas existentes y riesgos principales.</p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <h3>Tipos de solicitud</h3>
+        <p>Software a medida, automatización, dashboards, sitios web corporativos, infraestructura, soporte y Portik.</p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <h3>Qué no atenderemos</h3>
+        <p>Spam, evasión de controles, uso indebido de datos, exposición de secretos o actividades sin trazabilidad.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

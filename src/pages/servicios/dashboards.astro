@@ -1,0 +1,19 @@
+---
+import ServiceSeoPage from "../../components/ServiceSeoPage.astro";
+import { caseStudies } from "../../data/caseStudies";
+import { getServiceBySlug } from "../../data/services";
+
+const service = getServiceBySlug("dashboards");
+
+if (!service) {
+  throw new Error("Dashboards content is required to render this page.");
+}
+
+const relatedCases = caseStudies.filter((caseStudy) => service.relatedCaseSlugs.includes(caseStudy.slug));
+---
+
+<ServiceSeoPage
+  service={service}
+  relatedCases={relatedCases}
+  canonicalPath="/servicios/dashboards/"
+/>

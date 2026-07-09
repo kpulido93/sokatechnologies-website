@@ -1,0 +1,95 @@
+---
+import VisualFrame from "./VisualFrame.astro";
+---
+
+<VisualFrame eyebrow="AutoInventario" title="Inventario técnico de activos Windows" status="evaluación técnica">
+  <div class="visual-stat-strip">
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Cobertura</span>
+      <strong>Nodos inventariables</strong>
+      <small>equipos, agentes y sincronización de información base</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Auditoría</span>
+      <strong>Lectura consolidada</strong>
+      <small>hardware, sistema, usuario técnico y estado del agente</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Operación</span>
+      <strong>Alertas simples</strong>
+      <small>pendientes de remediación, cobertura y consistencia</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Madurez</span>
+      <strong>Requiere validación</strong>
+      <small>apto para revisión técnica antes de venta masiva</small>
+    </article>
+  </div>
+
+  <div class="visual-grid visual-grid--two">
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Inventario</p>
+          <strong>Categorías auditables</strong>
+        </div>
+        <span class="visual-chip">sin hostnames reales</span>
+      </div>
+
+      <ul class="visual-bar-list">
+        <li>
+          <span class="visual-bar-label">portátiles</span>
+          <strong>estable</strong>
+          <div class="visual-bar"><span style="--meter-size: 82%;"></span></div>
+        </li>
+        <li>
+          <span class="visual-bar-label">escritorio</span>
+          <strong>estable</strong>
+          <div class="visual-bar"><span style="--meter-size: 74%;"></span></div>
+        </li>
+        <li>
+          <span class="visual-bar-label">servidores windows</span>
+          <strong>parcial</strong>
+          <div class="visual-bar"><span style="--meter-size: 56%;"></span></div>
+        </li>
+        <li>
+          <span class="visual-bar-label">periféricos críticos</span>
+          <strong>en revisión</strong>
+          <div class="visual-bar"><span style="--meter-size: 43%;"></span></div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Consolidación</p>
+          <strong>Señales de remediación</strong>
+        </div>
+        <span class="visual-chip">back-office TI</span>
+      </div>
+
+      <ul class="visual-list">
+        <li>
+          <span>Agente sin última lectura</span>
+          <strong>04</strong>
+        </li>
+        <li>
+          <span>Versiones por revisar</span>
+          <strong>07</strong>
+        </li>
+        <li>
+          <span>Equipos con datos incompletos</span>
+          <strong>03</strong>
+        </li>
+      </ul>
+
+      <div class="visual-stack">
+        <p class="visual-note">Cobertura de inventario consolidado</p>
+        <div class="visual-meter">
+          <span style="--meter-size: 64%;"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</VisualFrame>

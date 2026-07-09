@@ -1,0 +1,263 @@
+---
+import CaseCard from "../components/CaseCard.astro";
+import HeroVisual from "../components/HeroVisual.astro";
+import ProductCard from "../components/ProductCard.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import { caseStudies } from "../data/caseStudies";
+import { demos } from "../data/demos";
+import { products } from "../data/products";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { services } from "../data/services";
+import { noiseProblems, noiseResults, processSteps } from "../lib/site";
+
+const coreServices = services.filter((service) => service.slug !== "mantenimiento-mejora-continua");
+const supportService = services.find((service) => service.slug === "mantenimiento-mejora-continua");
+const operationalCases = caseStudies.filter((caseStudy) => caseStudy.slug !== "demo-ecommerce");
+
+if (!supportService) {
+  throw new Error("Support service content is required to render the home page.");
+}
+---
+
+<BaseLayout
+  title="SokaTechnologies | Software, automatización e infraestructura para operar con más control"
+  description="Web comercial B2B de SokaTechnologies con enfoque consultivo en software a medida, automatización, dashboards, infraestructura, soporte y productos propios."
+  canonicalPath="/"
+>
+  <section class="hero section js-hero">
+    <div class="hero-copy">
+      <p class="eyebrow js-hero-eyebrow">SokaTechnologies</p>
+      <h1 class="js-hero-title">
+        Software, automatización e infraestructura para empresas que necesitan operar con más
+        control.
+      </h1>
+      <p class="hero-body js-hero-subtitle">
+        Convertimos procesos manuales, sistemas desconectados y reportes dispersos en soluciones
+        digitales mantenibles: software a medida, automatizaciones, dashboards, infraestructura y
+        soporte continuo.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary js-hero-cta" href="/diagnostico/" data-link-shift>
+          Solicitar diagnóstico
+        </a>
+        <a class="button button-ghost js-hero-cta" href="/productos/" data-link-shift>
+          Ver productos
+        </a>
+      </div>
+
+      <ul class="hero-signals">
+        <li>Diagnóstico consultivo</li>
+        <li>Casos anonimizados</li>
+        <li>Productos propios</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual js-hero-visual">
+      <HeroVisual />
+    </div>
+  </section>
+
+  <section class="metrics-band section" aria-label="Señales de confianza">
+    <div class="trust-grid">
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Diagnóstico</p>
+        <h2>Primero entendemos el proceso.</h2>
+        <p>
+          Revisamos operación, herramientas, responsables y riesgos antes de proponer software,
+          automatización, reporting o infraestructura.
+        </p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Experiencia</p>
+        <h2>Mostramos criterio, no humo.</h2>
+        <p>
+          La web combina casos anonimizados, productos propios y demos controladas sin usar datos
+          sensibles, capturas reales ni claims inflados.
+        </p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Continuidad</p>
+        <h2>Software, infraestructura y soporte en una sola conversación.</h2>
+        <p>
+          Soka acompaña desde el alcance inicial hasta la continuidad técnica cuando la operación
+          necesita orden, seguimiento y mantenimiento.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Ruido operativo"
+      title="Menos ruido operativo. Más control."
+      body="Soka no vende tecnología aislada. Diseña una ruta para reducir fricción manual, ordenar datos y dar seguimiento con mejor criterio operativo."
+    />
+
+    <div class="noise-grid js-noise-transform">
+      <article class="noise-panel">
+        <h3>Ruido que frena la operación</h3>
+        <ul class="noise-list">
+          {noiseProblems.map((item) => <li class="js-noise-problem">{item}</li>)}
+        </ul>
+      </article>
+
+      <article class="noise-panel noise-panel-result">
+        <h3>Lo que se busca construir</h3>
+        <ul class="noise-list">
+          {noiseResults.map((item) => <li class="js-noise-result">{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Servicios"
+      title="Servicios principales para ordenar operación, reporting, continuidad y presencia digital."
+      body="La oferta se explica por problema resuelto y resultado esperado: sistemas internos, automatizaciones, dashboards, web corporativa e infraestructura con criterio operativo."
+    />
+
+    <div class="service-grid js-services-grid">
+      {coreServices.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Productos propios"
+      title="Productos y herramientas con distinta madurez comercial, explicados con límites claros."
+      body="Portik es prioridad comercial; AutoInventario se plantea como revisión técnica; AutoWhatsapp se presenta solo dentro de un uso operativo consentido."
+    />
+
+    <div class="catalog-grid">
+      {products.map((product) => <ProductCard product={product} />)}
+    </div>
+  </section>
+
+  <section class="cta-panel section js-section">
+    <div class="cta-shell js-reveal">
+      <p class="eyebrow">Diagnóstico</p>
+      <h2>Si todavía no sabes si necesitas producto, desarrollo a medida o una automatización puntual, conviene revisar primero el proceso.</h2>
+      <p>
+        El diagnóstico ayuda a priorizar el frente correcto, reducir ambigüedad comercial y evitar
+        construir sobre supuestos.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-ghost" href="/servicios/" data-link-shift>Explorar servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section js-section js-cases">
+    <SectionHeading
+      eyebrow="Casos anonimizados"
+      title="Experiencia presentada con criterio de confidencialidad."
+      body="La Home muestra proyectos y contextos reales de trabajo de forma segura: empresa regulada en Panamá, servicios en República Dominicana, IVR, mensajería consentida e inventario de activos TI."
+    />
+
+    <div class="case-grid">
+      {operationalCases.map((caseStudy) => <CaseCard caseStudy={caseStudy} />)}
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Demos disponibles"
+      title="Demos públicas y recorridos guiados para explicar capacidad sin exponer datos de terceros."
+      body="EcomDemo está disponible como demo pública. Portik demo, dashboard demo y automatización demo se presentan como recorridos guiados o apoyo comercial controlado."
+    />
+
+    <div class="catalog-grid">
+      {
+        demos.map((demo) => (
+          <article class="catalog-card js-reveal-card" data-card-interaction>
+            <p class="eyebrow">{demo.title}</p>
+            <h3>{demo.headline}</h3>
+            <p>{demo.summary}</p>
+            <p class="catalog-status">
+              {demo.routeImplemented
+                ? "Disponible como demo pública."
+                : "Disponible como recorrido guiado dentro de una conversación comercial."}
+            </p>
+            <a
+              class="button button-ghost"
+              href={demo.routeImplemented ? demo.ctaHref : demo.primaryCtaHref}
+              data-link-shift
+            >
+              {demo.routeImplemented ? demo.ctaLabel : demo.primaryCtaLabel}
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section js-section js-process">
+    <SectionHeading
+      eyebrow="Cómo trabajamos"
+      title="Método claro desde diagnóstico hasta soporte posterior."
+      body="La relación parte del problema operativo, define alcance con límites y acompaña la implementación con pruebas, despliegue y continuidad proporcional al caso."
+    />
+
+    <div class="process-shell">
+      <div class="process-line js-process-line"></div>
+      <div class="process-steps">
+        {
+          processSteps.map((step, index) => (
+            <article class:list={["process-step", "js-process-step", index === 0 && "is-active"]}>
+              <span class="process-index">{step.index}</span>
+              <div class="process-copy-block">
+                <p class="process-label">Etapa {step.index}</p>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Soporte y mantenimiento"
+      title={supportService.headline}
+      body={supportService.summary}
+    />
+
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué resolvemos después de publicar</h2>
+        <p>{supportService.problem}</p>
+        <ul class="detail-list">
+          {supportService.includes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Cómo se ve una continuidad útil</h2>
+        <p>{supportService.solution}</p>
+        <ul class="detail-list">
+          {supportService.outcomes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>Cuéntanos cómo operas hoy y revisamos qué combinación de software, automatización, producto o infraestructura tiene más sentido.</h2>
+      <p>
+        La intención no es vender una tecnología aislada. Es ayudarte a ordenar procesos, datos,
+        reporting, continuidad técnica y presencia digital con un alcance claro.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-secondary" href="/contacto/" data-link-shift>Hablar con Soka</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

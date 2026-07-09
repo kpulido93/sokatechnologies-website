@@ -1,0 +1,94 @@
+---
+import VisualFrame from "./VisualFrame.astro";
+
+const commerceBars = ["28%", "46%", "58%", "72%", "64%", "78%"];
+---
+
+<VisualFrame eyebrow="EcomDemo" title="Experiencia digital y operación comercial" status="demo técnica">
+  <div class="visual-stat-strip">
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Catálogo</span>
+      <strong>Familias de producto</strong>
+      <small>presentación clara, filtros y fichas sin datos comerciales reales</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Checkout</span>
+      <strong>Ruta simple</strong>
+      <small>carrito, confirmación y seguimiento de estado</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Fulfillment</span>
+      <strong>Cola visible</strong>
+      <small>preparación, validación y cierre operativo</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Soporte</span>
+      <strong>Postventa ordenada</strong>
+      <small>notificaciones, incidencias y lectura ejecutiva</small>
+    </article>
+  </div>
+
+  <div class="visual-grid visual-grid--two">
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Vitrina</p>
+          <strong>Bloques de experiencia</strong>
+        </div>
+        <span class="visual-chip">abstracto</span>
+      </div>
+
+      <div class="visual-mini-grid">
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Colección</span>
+          <strong>Descubrimiento</strong>
+          <small>categorías y narrativa de valor</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Ficha</span>
+          <strong>Detalle útil</strong>
+          <small>atributos, disponibilidad y CTA limpio</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Carrito</span>
+          <strong>Confirmación</strong>
+          <small>resumen y próximos pasos visibles</small>
+        </article>
+        <article class="visual-mini-card js-visual-card" data-card-interaction>
+          <span class="visual-label">Atención</span>
+          <strong>Seguimiento</strong>
+          <small>operación, soporte y cierre de pedido</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Conversión cualitativa</p>
+          <strong>Embudo genérico</strong>
+        </div>
+        <span class="visual-chip">sin montos</span>
+      </div>
+
+      <div class="visual-sparkbars" aria-hidden="true">
+        {commerceBars.map((size) => <span style={`--bar-size: ${size};`}></span>)}
+      </div>
+
+      <ul class="visual-list">
+        <li>
+          <span>descubrimiento</span>
+          <strong>activo</strong>
+        </li>
+        <li>
+          <span>checkout</span>
+          <strong>fluido</strong>
+        </li>
+        <li>
+          <span>postventa</span>
+          <strong>visible</strong>
+        </li>
+      </ul>
+    </section>
+  </div>
+</VisualFrame>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  body: string;
+  centered?: boolean;
+}
+
+const { eyebrow, title, body, centered = false } = Astro.props;
+---
+
+<div class:list={["section-heading", centered && "is-centered", "js-reveal"]}>
+  <p class="eyebrow">{eyebrow}</p>
+  <h2>{title}</h2>
+  <p>{body}</p>
+</div>

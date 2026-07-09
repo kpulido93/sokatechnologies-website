@@ -1,0 +1,79 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { products } from "../../data/products";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = () =>
+  products
+    .filter((page) => page.detailRoute === "dynamic")
+    .map((page) => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+
+const { page } = Astro.props;
+---
+
+<BaseLayout
+  title={page.metaTitle}
+  description={page.metaDescription}
+  canonicalPath={`/productos/${page.slug}/`}
+>
+  <PageHero
+    eyebrow={page.eyebrow}
+    title={page.heroTitle}
+    body={page.heroBody}
+    primaryCtaLabel={page.primaryCtaLabel}
+    primaryCtaHref={page.primaryCtaHref}
+    secondaryCtaLabel={page.secondaryCtaLabel}
+    secondaryCtaHref={page.secondaryCtaHref}
+    signals={[page.status]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Encaje"
+      title="Cuándo puede tener sentido evaluar este producto."
+      body="Se presenta solo dentro de su alcance correcto, evitando posicionamientos ambiguos o comercialmente riesgosos."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Puede servir para</h2>
+        <ul class="detail-list">
+          {page.fitFor.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué puede incluir</h2>
+        <ul class="detail-list">
+          {page.includes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Restricciones"
+      title="Qué no debe asumirse ni venderse desde esta página."
+      body="Esto protege a SokaTechnologies de claims incorrectos, riesgos de cumplimiento y expectativas técnicas equivocadas."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <ul class="detail-list">
+          {page.constraints.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>{page.finalCtaTitle}</h2>
+      <p>{page.finalCtaBody}</p>
+      <a class="button button-primary" href={page.primaryCtaHref} data-link-shift>{page.primaryCtaLabel}</a>
+    </div>
+  </section>
+</BaseLayout>

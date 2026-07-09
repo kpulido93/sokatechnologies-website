@@ -1,0 +1,30 @@
+---
+import { footerGroups, siteMeta } from "../lib/site";
+---
+
+<footer class="site-footer">
+  <div class="footer-shell">
+    <div class="footer-intro">
+      <p class="eyebrow">SokaTechnologies</p>
+      <h2>Tecnología clara para operaciones que necesitan más control.</h2>
+      <p>
+        Software, automatización, dashboards, web corporativa, infraestructura y soporte con
+        enfoque consultivo B2B.
+      </p>
+      <p class="footer-region">{siteMeta.regions}</p>
+    </div>
+
+    <div class="footer-grid">
+      {
+        footerGroups.map((group) => (
+          <section>
+            <h3>{group.title}</h3>
+            <ul>
+              {group.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</footer>

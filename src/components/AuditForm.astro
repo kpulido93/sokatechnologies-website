@@ -1,0 +1,149 @@
+---
+import AuditReportPreview from "./AuditReportPreview.astro";
+import { auditCompanyTypes } from "../data/auditAreas";
+import { siteMeta } from "../lib/site";
+
+const fallbackEmail = import.meta.env.PUBLIC_CONTACT_FALLBACK_EMAIL?.trim() || siteMeta.email;
+const formId = "audit-request-form";
+const successId = `${formId}-success`;
+const errorId = `${formId}-error`;
+const loadingId = `${formId}-loading`;
+const issuesId = `${formId}-issues`;
+const noteId = `${formId}-note`;
+const previewId = `${formId}-preview`;
+---
+
+<form
+  id={formId}
+  class="contact-form audit-form js-reveal"
+  method="post"
+  data-endpoint="/api/audit"
+  data-success-id={successId}
+  data-error-id={errorId}
+  data-loading-id={loadingId}
+  data-issues-id={issuesId}
+  data-preview-id={previewId}
+  aria-describedby={noteId}
+>
+  <input type="hidden" name="formContext" value="Auditoría web y operación digital" />
+
+  <label class="form-trap" aria-hidden="true">
+    <span>Website</span>
+    <input type="text" name="website" tabindex="-1" autocomplete="off" />
+  </label>
+
+  <div class="field-grid">
+    <label>
+      <span>URL del sitio web</span>
+      <input
+        type="url"
+        name="websiteUrl"
+        placeholder="https://tuempresa.com"
+        inputmode="url"
+        maxlength="200"
+        required
+      />
+      <p class="field-hint">Solo revisamos sitios públicos. No envíes accesos ni ambientes internos.</p>
+    </label>
+
+    <label>
+      <span>Nombre</span>
+      <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" required />
+    </label>
+
+    <label>
+      <span>Empresa</span>
+      <input
+        type="text"
+        name="company"
+        autocomplete="organization"
+        minlength="2"
+        maxlength="120"
+        required
+      />
+    </label>
+
+    <label>
+      <span>Email</span>
+      <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required />
+    </label>
+
+    <label>
+      <span>WhatsApp opcional</span>
+      <input type="tel" name="whatsapp" inputmode="tel" autocomplete="tel" maxlength="30" />
+      <p class="field-hint">Opcional. Solo si prefieres seguimiento por ese canal.</p>
+    </label>
+
+    <label>
+      <span>País</span>
+      <input type="text" name="country" autocomplete="country-name" maxlength="80" required />
+    </label>
+
+    <label>
+      <span>Tipo de empresa</span>
+      <select name="companyType" required>
+        <option value="">Selecciona una opción</option>
+        {auditCompanyTypes.map((option) => <option value={option}>{option}</option>)}
+      </select>
+    </label>
+  </div>
+
+  <label class="field-block">
+    <span>Principal problema</span>
+    <textarea
+      name="mainProblem"
+      rows="6"
+      minlength="30"
+      maxlength="1200"
+      placeholder="Describe qué te preocupa más: claridad comercial, conversión, seguimiento manual, velocidad, confianza o continuidad técnica."
+      required
+    ></textarea>
+    <p class="field-hint">
+      No compartas contraseñas, tokens, paneles, capturas internas ni información sensible.
+    </p>
+  </label>
+
+  <label class="checkbox-line">
+    <input type="checkbox" name="consent" required />
+    <span>
+      Acepto que SokaTechnologies me contacte sobre esta auditoría y confirmo que no enviaré
+      contraseñas, tokens, llaves privadas ni accesos. Consulta la
+      <a href="/politica-privacidad/">política de privacidad</a>.
+    </span>
+  </label>
+
+  <div class="form-actions">
+    <button class="button button-primary" type="submit">Solicitar auditoría gratuita</button>
+    <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
+      Escribir por correo
+    </a>
+  </div>
+
+  <p id={loadingId} class="form-status form-status-loading" role="status" aria-live="polite" hidden>
+    Revisando la solicitud y generando una vista previa inicial...
+  </p>
+
+  <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
+    La solicitud fue procesada. Revisa el reporte inicial y, si tiene sentido, continúa hacia
+    diagnóstico o contacto.
+  </p>
+
+  <p id={errorId} class="form-status form-status-error" role="alert" hidden>
+    No se pudo procesar la solicitud. Revisa los campos requeridos y evita incluir datos sensibles.
+  </p>
+
+  <ul id={issuesId} class="form-issues" hidden></ul>
+
+  <p id={noteId} class="form-note">
+    El formulario consulta `/api/audit` y nunca debe incluir contraseñas, tokens ni accesos. En
+    previews estáticos, la vista previa puede resolverse con reglas locales del navegador.
+  </p>
+
+  <AuditReportPreview id={previewId} />
+</form>
+
+<script>
+  import { initAuditForms } from "../scripts/auditForm";
+
+  initAuditForms();
+</script>

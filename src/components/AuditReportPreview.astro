@@ -1,0 +1,99 @@
+---
+import AuditRecommendationCard from "./AuditRecommendationCard.astro";
+import AuditScoreCard from "./AuditScoreCard.astro";
+
+interface Props {
+  id?: string;
+}
+
+const { id = "audit-report-preview" } = Astro.props;
+const titleId = `${id}-title`;
+const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
+---
+
+<section id={id} class="audit-report-preview catalog-card" aria-labelledby={titleId} hidden>
+  <div class="audit-report-header">
+    <div>
+      <p class="eyebrow">Reporte inicial</p>
+      <h3 id={titleId}>Lectura preliminar de la auditoria</h3>
+    </div>
+    <p class="catalog-status" data-audit-meta>
+      Envia el formulario para generar una vista previa basada en reglas locales de Soka.
+    </p>
+  </div>
+
+  <p class="catalog-status audit-report-summary" data-audit-summary>
+    Aqui apareceran los hallazgos visibles, las areas revisadas y la ruta sugerida.
+  </p>
+
+  <div class="audit-score-grid">
+    <AuditScoreCard
+      label="Score general"
+      valueAttr="data-audit-overall-score"
+      noteAttr="data-audit-overall-note"
+      initialNote="Priorización inicial basada en señales visibles y contexto declarado."
+    />
+    <AuditScoreCard
+      label="Encaje consultivo"
+      valueAttr="data-audit-lead-fit"
+      noteAttr="data-audit-lead-note"
+      initialNote="Sirve para decidir si conviene abrir diagnóstico, no como medición técnica cerrada."
+    />
+    <AuditScoreCard
+      label="Cobertura actual"
+      valueAttr="data-audit-coverage"
+      noteAttr="data-audit-coverage-note"
+      initialValue="Señales visibles"
+      initialNote="El reporte puede sumar PageSpeed si la URL pública responde y la cuota lo permite."
+      valueClass="audit-score-text"
+    />
+  </div>
+
+  <section class="audit-list-stack audit-areas-stack" aria-labelledby={`${id}-areas-title`}>
+    <div class="audit-list-head">
+      <p id={`${id}-areas-title`} class="card-label">Areas evaluadas</p>
+      <span class="catalog-status" data-audit-areas-count>0 areas</span>
+    </div>
+    <ul class="audit-area-grid" data-audit-areas></ul>
+  </section>
+
+  <div class="audit-report-columns">
+    <section class="audit-list-stack" aria-labelledby={`${id}-findings-title`}>
+      <div class="audit-list-head">
+        <p id={`${id}-findings-title`} class="card-label">Hallazgos principales</p>
+        <span class="catalog-status" data-audit-findings-count>0 hallazgos</span>
+      </div>
+      <ul class="audit-result-list" data-audit-findings></ul>
+    </section>
+
+    <section class="audit-list-stack" aria-labelledby={`${id}-recommendations-title`}>
+      <div class="audit-list-head">
+        <p id={`${id}-recommendations-title`} class="card-label">Recomendaciones</p>
+        <span class="catalog-status" data-audit-recommendations-count>0 recomendaciones</span>
+      </div>
+      <ul class="audit-result-list" data-audit-recommendations></ul>
+      <template data-audit-recommendation-template>
+        <AuditRecommendationCard />
+      </template>
+    </section>
+  </div>
+
+  <div class="audit-report-actions">
+    <a class="button button-primary" href="/diagnostico/" data-link-shift>
+      Solicitar diagnostico
+    </a>
+    <a class="button button-secondary" href="/contacto/" data-link-shift>
+      Agendar llamada
+    </a>
+    {whatsappHref && (
+      <a class="button button-ghost" href={whatsappHref} target="_blank" rel="noreferrer" data-link-shift>
+        Contactar por WhatsApp
+      </a>
+    )}
+  </div>
+
+  <p class="audit-report-note">
+    Este es un análisis inicial. Para una revisión completa necesitamos validar contexto, objetivos
+    y operación.
+  </p>
+</section>

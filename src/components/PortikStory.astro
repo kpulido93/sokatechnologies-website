@@ -1,0 +1,57 @@
+---
+import { getProductBySlug, portikModules } from "../data/products";
+
+interface Props {
+  expanded?: boolean;
+}
+
+const { expanded = false } = Astro.props;
+const portik = getProductBySlug("portik");
+
+if (!portik) {
+  throw new Error("Portik content is required to render PortikStory.");
+}
+---
+
+<section class="portik-shell js-portik">
+  <div class="portik-copy js-reveal">
+    <p class="eyebrow">{portik.eyebrow}</p>
+    <h2>{portik.headline}</h2>
+    <p>{portik.summary}</p>
+    <p>{portik.confidentialityNote}</p>
+
+    <div class="hero-actions">
+      <a class="button button-primary" href={portik.primaryCtaHref} data-link-shift>
+        {portik.primaryCtaLabel}
+      </a>
+      <a class="button button-ghost" href={portik.secondaryCtaHref} data-link-shift>
+        {portik.secondaryCtaLabel}
+      </a>
+    </div>
+  </div>
+
+  <aside class="portik-panel js-portik-panel" data-card-interaction>
+    <div class="portik-panel-head">
+      <span>portik piloto operativo</span>
+      <span>módulos MVP</span>
+    </div>
+    <div class="portik-module-grid">
+      {
+        portikModules.map((module) => (
+          <article class="portik-module js-portik-module">
+            <strong>{module.name}</strong>
+            <p>{module.summary}</p>
+          </article>
+        ))
+      }
+    </div>
+    {
+      expanded && (
+        <p class="portik-footnote">
+          La recomendación comercial es validar un piloto controlado de 30 a 60 días con
+          administración y portería antes de ampliar alcance.
+        </p>
+      )
+    }
+  </aside>
+</section>

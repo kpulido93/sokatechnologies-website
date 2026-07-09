@@ -1,0 +1,123 @@
+---
+import PortikStory from "../../components/PortikStory.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { getProductBySlug, portikModules } from "../../data/products";
+import { absoluteUrl, createSoftwareApplicationSchema } from "../../lib/seo";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const portik = getProductBySlug("portik");
+
+if (!portik) {
+  throw new Error("Portik content is required to render this page.");
+}
+---
+
+<BaseLayout
+  title={portik.metaTitle}
+  description={portik.metaDescription}
+  canonicalPath="/productos/portik/"
+  pageName={portik.title}
+  schemas={[createSoftwareApplicationSchema(portik, absoluteUrl("/productos/portik/"))]}
+>
+  <section class="page-hero section">
+    <p class="eyebrow">{portik.title}</p>
+    <h1>{portik.heroTitle}</h1>
+    <p>{portik.heroBody}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href={portik.primaryCtaHref} data-link-shift>
+        {portik.primaryCtaLabel}
+      </a>
+      <a class="button button-ghost" href={portik.secondaryCtaHref} data-link-shift>
+        {portik.secondaryCtaLabel}
+      </a>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Problema"
+      title="Muchas porterías todavía operan entre llamadas, WhatsApp, cuadernos y Excel."
+      body={portik.problem}
+    />
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Cliente ideal"
+      title="Portik encaja mejor donde la portería y la administración necesitan más orden sin promesas infladas."
+      body="Se presenta como un producto acotado para operaciones residenciales que ya sienten fricción manual y necesitan una base clara para validar un piloto."
+    />
+
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Cliente ideal</h2>
+        <ul class="detail-list">
+          {portik.fitFor.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué ordena Portik</h2>
+        <ul class="detail-list">
+          {portik.outcomes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <PortikStory expanded />
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Módulos MVP"
+      title="Alcance comercial acotado para un piloto realista."
+      body="La primera etapa prioriza control operativo y administración básica. No se promete hardware, OCR, pagos, WhatsApp automático ni app móvil nativa."
+    />
+
+    <div class="module-summary-grid">
+      {
+        portikModules.map((module) => (
+          <article class="module-summary-card js-reveal-card" data-card-interaction>
+            <h3>{module.name}</h3>
+            <p>{module.summary}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Qué no incluye"
+      title="El posicionamiento comercial de Portik depende de mantener límites claros."
+      body="La primera etapa no debe prometer funcionalidades que todavía no forman parte del MVP ni del piloto inicial."
+    />
+
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>No incluido por defecto</h2>
+        <ul class="detail-list">
+          {portik.constraints.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Propuesta de piloto</h2>
+        <ul class="detail-list">
+          {portik.pilotProposal?.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Piloto</p>
+      <h2>{portik.finalCtaTitle}</h2>
+      <p>{portik.finalCtaBody}</p>
+      <a class="button button-primary" href={portik.primaryCtaHref} data-link-shift>
+        {portik.primaryCtaLabel}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

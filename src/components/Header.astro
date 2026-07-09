@@ -1,0 +1,46 @@
+---
+import { navItems, siteMeta } from "../lib/site";
+
+interface Props {
+  pathname?: string;
+}
+
+const { pathname = "/" } = Astro.props;
+
+const isActive = (href: string) => {
+  if (href === "/") {
+    return pathname === "/";
+  }
+
+  return pathname.startsWith(href);
+};
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label={siteMeta.name}>
+    <span class="brand-mark">S</span>
+    <span class="brand-copy">
+      <strong>{siteMeta.name}</strong>
+      <small>software, productos e infraestructura</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Navegación principal">
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={["nav-link", isActive(item.href) && "is-active"]}
+          aria-current={isActive(item.href) ? "page" : undefined}
+          data-link-shift
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <a class="button button-primary header-cta" href={siteMeta.diagnosisHref} data-link-shift>
+    Solicitar diagnóstico
+  </a>
+</header>

@@ -1,0 +1,49 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  body: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
+  signals?: string[];
+}
+
+const {
+  eyebrow,
+  title,
+  body,
+  primaryCtaLabel,
+  primaryCtaHref,
+  secondaryCtaLabel,
+  secondaryCtaHref,
+  signals = []
+} = Astro.props;
+---
+
+<section class="page-hero section">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1>{title}</h1>
+  <p>{body}</p>
+
+  <div class="hero-actions">
+    <a class="button button-primary" href={primaryCtaHref} data-link-shift>{primaryCtaLabel}</a>
+    {
+      secondaryCtaLabel &&
+        secondaryCtaHref && (
+          <a class="button button-ghost" href={secondaryCtaHref} data-link-shift>
+            {secondaryCtaLabel}
+          </a>
+        )
+    }
+  </div>
+
+  {
+    signals.length > 0 && (
+      <ul class="hero-signals">
+        {signals.map((signal) => <li>{signal}</li>)}
+      </ul>
+    )
+  }
+</section>

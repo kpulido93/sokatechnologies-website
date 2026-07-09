@@ -1,0 +1,47 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { products } from "../../data/products";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Productos | SokaTechnologies"
+  description="Productos y herramientas propias de SokaTechnologies: Portik, AutoInventario y AutoWhatsapp, cada uno con madurez y alcance distintos."
+  canonicalPath="/productos/"
+>
+  <PageHero
+    eyebrow="Productos"
+    title="Productos propios con madurez y objetivos comerciales distintos."
+    body="No todos los activos de producto deben venderse igual. Portik es prioridad comercial; AutoInventario requiere remediación; AutoWhatsapp debe mantenerse bajo límites estrictos de cumplimiento."
+    primaryCtaLabel="Solicitar diagnóstico"
+    primaryCtaHref="/diagnostico/"
+    secondaryCtaLabel="Ver casos"
+    secondaryCtaHref="/casos/"
+    signals={["Portik prioritario", "AutoInventario en validación", "AutoWhatsapp controlado"]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Catálogo"
+      title="Cada producto se presenta desde su naturaleza real, no desde promesas infladas."
+      body="La intención es explicar qué puede evaluarse hoy, qué necesita validación adicional y qué límites comerciales o técnicos deben respetarse."
+    />
+    <div class="catalog-grid">
+      {products.map((product) => <ProductCard product={product} />)}
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Ruta comercial</p>
+      <h2>Si el producto correcto no está claro, conviene partir del problema operativo.</h2>
+      <p>
+        El diagnóstico permite decidir si el siguiente paso es Portik, una revisión técnica de
+        AutoInventario, una evaluación controlada de AutoWhatsapp o un desarrollo a medida.
+      </p>
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+    </div>
+  </section>
+</BaseLayout>

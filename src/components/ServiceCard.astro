@@ -1,0 +1,31 @@
+---
+import type { ServiceContent } from "../data/types";
+
+interface Props {
+  service: ServiceContent;
+}
+
+const { service } = Astro.props;
+---
+
+<article class="service-card js-service-card js-reveal-card" data-card-interaction>
+  <p class="eyebrow">{service.title}</p>
+  <h3>{service.headline}</h3>
+  <p>{service.summary}</p>
+  <dl class="service-detail-list">
+    <div>
+      <dt>Dolor que resuelve</dt>
+      <dd>{service.problem}</dd>
+    </div>
+    <div>
+      <dt>Resultado esperado</dt>
+      <dd>{service.solution}</dd>
+    </div>
+  </dl>
+  <ul class="service-deliverables">
+    {service.deliverables.map((deliverable) => <li>{deliverable}</li>)}
+  </ul>
+  <a class="button button-ghost" href={service.ctaHref} data-link-shift>
+    {service.ctaLabel}
+  </a>
+</article>

@@ -1,0 +1,40 @@
+---
+import ContactForm from "../components/ContactForm.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { processSteps } from "../lib/site";
+---
+
+<BaseLayout
+  title="Diagnóstico | SokaTechnologies"
+  description="Solicitud de diagnóstico consultivo para entender procesos, alcance, riesgos y próximos pasos tecnológicos."
+  canonicalPath="/diagnostico/"
+>
+  <section class="page-hero section">
+    <p class="eyebrow">Diagnóstico</p>
+    <h1>Antes de construir, conviene entender bien el proceso.</h1>
+    <p>
+      El diagnóstico sirve para ordenar contexto, objetivos, usuarios, restricciones y riesgos
+      antes de plantear una solución o un piloto.
+    </p>
+  </section>
+
+  <section class="section js-section">
+    <div class="mini-process-grid">
+      {
+        processSteps.map((step) => (
+          <article class="mini-process-card js-reveal-card" data-card-interaction>
+            <span>{step.index}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <ContactForm
+    title="Solicita un diagnóstico consultivo"
+    body="Comparte el problema principal, la operación afectada, las herramientas actuales y cualquier restricción importante. No envíes credenciales, datos sensibles ni accesos."
+    buttonLabel="Enviar solicitud de diagnóstico"
+  />
+</BaseLayout>

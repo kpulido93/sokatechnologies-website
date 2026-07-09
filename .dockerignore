@@ -1,0 +1,15 @@
+node_modules
+dist
+.astro
+.git
+public_html
+docs
+assets
+website
+wp-theme
+content
+tests
+scripts
+snippets
+checklists
+prompts_codex_sokatechnologies_website_wordpress.md

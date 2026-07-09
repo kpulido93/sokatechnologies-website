@@ -1,0 +1,176 @@
+---
+import AuditForm from "../components/AuditForm.astro";
+import AuditValueCard from "../components/AuditValueCard.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import {
+  auditAreas,
+  auditDeliverables,
+  auditHeroFocus,
+  auditHeroGuardrails,
+  auditHeroSignals,
+  auditRecommendations
+} from "../data/auditAreas";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Auditoría gratuita de tu web y operación digital | SokaTechnologies"
+  description="Lead magnet consultivo de SokaTechnologies para revisar señales visibles de claridad comercial, conversión, SEO básico y continuidad digital."
+  canonicalPath="/auditoria/"
+>
+  <section class="hero section audit-hero js-hero">
+    <div class="hero-copy">
+      <p class="eyebrow js-hero-eyebrow">Auditoría consultiva</p>
+      <h1 class="js-hero-title">Auditoría gratuita de tu web y operación digital</h1>
+      <p class="hero-body js-hero-subtitle">
+        Revisamos señales visibles de claridad comercial, conversión, SEO técnico básico y
+        continuidad digital para detectar si tu sitio necesita rediseño, automatización, reporting
+        o una base técnica más sólida.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary js-hero-cta" href="#audit-form" data-link-shift>
+          Solicitar auditoría
+        </a>
+        <a class="button button-ghost js-hero-cta" href="/servicios/" data-link-shift>
+          Ver servicios
+        </a>
+      </div>
+
+      <ul class="hero-signals">
+        {auditHeroSignals.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <div class="hero-panel audit-hero-panel js-hero-visual">
+      <div class="hero-panel-head">
+        <span class="panel-chip">revisión visible</span>
+        <span class="panel-chip">sin backend ni accesos</span>
+      </div>
+
+      <div class="audit-hero-grid">
+        <article
+          class="hero-panel-card audit-hero-card js-hero-panel-card js-reveal-card"
+          data-card-interaction
+        >
+          <p class="card-label">Qué vemos rápido</p>
+          <strong>Señales visibles del sitio</strong>
+          <ul class="audit-hero-list">
+            {auditHeroFocus.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <article
+          class="hero-panel-card audit-hero-card js-hero-panel-card js-reveal-card"
+          data-card-interaction
+        >
+          <p class="card-label">Guardrails</p>
+          <strong>Sin accesos privados</strong>
+          <ul class="audit-hero-list">
+            {auditHeroGuardrails.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </div>
+
+      <p class="audit-hero-footnote">
+        La auditoría gratuita entrega hallazgos priorizados y una ruta sugerida. No sustituye un
+        proyecto completo, un pentest ni una auditoría de código privado.
+      </p>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Qué analizamos"
+      title="Una lectura inicial de tu sitio y de la fricción digital más visible."
+      body="La revisión parte de lo que un visitante, comprador o gerente puede percibir públicamente. No pedimos accesos, paneles internos ni credenciales."
+    />
+
+    <div class="catalog-grid audit-card-grid">
+      {
+        auditAreas.map((item) => (
+          <AuditValueCard eyebrow={item.eyebrow} title={item.title} body={item.body} items={item.items} />
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="audit-form" class="section js-section">
+    <div class="contact-panel audit-intake-panel">
+      <div class="contact-copy audit-intake-copy js-reveal">
+        <p class="eyebrow">Formulario</p>
+        <h2>Solicita la revisión inicial de tu sitio.</h2>
+        <p>
+          Comparte la URL pública, el contexto de la empresa y el principal problema que te está
+          frenando. La auditoría busca abrir una conversación útil, no pedir datos sensibles ni
+          accesos.
+        </p>
+        <ul class="contact-guidelines">
+          <li>Solo revisamos sitios públicos con acceso abierto.</li>
+          <li>No envíes contraseñas, tokens, capturas internas ni paneles.</li>
+          <li>Si el caso requiere profundidad, el siguiente paso será diagnóstico o revisión técnica.</li>
+        </ul>
+      </div>
+
+      <AuditForm />
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Qué recibirás"
+      title="Una respuesta útil para decidir el siguiente paso con más criterio."
+      body="La salida del MVP debe ser breve, accionable y coherente con el nivel de información pública disponible."
+    />
+
+    <div class="catalog-grid audit-card-grid">
+      {
+        auditDeliverables.map((item) => (
+          <AuditValueCard eyebrow={item.eyebrow} title={item.title} body={item.body} items={item.items} />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Recomendaciones posibles"
+      title="La auditoría puede derivar en distintas rutas, no en una venta única forzada."
+      body="Si el problema principal es web, automatización, reporting o continuidad, la recomendación debe apuntar al frente correcto."
+    />
+
+    <div class="catalog-grid audit-card-grid audit-recommendation-grid">
+      {
+        auditRecommendations.map((item) => (
+          <AuditValueCard
+            eyebrow={item.eyebrow}
+            title={item.title}
+            body={item.body}
+            items={item.items}
+            ctaLabel={item.ctaLabel}
+            ctaHref={item.ctaHref}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>
+        Si tu sitio revela un problema mayor de operación, la auditoría puede convertirse en una
+        conversación de diagnóstico mucho más útil.
+      </h2>
+      <p>
+        SokaTechnologies no busca entregar un checklist genérico. Busca ayudarte a decidir si
+        conviene rediseñar tu web, automatizar el seguimiento, ordenar indicadores o fortalecer la
+        base técnica que sostiene tu presencia digital.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#audit-form" data-link-shift>Solicitar auditoría</a>
+        <a class="button button-secondary" href="/contacto/" data-link-shift>Hablar con Soka</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

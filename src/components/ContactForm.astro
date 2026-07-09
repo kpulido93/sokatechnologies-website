@@ -1,0 +1,194 @@
+---
+import { contactServiceOptions } from "../lib/site";
+
+interface Props {
+  title: string;
+  body: string;
+  buttonLabel: string;
+}
+
+const { title, body, buttonLabel } = Astro.props;
+const provider = import.meta.env.PUBLIC_FORM_PROVIDER?.trim().toLowerCase() || "demo";
+const submitEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() || "";
+const fallbackEmail = import.meta.env.PUBLIC_CONTACT_FALLBACK_EMAIL?.trim() || "hola@sokatechnologies.com";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || "";
+const isDemoMode = provider === "demo" || submitEndpoint.length === 0;
+const formId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-form`;
+const successId = `${formId}-success`;
+const errorId = `${formId}-error`;
+const noteId = `${formId}-note`;
+---
+
+<section class="contact-panel js-reveal">
+  <div class="contact-copy">
+    <p class="eyebrow">Diagnóstico B2B</p>
+    <h2>{title}</h2>
+    <p>{body}</p>
+    <ul class="contact-guidelines">
+      <li>No envíes contraseñas, tokens, llaves privadas ni accesos.</li>
+      <li>Describe el problema, el proceso afectado y las herramientas actuales.</li>
+      <li>Si el alcance no está claro, el siguiente paso recomendado es diagnóstico.</li>
+    </ul>
+  </div>
+
+  <form
+    class="contact-form"
+    method="post"
+    action={submitEndpoint || undefined}
+    data-form-mode={isDemoMode ? "demo" : "live"}
+    data-form-provider={provider}
+    data-success-id={successId}
+    data-error-id={errorId}
+    aria-describedby={noteId}
+  >
+    <input type="hidden" name="formContext" value={title} />
+
+    <label class="form-trap" aria-hidden="true">
+      <span>Website</span>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+
+    <div class="field-grid">
+      <label>
+        <span>Nombre</span>
+        <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" required />
+      </label>
+      <label>
+        <span>Empresa</span>
+        <input
+          type="text"
+          name="company"
+          autocomplete="organization"
+          minlength="2"
+          maxlength="120"
+          required
+        />
+      </label>
+      <label>
+        <span>Email</span>
+        <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required />
+      </label>
+      <label>
+        <span>Pais</span>
+        <input type="text" name="country" autocomplete="country-name" maxlength="80" required />
+      </label>
+      <label>
+        <span>Servicio de interes</span>
+        <select name="service" required>
+          <option value="">Selecciona una opcion</option>
+          {contactServiceOptions.map((option) => <option value={option}>{option}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Tipo de problema</span>
+        <select name="problemType" required>
+          <option value="">Selecciona una opcion</option>
+          <option value="manual">Proceso manual o disperso</option>
+          <option value="reporting">Reportes o indicadores</option>
+          <option value="infra">Infraestructura o continuidad</option>
+          <option value="web">Sitio web o presencia digital</option>
+        </select>
+      </label>
+    </div>
+
+    <label class="field-block">
+      <span>Descripcion breve</span>
+      <textarea name="summary" rows="5" minlength="30" maxlength="1200" required></textarea>
+    </label>
+
+    <label class="checkbox-line">
+      <input type="checkbox" name="consent" required />
+      <span>
+        Acepto que SokaTechnologies me contacte sobre esta solicitud y confirmo que no incluire
+        contrasenas, tokens, llaves privadas ni datos sensibles. Consulta la
+        <a href="/politica-privacidad/">politica de privacidad</a>.
+      </span>
+    </label>
+
+    {
+      turnstileSiteKey && (
+        <p class="form-note">
+          Turnstile configurado con clave publica. La verificacion del token debe hacerse siempre
+          del lado servidor.
+        </p>
+      )
+    }
+
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">{buttonLabel}</button>
+      <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
+        Escribir por correo
+      </a>
+    </div>
+
+    <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
+      Validacion local completada. El envio real queda pendiente de conectar a un endpoint seguro;
+      mientras tanto usa el correo corporativo como canal alternativo.
+    </p>
+
+    <p id={errorId} class="form-status form-status-error" role="alert" hidden>
+      No se pudo procesar la solicitud. Revisa los campos requeridos o usa el correo corporativo
+      mientras se conecta el backend del formulario.
+    </p>
+
+    <p id={noteId} class="form-note">
+      {isDemoMode
+        ? "Modo demo: el formulario valida campos y consentimiento, pero no envia ni almacena datos hasta configurar un endpoint seguro."
+        : `Modo ${provider}: el envio real depende del endpoint configurado en despliegue y nunca debe exponer secretos en el cliente.`}
+    </p>
+  </form>
+</section>
+
+<script is:inline>
+  document.querySelectorAll(".contact-form").forEach((form) => {
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const successId = form.dataset.successId;
+    const errorId = form.dataset.errorId;
+    const mode = form.dataset.formMode ?? "demo";
+    const successNode = successId ? document.getElementById(successId) : null;
+    const errorNode = errorId ? document.getElementById(errorId) : null;
+
+    const setStatus = (target) => {
+      [successNode, errorNode].forEach((node) => {
+        if (!(node instanceof HTMLElement)) return;
+        node.hidden = node !== target;
+      });
+    };
+
+    form.addEventListener(
+      "invalid",
+      () => {
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
+      },
+      true,
+    );
+
+    form.addEventListener("input", () => {
+      setStatus(null);
+    });
+
+    form.addEventListener("submit", (event) => {
+      const trap = form.elements.namedItem("website");
+
+      if (trap instanceof HTMLInputElement && trap.value.trim().length > 0) {
+        event.preventDefault();
+        form.reset();
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        form.reportValidity();
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
+        return;
+      }
+
+      if (mode === "demo") {
+        event.preventDefault();
+        setStatus(successNode instanceof HTMLElement ? successNode : null);
+      }
+    });
+  });
+</script>

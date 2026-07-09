@@ -1,0 +1,60 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { getDemoBySlug } from "../../data/demos";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const ecommerceDemo = getDemoBySlug("ecommerce");
+
+if (!ecommerceDemo) {
+  throw new Error("E-commerce demo content is required to render this page.");
+}
+---
+
+<BaseLayout
+  title={ecommerceDemo.metaTitle}
+  description={ecommerceDemo.metaDescription}
+  canonicalPath="/demos/ecommerce/"
+>
+  <PageHero
+    eyebrow={ecommerceDemo.eyebrow}
+    title={ecommerceDemo.heroTitle}
+    body={ecommerceDemo.heroBody}
+    primaryCtaLabel="Solicitar diagnóstico"
+    primaryCtaHref="/diagnostico/"
+    secondaryCtaLabel="Ver servicios"
+    secondaryCtaHref="/servicios/"
+    signals={["demo controlada", "sin backend real", "sin datos de terceros"]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Qué demuestra"
+      title="Una base visual y de producto para conversaciones B2B."
+      body="La demo no pretende simular ventas reales. Sirve para mostrar criterio de catálogo, fichas, jerarquía visual, CTA y estructura técnica reutilizable."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Incluye</h2>
+        <ul class="detail-list">
+          {ecommerceDemo.includes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>No incluye</h2>
+        <ul class="detail-list">
+          {ecommerceDemo.exclusions.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>{ecommerceDemo.finalCtaTitle}</h2>
+      <p>{ecommerceDemo.finalCtaBody}</p>
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+    </div>
+  </section>
+</BaseLayout>

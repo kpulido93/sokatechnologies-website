@@ -1,0 +1,140 @@
+---
+import CaseCard from "./CaseCard.astro";
+import PageHero from "./PageHero.astro";
+import SectionHeading from "./SectionHeading.astro";
+import type { CaseStudyContent, ServiceContent } from "../data/types";
+import { absoluteUrl, createFaqSchema, createServiceSchema } from "../lib/seo";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { processSteps } from "../lib/site";
+
+interface Props {
+  service: ServiceContent;
+  relatedCases: CaseStudyContent[];
+  canonicalPath: string;
+}
+
+const { service, relatedCases, canonicalPath } = Astro.props;
+const schemas = [
+  createServiceSchema(service, absoluteUrl(canonicalPath)),
+  createFaqSchema(service.faqs)
+];
+---
+
+<BaseLayout
+  title={service.metaTitle}
+  description={service.metaDescription}
+  canonicalPath={canonicalPath}
+  pageName={service.title}
+  schemas={schemas}
+>
+  <PageHero
+    eyebrow={service.title}
+    title={service.heroTitle}
+    body={service.heroBody}
+    primaryCtaLabel={service.primaryCtaLabel}
+    primaryCtaHref={service.primaryCtaHref}
+    secondaryCtaLabel={service.secondaryCtaLabel}
+    secondaryCtaHref={service.secondaryCtaHref}
+    signals={service.tags}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Dolor del cliente"
+      title={`Dónde suele aparecer el problema en ${service.title.toLowerCase()}.`}
+      body={service.problem}
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Señales frecuentes</h2>
+        <ul class="detail-list">
+          {service.painSignals.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué suele pasar si no se corrige</h2>
+        <p>{service.problem}</p>
+        <p class="case-note">{service.confidentialityNote}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Qué resuelve Soka"
+      title={`Cómo abordamos ${service.title.toLowerCase()} con criterio operativo.`}
+      body={service.solution}
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Resultados que se buscan construir</h2>
+        <ul class="detail-list">
+          {service.outcomes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Entregables frecuentes</h2>
+        <ul class="detail-list">
+          {service.deliverables.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Casos y ejemplos"
+      title={`Referencias relacionadas con ${service.title.toLowerCase()}.`}
+      body="Los ejemplos se presentan de forma anonimizada o como demos propias para explicar el tipo de problema, enfoque y resultado cualitativo sin exponer clientes."
+    />
+    <div class="case-grid">
+      {relatedCases.map((caseStudy) => <CaseCard caseStudy={caseStudy} />)}
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Proceso"
+      title={`Cómo trabajamos este tipo de servicio.`}
+      body="El diagnóstico define alcance, prioridades y límites antes de entrar a implementación, pruebas o continuidad."
+    />
+    <div class="mini-process-grid">
+      {
+        processSteps.map((step) => (
+          <article class="mini-process-card js-reveal-card" data-card-interaction>
+            <span>{step.index}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Preguntas frecuentes"
+      title={`Dudas habituales sobre ${service.title.toLowerCase()}.`}
+      body="La intención es dejar claro encaje, límites y siguiente paso comercial sin prometer resultados específicos."
+    />
+    <div class="faq-stack">
+      {
+        service.faqs.map((faq) => (
+          <details class="faq-item js-reveal-card" data-card-interaction>
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Diagnóstico</p>
+      <h2>{service.finalCtaTitle}</h2>
+      <p>{service.finalCtaBody}</p>
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+    </div>
+  </section>
+</BaseLayout>

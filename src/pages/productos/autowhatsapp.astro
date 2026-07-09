@@ -1,0 +1,87 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { getProductBySlug } from "../../data/products";
+import { absoluteUrl, createSoftwareApplicationSchema } from "../../lib/seo";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const product = getProductBySlug("autowhatsapp");
+
+if (!product) {
+  throw new Error("AutoWhatsapp content is required to render this page.");
+}
+---
+
+<BaseLayout
+  title={product.metaTitle}
+  description={product.metaDescription}
+  canonicalPath="/productos/autowhatsapp/"
+  pageName={product.title}
+  schemas={[createSoftwareApplicationSchema(product, absoluteUrl("/productos/autowhatsapp/"))]}
+>
+  <PageHero
+    eyebrow={product.eyebrow}
+    title={product.heroTitle}
+    body={product.heroBody}
+    primaryCtaLabel={product.primaryCtaLabel}
+    primaryCtaHref={product.primaryCtaHref}
+    secondaryCtaLabel={product.secondaryCtaLabel}
+    secondaryCtaHref={product.secondaryCtaHref}
+    signals={["consentimiento verificable", "opt-out cuando aplique", product.status]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Usos permitidos"
+      title="Se presenta como herramienta controlada para comunicaciones operativas consentidas."
+      body="El alcance correcto es puntual, con contactos existentes y propósito operativo claro. No se vende como motor de campañas ni como atajo de volumen."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Casos permitidos</h2>
+        <ul class="detail-list">
+          {product.fitFor.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Usos no permitidos</h2>
+        <ul class="detail-list">
+          {product.constraints.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Consentimiento y límites"
+      title="El cumplimiento no es opcional: consentimiento, opt-out y límites de uso deben quedar claros."
+      body="Si el caso necesita escala, formalidad regulatoria o una operación intensiva, esta no es la ruta correcta."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Requisitos mínimos</h2>
+        <ul class="detail-list">
+          {product.usageRequirements?.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Límites de uso</h2>
+        <ul class="detail-list">
+          {product.usageLimits?.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Caso de uso</p>
+      <h2>{product.finalCtaTitle}</h2>
+      <p>{product.finalCtaBody}</p>
+      <a class="button button-primary" href={product.primaryCtaHref} data-link-shift>
+        {product.primaryCtaLabel}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

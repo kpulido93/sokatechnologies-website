@@ -1,0 +1,17 @@
+---
+import type { ProductContent } from "../data/types";
+
+interface Props {
+  product: ProductContent;
+}
+
+const { product } = Astro.props;
+---
+
+<article class="catalog-card js-reveal-card" data-card-interaction>
+  <p class="eyebrow">{product.title}</p>
+  <h3>{product.headline}</h3>
+  <p>{product.summary}</p>
+  <p class="catalog-status">{product.status}</p>
+  <a class="button button-ghost" href={product.ctaHref} data-link-shift>{product.ctaLabel}</a>
+</article>

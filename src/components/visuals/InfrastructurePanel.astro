@@ -1,0 +1,105 @@
+---
+import VisualFrame from "./VisualFrame.astro";
+---
+
+<VisualFrame eyebrow="Infraestructura" title="Arquitectura cloud y on-prem con continuidad" status="topología abstracta">
+  <div class="visual-stat-strip">
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Disponibilidad</span>
+      <strong>Servicios visibles</strong>
+      <small>capa de acceso, aplicaciones y respaldo con lectura simple</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Seguridad</span>
+      <strong>Controles básicos</strong>
+      <small>segmentación, permisos y revisión de cambios</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Observabilidad</span>
+      <strong>Señales de salud</strong>
+      <small>eventos, alertas y evidencia mínima útil</small>
+    </article>
+    <article class="visual-stat js-visual-card" data-card-interaction>
+      <span class="visual-label">Continuidad</span>
+      <strong>Backups y soporte</strong>
+      <small>rutinas verificables y acompañamiento post despliegue</small>
+    </article>
+  </div>
+
+  <div class="visual-grid visual-grid--two">
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Mapa técnico</p>
+          <strong>Capas conectadas</strong>
+        </div>
+        <span class="visual-chip">sin IPs ni dominios</span>
+      </div>
+
+      <div class="visual-topology js-visual-topology">
+        <svg class="visual-topology__lines" viewBox="0 0 600 320" aria-hidden="true">
+          <defs>
+            <linearGradient id="infra-path" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#55b0ff"></stop>
+              <stop offset="100%" stop-color="#22d4bf"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M90 88H288" stroke="url(#infra-path)" stroke-width="3" stroke-linecap="round"></path>
+          <path d="M322 88H514" stroke="url(#infra-path)" stroke-width="3" stroke-linecap="round"></path>
+          <path d="M300 116V228" stroke="url(#infra-path)" stroke-width="3" stroke-linecap="round"></path>
+          <path d="M356 228H512" stroke="url(#infra-path)" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 8"></path>
+        </svg>
+
+        <article class="visual-topology__node visual-topology__node--edge js-visual-node" data-card-interaction>
+          <p class="visual-label">Capa 01</p>
+          <strong>Acceso</strong>
+          <p>entrada controlada y balanceada</p>
+        </article>
+        <article class="visual-topology__node visual-topology__node--apps js-visual-node" data-card-interaction>
+          <p class="visual-label">Capa 02</p>
+          <strong>Aplicación</strong>
+          <p>servicios, lógica y tareas internas</p>
+        </article>
+        <article class="visual-topology__node visual-topology__node--observe js-visual-node" data-card-interaction>
+          <p class="visual-label">Capa 03</p>
+          <strong>Observabilidad</strong>
+          <p>alertas, logs y revisión operativa</p>
+        </article>
+        <article class="visual-topology__node visual-topology__node--data js-visual-node" data-card-interaction>
+          <p class="visual-label">Capa 04</p>
+          <strong>Datos</strong>
+          <p>persistencia, respaldo y trazabilidad</p>
+        </article>
+        <article class="visual-topology__node visual-topology__node--backup js-visual-node" data-card-interaction>
+          <p class="visual-label">Capa 05</p>
+          <strong>Continuidad</strong>
+          <p>backups y recuperación básica</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="visual-card js-visual-card" data-card-interaction>
+      <div class="visual-card__head">
+        <div>
+          <p class="visual-label">Pilares</p>
+          <strong>Controles operativos</strong>
+        </div>
+        <span class="visual-chip">infra básica</span>
+      </div>
+
+      <ul class="visual-topology__legend">
+        <li><span class="visual-dot"></span> cambios con registro mínimo útil</li>
+        <li><span class="visual-dot is-mint"></span> copias verificables y continuidad</li>
+        <li><span class="visual-dot"></span> monitoreo sobre servicios críticos</li>
+        <li><span class="visual-dot is-mint"></span> separación entre acceso, app y datos</li>
+      </ul>
+
+      <div class="visual-stack">
+        <p class="visual-note">Cobertura de controles priorizados</p>
+        <div class="visual-meter">
+          <span style="--meter-size: 76%;"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</VisualFrame>

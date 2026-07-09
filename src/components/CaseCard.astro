@@ -1,0 +1,49 @@
+---
+import type { CaseStudyContent } from "../data/types";
+
+interface Props {
+  caseStudy: CaseStudyContent;
+}
+
+const { caseStudy } = Astro.props;
+const visibilityLabel =
+  caseStudy.visibility === "anonymized"
+    ? "caso anonimizado"
+    : caseStudy.visibility === "public"
+      ? "referencia pública"
+      : "caso controlado";
+---
+
+<article class="case-card js-case-card js-reveal-card" data-card-interaction>
+  <div class="case-meta">
+    <span>{caseStudy.region}</span>
+    <span>{visibilityLabel}</span>
+  </div>
+  <h3>{caseStudy.title}</h3>
+  <p>{caseStudy.summary}</p>
+  <dl class="case-flow">
+    <div>
+      <dt>Problema</dt>
+      <dd>{caseStudy.problem}</dd>
+    </div>
+    <div>
+      <dt>Enfoque</dt>
+      <dd>{caseStudy.solution}</dd>
+    </div>
+    <div>
+      <dt>Resultado cualitativo</dt>
+      <dd>{caseStudy.outcomes[0]}</dd>
+    </div>
+  </dl>
+  <div>
+    <p class="eyebrow">Servicios aplicados</p>
+    <div class="case-tags">
+      {caseStudy.servicesApplied.map((service) => <span>{service}</span>)}
+    </div>
+  </div>
+  <div class="case-tags">
+    {caseStudy.tags.map((tag) => <span>{tag}</span>)}
+  </div>
+  <p class="case-note">{caseStudy.confidentialityNote}</p>
+  <a class="button button-ghost" href={caseStudy.ctaHref} data-link-shift>{caseStudy.ctaLabel}</a>
+</article>

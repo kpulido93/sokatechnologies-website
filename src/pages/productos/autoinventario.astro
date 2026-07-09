@@ -1,0 +1,88 @@
+---
+import PageHero from "../../components/PageHero.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { getProductBySlug } from "../../data/products";
+import { absoluteUrl, createSoftwareApplicationSchema } from "../../lib/seo";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const product = getProductBySlug("autoinventario");
+
+if (!product) {
+  throw new Error("AutoInventario content is required to render this page.");
+}
+---
+
+<BaseLayout
+  title={product.metaTitle}
+  description={product.metaDescription}
+  canonicalPath="/productos/autoinventario/"
+  pageName={product.title}
+  schemas={[createSoftwareApplicationSchema(product, absoluteUrl("/productos/autoinventario/"))]}
+>
+  <PageHero
+    eyebrow={product.eyebrow}
+    title={product.heroTitle}
+    body={product.heroBody}
+    primaryCtaLabel={product.primaryCtaLabel}
+    primaryCtaHref={product.primaryCtaHref}
+    secondaryCtaLabel={product.secondaryCtaLabel}
+    secondaryCtaHref={product.secondaryCtaHref}
+    signals={["activos Windows", "auditoría TI", product.status]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Alcance correcto"
+      title="AutoInventario se plantea como inventario técnico de activos TI, no como inventario comercial."
+      body="La página posiciona la solución dentro de su encaje real: soporte, infraestructura, auditoría interna y trazabilidad de equipos Windows."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué puede cubrir</h2>
+        <ul class="detail-list">
+          {product.includes.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Qué no debe asumirse</h2>
+        <ul class="detail-list">
+          {product.constraints.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Empresas objetivo"
+      title="Tiene sentido donde ya existe una necesidad real de soporte, auditoría o visibilidad del parque tecnológico."
+      body="No es una herramienta genérica para cualquier negocio. Encaja mejor donde TI necesita trazabilidad y orden operativo sobre activos Windows."
+    />
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Perfil de empresa</h2>
+        <ul class="detail-list">
+          {product.fitFor.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <h2>Estado actual</h2>
+        <p>{product.status}</p>
+        <ul class="detail-list">
+          {product.usageLimits?.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Evaluación técnica</p>
+      <h2>{product.finalCtaTitle}</h2>
+      <p>{product.finalCtaBody}</p>
+      <a class="button button-primary" href={product.primaryCtaHref} data-link-shift>
+        {product.primaryCtaLabel}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

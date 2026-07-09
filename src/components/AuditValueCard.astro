@@ -1,0 +1,34 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  body: string;
+  items?: string[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { eyebrow, title, body, items = [], ctaLabel, ctaHref } = Astro.props;
+---
+
+<article class="catalog-card audit-value-card js-reveal-card" data-card-interaction>
+  <p class="eyebrow">{eyebrow}</p>
+  <h3>{title}</h3>
+  <p>{body}</p>
+
+  {
+    items.length > 0 && (
+      <ul class="audit-value-list">
+        {items.map((item) => <li>{item}</li>)}
+      </ul>
+    )
+  }
+
+  {
+    ctaLabel && ctaHref && (
+      <a class="button button-ghost" href={ctaHref} data-link-shift>
+        {ctaLabel}
+      </a>
+    )
+  }
+</article>

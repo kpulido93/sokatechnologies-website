@@ -1,0 +1,55 @@
+---
+import {
+  buildBreadcrumbItems,
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createWebsiteSchema,
+  getSiteUrl,
+  type StructuredData
+} from "../lib/seo";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  pathname?: string;
+  pageName?: string;
+  schemas?: StructuredData[];
+}
+
+const { title, description, canonicalPath, pathname, pageName, schemas = [] } = Astro.props;
+const siteUrl = Astro.site ?? getSiteUrl();
+const currentPath = pathname ?? Astro.url.pathname;
+const canonical = new URL(canonicalPath ?? currentPath, siteUrl).toString();
+const socialImage = new URL("/og/soka-demo-2026.svg", siteUrl).toString();
+const structuredData = [
+  createOrganizationSchema(),
+  createWebsiteSchema(),
+  createBreadcrumbSchema(buildBreadcrumbItems(currentPath, pageName ?? title, siteUrl.toString())),
+  ...schemas
+];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+<link rel="canonical" href={canonical} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="SokaTechnologies" />
+<meta property="og:locale" content="es_DO" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:image:alt" content={title} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+<meta name="twitter:url" content={canonical} />
+{
+  structuredData.map((schema) => (
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  ))
+}

@@ -1,0 +1,30 @@
+---
+import ServiceSeoPage from "../../components/ServiceSeoPage.astro";
+import { caseStudies } from "../../data/caseStudies";
+import { services } from "../../data/services";
+
+export const getStaticPaths = () =>
+  services
+    .filter((page) =>
+      !new Set([
+        "software-a-medida",
+        "automatizaciones",
+        "dashboards",
+        "infraestructura-soporte",
+        "sitios-web-corporativos"
+      ]).has(page.slug)
+    )
+    .map((page) => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+
+const { page } = Astro.props;
+const relatedCases = caseStudies.filter((caseStudy) => page.relatedCaseSlugs.includes(caseStudy.slug));
+---
+
+<ServiceSeoPage
+  service={page}
+  relatedCases={relatedCases}
+  canonicalPath={`/servicios/${page.slug}/`}
+/>

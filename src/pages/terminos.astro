@@ -1,0 +1,50 @@
+---
+import PageHero from "../components/PageHero.astro";
+import { legalPages } from "../data/legal";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title={legalPages.terms.title}
+  description={legalPages.terms.description}
+  canonicalPath="/terminos/"
+>
+  <PageHero
+    eyebrow={legalPages.terms.eyebrow}
+    title={legalPages.terms.heroTitle}
+    body={legalPages.terms.heroBody}
+    primaryCtaLabel="Contactar a SokaTechnologies"
+    primaryCtaHref="/contacto/"
+    secondaryCtaLabel="Ver política de privacidad"
+    secondaryCtaHref="/politica-privacidad/"
+    signals={["borrador", "uso informativo", "pendiente de revisión legal"]}
+  />
+
+  <section class="section js-section">
+    <div class="legal-stack">
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>Uso permitido del sitio</h2>
+        <ul class="detail-list">
+          <li>conocer servicios, productos y canales de contacto</li>
+          <li>solicitar información comercial o diagnóstico</li>
+          <li>revisar contenido público sobre soluciones tecnológicas</li>
+        </ul>
+      </article>
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>Uso no permitido</h2>
+        <ul class="detail-list">
+          <li>spam, abuso o solicitudes fuera del alcance profesional</li>
+          <li>intentos de vulnerar formularios, servidores o controles</li>
+          <li>envío de secretos o información sensible sin canal seguro acordado</li>
+        </ul>
+      </article>
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>Estado del documento</h2>
+        <p>
+          Este texto es un borrador informativo. No constituye contrato final ni asesoría legal y
+          debe validarse antes de cualquier publicación definitiva.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
