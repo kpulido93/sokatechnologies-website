@@ -4,6 +4,12 @@ Fecha: 2026-10-19
 Rama: `codex/sec-01-astro-dependencies`
 Base: `c5e9590199fb360a879e164dc11cb93c527b8959`
 
+## Runtime de Node.js
+
+Astro 7.4.0 requiere Node.js `>=22.22.0`. El proyecto declara ese mínimo en `package.json` y fija Node `22.22.3` para desarrollo en `.nvmrc`.
+
+La etapa de compilación usa `node:22.22.3-alpine` fijado al digest de índice OCI `sha256:e58326d0d441090181ac150dc2078d3e2cf6a0d42e809aebba3ef5880935ffdd`, verificado con Docker Buildx. Esto evita depender de la etiqueta flotante `node:22-alpine` y mantiene Node 22.22.3 durante el build.
+
 ## Alcance
 
 Se actualizaron únicamente dependencias del toolchain Astro y el lockfile. No se modificaron contenido, diseño, formularios, SEO, WordPress, hosting, DNS ni producción.
@@ -47,7 +53,12 @@ Después de la remediación:
 - `npm run check`: 0 errores, warnings o hints.
 - `npm run build`: correcto; 19 páginas estáticas generadas.
 - `git diff --check`: correcto.
+- `node --version`: `v22.22.3`.
+- Docker Buildx confirmó disponible `node:22.22.3-alpine` y su digest antes de actualizar `Dockerfile`.
+- `docker build --target build`: la etapa Astro completó `npm run build` y generó 19 páginas usando la imagen fijada; la exportación local de la imagen quedó bloqueada por el daemon Docker y no permitió completar `docker run` para imprimir la versión desde el artefacto etiquetado.
 
 La aplicación conserva `output: "static"`. GSAP no fue actualizado ni reemplazado. Los paquetes auditados son dependencias de compilación o de validación; los assets publicados se generan en `dist/`. Los formularios conservan su modo demo y no se incluyeron credenciales.
 
 No se utilizó `npm audit fix --force`, no se añadieron overrides y no se suprimieron advisories.
+
+El lockfile no necesitó cambios adicionales: declarar `engines`, fijar `.nvmrc` y cambiar la imagen de compilación no altera el grafo de dependencias ya bloqueado.
