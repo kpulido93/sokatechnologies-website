@@ -2,7 +2,7 @@
 
 ## Alcance de esta tarea
 
-La rama de trabajo parte de `feature/web-demo-2026-gsap`. Esta primera entrega solo normaliza el correo comercial público y deja documentada la ruta de implementación. No conecta formularios, no cambia el backend, no modifica WordPress/cPanel y no ejecuta despliegues.
+La rama de trabajo parte de `feature/web-demo-2026-gsap`. La Tarea 02-A ya implementó la nueva Home corporativa en Astro y la ruta `/nosotros/`, e incorporó temporalmente Nosotros a la navegación. Los servicios definitivos, la reorganización de proyectos/casos y la compatibilidad final de rutas permanecen pendientes de la Tarea 02-B. No conecta formularios, no cambia el backend, no modifica WordPress/cPanel y no ejecuta despliegues.
 
 El correo público y destinatario comercial aprobado es `info@sokatechnologies.com`. La variable pública `PUBLIC_CONTACT_FALLBACK_EMAIL` y el destinatario server-side `LEADS_TO_EMAIL` se mantienen separados del remitente técnico `RESEND_FROM_EMAIL`. No se incluyen valores de secretos ni se configura `Reply-To` en esta tarea.
 
@@ -23,21 +23,22 @@ El [documento maestro de contenido](https://github.com/kpulido93/sokatechnologie
 
 | Contenido aprobado | Destino Astro previsto | Trabajo pendiente |
 |---|---|---|
-| Inicio, propuesta de valor, método y CTA | `src/pages/index.astro` y `src/lib/site.ts` | Sustituir gradualmente el copy de demo sin inventar métricas ni claims. |
-| Servicios y landings | `src/data/services.ts`, `src/pages/servicios/` | Mapear nombres, slugs y entregables aprobados. |
-| Proyectos anonimizados | `src/data/caseStudies.ts`, futura `/proyectos/` | Alinear casos, permisos y riesgo de reidentificación. |
-| Nosotros | futura `/nosotros/` | Incorporar solo la información aprobada del fundador y diferenciar experiencia personal de trayectoria empresarial. |
+| Inicio, propuesta de valor, método y CTA | `src/pages/index.astro` y `src/lib/site.ts` | Implementado en la Tarea 02-A. Mantener los claims cualitativos y revisar enlaces durante 02-B. |
+| Servicios y landings | `src/data/services.ts`, `src/pages/servicios/` | Pendiente de Tarea 02-B: mapear nombres, slugs y entregables aprobados. |
+| Proyectos anonimizados | `src/data/caseStudies.ts`, futura `/proyectos/` | Pendiente de Tarea 02-B: validar permisos, anonimización y riesgo de reidentificación antes de destacar casos en Home. |
+| Nosotros | `src/pages/nosotros.astro` | Implementado en la Tarea 02-A con la información aprobada del fundador y la distinción frente a su experiencia internacional. |
 | Contacto y diagnóstico | `src/pages/contacto.astro`, `src/pages/diagnostico.astro`, `ContactForm.astro` | Definir recepción, anti-spam, privacidad y confirmación antes de activar envío real. |
 
-La navegación actual expone `Productos` y `Casos`; el contenido maestro propone `Proyectos` y `Nosotros`. La decisión de rutas, redirecciones y tratamiento de productos debe resolverse en la PR de contenido, no en esta normalización. Portik permanece fuera de la publicación corporativa hasta su validación comercial.
+La navegación de la Tarea 02-A mantiene `Productos` y `Casos`, y añade temporalmente `Nosotros` sin convertir todavía `Casos` en `Proyectos`. La decisión de rutas, redirecciones, tratamiento de productos y selección definitiva de casos debe resolverse en la Tarea 02-B. Portik permanece fuera de la publicación corporativa hasta su validación comercial.
 
 ## Secuencia propuesta de pull requests
 
-1. **PR 01 — correo y documentación mínima (esta tarea).** Actualizar referencias públicas y destinatario de ejemplo a `info@sokatechnologies.com`; mantener separados remitente técnico, Reply-To futuro y secretos. Sin cambiar el comportamiento demo.
-2. **PR 02 — contenido y arquitectura.** Integrar el contenido maestro en inicio, servicios, proyectos, nosotros y contacto; definir slugs, navegación, casos anonimizados y páginas nuevas. Validar permisos y claims antes de publicar.
-3. **PR 03 — sistema visual B2B.** Consolidar tokens, tipografía, contraste, layout responsive, navegación, hero y tarjetas usando Astro/CSS/GSAP ya instalados. Incluir foco visible, HTML semántico, estados sin JavaScript y `prefers-reduced-motion`. No añadir React, Tailwind ni otra librería de animación.
-4. **PR 04 — formularios y runtime.** Mantener demo hasta aprobar proveedor y flujo. Después definir endpoint, validación server-side, Turnstile, rate limit, persistencia mínima, destinatario `LEADS_TO_EMAIL`, remitente `RESEND_FROM_EMAIL` y `Reply-To` derivado del correo del prospecto. Resolver el modo on-demand de `/api/audit` antes de prometer reportes o notificaciones.
-5. **PR 05 — SEO y publicación controlada.** Revisar títulos, descripciones, canonical, sitemap, datos estructurados, privacidad, accesibilidad, rendimiento, protección/noindex de prueba, redirects y rollback. Comparar el destino final con WordPress antes de cambiar DNS o hosting.
+1. **PR 01 — correo y documentación mínima.** Actualizar referencias públicas y destinatario de ejemplo a `info@sokatechnologies.com`; mantener separados remitente técnico, Reply-To futuro y secretos. Sin cambiar el comportamiento demo.
+2. **Tarea 02-A — Home y Nosotros (implementada).** Integrar la propuesta corporativa en Inicio, crear `/nosotros/`, añadir temporalmente Nosotros a la navegación, mantener las rutas existentes y evitar destacar casos cuya anonimización o autorización aún no esté validada.
+3. **Tarea 02-B — servicios, proyectos y arquitectura final (pendiente).** Mapear nombres y slugs definitivos, revisar el catálogo de casos, permisos, anonimización, riesgo de reidentificación, redirecciones y tratamiento de productos antes de convertir la navegación en `Proyectos`.
+4. **PR siguiente — sistema visual B2B.** Consolidar tokens, tipografía, contraste, layout responsive, navegación, hero y tarjetas usando Astro/CSS/GSAP ya instalados. Incluir foco visible, HTML semántico, estados sin JavaScript y `prefers-reduced-motion`. No añadir React, Tailwind ni otra librería de animación.
+5. **PR siguiente — formularios y runtime.** Mantener demo hasta aprobar proveedor y flujo. Después definir endpoint, validación server-side, Turnstile, rate limit, persistencia mínima, destinatario `LEADS_TO_EMAIL`, remitente `RESEND_FROM_EMAIL` y `Reply-To` derivado del correo del prospecto. Resolver el modo on-demand de `/api/audit` antes de prometer reportes o notificaciones.
+6. **PR siguiente — SEO y publicación controlada.** Revisar títulos, descripciones, canonical, sitemap, datos estructurados, privacidad, accesibilidad, rendimiento, protección/noindex de prueba, redirects y rollback. Comparar el destino final con WordPress antes de cambiar DNS o hosting.
 
 ## Evaluación de referencias de diseño
 
