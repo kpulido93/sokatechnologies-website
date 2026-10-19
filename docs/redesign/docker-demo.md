@@ -12,7 +12,7 @@ Construir y servir la demo estática de SokaTechnologies dentro de un contenedor
 
 ## Flujo
 
-1. La etapa `build` usa `node:22-alpine`.
+1. La etapa `build` usa `node:22.22.3-alpine` fijada por digest OCI en `Dockerfile`; el build requiere Node.js `>=22.22.0` (ver `.nvmrc` y `package.json`).
 2. Se instala con `npm ci`.
 3. Se compila la demo con `npm run build`.
 4. La etapa final usa `nginx:1.29-alpine`.
