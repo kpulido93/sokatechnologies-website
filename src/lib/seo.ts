@@ -5,7 +5,7 @@ export type StructuredData = Record<string, unknown>;
 const SITE_URL = "https://sokatechnologies.com";
 const SITE_NAME = "SokaTechnologies";
 const SITE_DESCRIPTION =
-  "Software, automatización e infraestructura para empresas que necesitan operar con más control.";
+  "Software, automatización, Power BI e infraestructura para empresas que necesitan operar con más control.";
 
 const SEGMENT_LABELS: Record<string, string> = {
   casos: "Casos",
@@ -13,7 +13,8 @@ const SEGMENT_LABELS: Record<string, string> = {
   demos: "Demos",
   diagnostico: "Diagnóstico",
   ecommerce: "EcomDemo",
-  "infraestructura-soporte": "Infraestructura y soporte",
+  "consultoria-ti-devops": "Consultoría TI y DevOps",
+  "infraestructura-soporte": "Infraestructura cloud/on-prem",
   "politica-privacidad": "Política de privacidad",
   productos: "Productos",
   portik: "Portik",
@@ -23,9 +24,9 @@ const SEGMENT_LABELS: Record<string, string> = {
   autoinventario: "AutoInventario",
   autowhatsapp: "AutoWhatsapp",
   automatizaciones: "Automatizaciones",
-  dashboards: "Dashboards y reportes",
+  dashboards: "Power BI y Business Intelligence",
   terminos: "Términos",
-  "mantenimiento-mejora-continua": "Mantenimiento y mejora continua"
+  "mantenimiento-mejora-continua": "Soporte, mantenimiento y mejora continua"
 };
 
 export const getSiteUrl = () => new URL(SITE_URL);
@@ -75,11 +76,12 @@ export const createOrganizationSchema = (): StructuredData => ({
   areaServed: ["Panamá", "República Dominicana", "Latinoamérica"],
   knowsAbout: [
     "Software a medida",
-    "Automatizaciones",
-    "Dashboards y reportes",
-    "Infraestructura y soporte",
+    "Automatizaciones e integraciones",
+    "Power BI y Business Intelligence",
+    "Consultoría TI y DevOps",
+    "Infraestructura cloud/on-prem",
     "Sitios web corporativos",
-    "Productos digitales B2B"
+    "Soporte y mejora continua"
   ]
 });
 

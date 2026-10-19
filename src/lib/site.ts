@@ -48,9 +48,9 @@ export const metrics: MetricItem[] = [
     detail: "Cada conversación parte del proceso, no de una lista cerrada de funcionalidades."
   },
   {
-    value: "06",
+    value: "07",
     label: "frentes coordinados",
-    detail: "Software, automatización, dashboards, web, infraestructura y soporte bajo una misma narrativa."
+    detail: "Software, automatización, BI, consultoría TI/DevOps, web, infraestructura y soporte bajo una misma narrativa."
   },
   {
     value: "100%",

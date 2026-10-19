@@ -1,53 +1,9 @@
 ---
 import HeroVisual from "../components/HeroVisual.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import { services } from "../data/services";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { noiseProblems, noiseResults, processSteps } from "../lib/site";
-
-const featuredServices = [
-  {
-    eyebrow: "Software empresarial",
-    title: "Software a medida e integraciones",
-    body: "Sistemas internos, aplicaciones web, APIs y automatizaciones para conectar información y ordenar procesos críticos.",
-    href: "/servicios/software-a-medida/",
-    label: "Conocer software a medida"
-  },
-  {
-    eyebrow: "Automatización",
-    title: "Automatización e integraciones",
-    body: "Conectamos herramientas, datos y reglas operativas para reducir tareas repetitivas y mejorar el seguimiento.",
-    href: "/servicios/automatizaciones/",
-    label: "Conocer automatizaciones"
-  },
-  {
-    eyebrow: "Business Intelligence",
-    title: "Power BI y dashboards",
-    body: "Dashboards, indicadores, modelos de datos y reportes para convertir información dispersa en decisiones útiles.",
-    href: "/servicios/dashboards/",
-    label: "Conocer Power BI"
-  },
-  {
-    eyebrow: "Consultoría TI",
-    title: "Consultoría TI y DevOps",
-    body: "Monitoreo, gestión de servicios, pipelines y releases con una ruta de implementación proporcional al contexto.",
-    href: "/servicios/infraestructura-soporte/",
-    label: "Conocer consultoría TI"
-  },
-  {
-    eyebrow: "Infraestructura",
-    title: "Infraestructura y continuidad",
-    body: "Servidores, bases de datos, cloud u on-prem, respaldos, monitoreo y mantenimiento para sostener la operación.",
-    href: "/servicios/infraestructura-soporte/",
-    label: "Conocer infraestructura"
-  },
-  {
-    eyebrow: "Presencia digital",
-    title: "Sitios web corporativos",
-    body: "Experiencias B2B claras, profesionales y orientadas a explicar la oferta real y facilitar conversaciones comerciales.",
-    href: "/servicios/sitios-web-corporativos/",
-    label: "Conocer sitios corporativos"
-  }
-];
 ---
 
 <BaseLayout
@@ -150,12 +106,12 @@ const featuredServices = [
 
     <div class="catalog-grid js-services-grid">
       {
-        featuredServices.map((service) => (
+        services.map((service) => (
           <article class="catalog-card js-reveal-card" data-card-interaction>
-            <p class="eyebrow">{service.eyebrow}</p>
-            <h3>{service.title}</h3>
-            <p>{service.body}</p>
-            <a class="button button-ghost" href={service.href} data-link-shift>{service.label}</a>
+            <p class="eyebrow">{service.title}</p>
+            <h3>{service.headline}</h3>
+            <p>{service.summary}</p>
+            <a class="button button-ghost" href={service.ctaHref} data-link-shift>{service.ctaLabel}</a>
           </article>
         ))
       }

@@ -124,11 +124,11 @@ export const auditRecommendations: AuditCardContent[] = [
   },
   {
     eyebrow: "Ruta posible",
-    title: "Dashboards o reporting para visibilidad real.",
+    title: "Power BI y reporting para visibilidad real.",
     body:
       "Si la fricción viene de poca visibilidad sobre leads, solicitudes o desempeño operativo, puede hacer falta ordenar indicadores.",
     items: ["KPIs claros", "menos reportes manuales", "lectura más ejecutiva"],
-    ctaLabel: "Ver dashboards",
+    ctaLabel: "Ver Power BI",
     ctaHref: "/servicios/dashboards/"
   },
   {
