@@ -4,14 +4,20 @@
 
 Codex actua como asistente tecnico para el repositorio `sokatechnologies-website`.
 
-El trabajo debe limitarse a documentacion, child theme, assets, snippets, checklists y pruebas controladas en el entorno local `public_html/` para la web publica de SokaTechnologies en WordPress/cPanel.
+El repositorio contiene dos areas de implementacion que deben mantenerse separadas: una aplicacion Astro en desarrollo y los componentes/documentacion historicos de WordPress/cPanel. La tarea y la autorizacion explicita determinan el area que puede modificarse.
 
 ## Objetivo del repositorio
 
-Este repositorio versiona la parte controlada por SokaTechnologies para una web en WordPress. No debe contener una instalacion completa de WordPress.
+Este repositorio versiona:
+
+- La aplicacion Astro independiente que prepara la futura web corporativa.
+- La parte controlada por SokaTechnologies para la web actual en WordPress.
+
+No debe contener una instalacion completa de WordPress.
 
 Debe contener:
 
+- Aplicacion Astro y su configuracion versionada en la rama de desarrollo autorizada.
 - Documentacion.
 - Child theme propio.
 - Assets propios.
@@ -19,6 +25,28 @@ Debe contener:
 - Checklists de seguridad.
 - Checklists de instalacion y despliegue.
 - Guias de configuracion.
+
+## Reglas para la aplicacion Astro
+
+La aplicacion Astro vive en la rama de desarrollo correspondiente, actualmente `feature/web-demo-2026-gsap`, y utiliza Astro, TypeScript y GSAP. No se debe asumir que la rama predeterminada contiene esta aplicacion.
+
+Cuando una tarea autorice expresamente trabajo sobre Astro, Codex puede modificar de forma pequena y revisable:
+
+- `src/`, incluyendo paginas, componentes, datos, librerias, scripts y estilos.
+- `public/` y la configuracion de Astro/TypeScript.
+- `package.json`, `package-lock.json` y dependencias estrictamente necesarias para la tarea.
+- Documentacion relacionada con la aplicacion Astro.
+
+Las tareas Astro deben:
+
+- Partir de la rama Astro verificada o de una rama nueva basada en ella.
+- Entregarse mediante pull requests pequenos y revisables.
+- Validarse con los comandos disponibles, normalmente `npm run check`, `npm run build` y `git diff --check`.
+- Mantener el formulario demo y los mensajes de estado veraces hasta que exista un backend autorizado.
+- No anadir React, Tailwind, librerias de animacion ni dependencias de build sin justificacion y revision de alcance/licencia.
+- No modificar DNS, hosting, certificados, WordPress ni produccion como parte de una tarea de codigo Astro.
+
+Estas reglas no autorizan por si solas una migracion, un despliegue, un cambio de infraestructura ni la activacion de servicios externos.
 
 ## Reglas generales
 
@@ -44,7 +72,7 @@ Codex no debe:
 - Crear `.cpanel.yml` sin aprobacion explicita.
 - Instalar plugins.
 - Cambiar configuracion real de cPanel.
-- Crear apps Next/React o dependencias de build innecesarias para este repo.
+- Crear aplicaciones o dependencias ajenas al area autorizada; en Astro tampoco se deben anadir React, Tailwind o librerias de build innecesarias.
 - Hacer cambios masivos sin plan previo.
 
 ## Reglas para `public_html/` local
@@ -98,6 +126,8 @@ Reglas obligatorias:
 Si Codex detecta un secreto, debe detenerse, no copiarlo y recomendar rotacion.
 
 ## Reglas para WordPress
+
+Las siguientes reglas aplican al tema, snippets, documentacion y entorno local de WordPress/cPanel. No restringen las tareas Astro autorizadas descritas arriba.
 
 Codex puede ayudar con:
 
