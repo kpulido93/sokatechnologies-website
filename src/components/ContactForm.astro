@@ -10,7 +10,7 @@ interface Props {
 const { title, body, buttonLabel } = Astro.props;
 const provider = import.meta.env.PUBLIC_FORM_PROVIDER?.trim().toLowerCase() || "demo";
 const submitEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() || "";
-const fallbackEmail = import.meta.env.PUBLIC_CONTACT_FALLBACK_EMAIL?.trim() || "hola@sokatechnologies.com";
+const fallbackEmail = import.meta.env.PUBLIC_CONTACT_FALLBACK_EMAIL?.trim() || "info@sokatechnologies.com";
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || "";
 const isDemoMode = provider === "demo" || submitEndpoint.length === 0;
 const formId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-form`;

@@ -61,7 +61,7 @@ CTA principal: `Solicitar diagnostico`
 CTA secundaria: `Responder este correo`
 
 SokaTechnologies  
-`hola@sokatechnologies.com`
+`info@sokatechnologies.com`
 
 ## Version extendida
 
@@ -99,7 +99,7 @@ CTA secundaria: `Responder este correo`
 Si prefieres, puedes responder directamente a este mensaje con cualquier dato adicional que ayude a entender mejor el caso.
 
 SokaTechnologies  
-`hola@sokatechnologies.com`
+`info@sokatechnologies.com`
 
 ## CTA a diagnostico
 

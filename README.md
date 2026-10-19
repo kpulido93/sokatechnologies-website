@@ -1,8 +1,11 @@
 # SokaTechnologies Website
 
-Repositorio de soporte para la web publica de SokaTechnologies en WordPress/cPanel.
+Repositorio con dos areas separadas para la presencia corporativa de SokaTechnologies:
 
-Este repositorio no contiene una instalacion completa de WordPress. Su objetivo es versionar solo los elementos controlados por SokaTechnologies que pueden revisarse de forma segura antes de aplicarlos en WordPress.
+- Una aplicacion Astro independiente, con Astro, TypeScript y GSAP, preparada en una rama de desarrollo para sustituir la web corporativa despues de su revision y autorizacion.
+- Los elementos controlados de la web actual en WordPress/cPanel, que no constituyen una instalacion completa de WordPress.
+
+Cada area debe trabajarse en su rama y flujo de pull requests correspondiente. Los cambios Astro no implican cambios directos en WordPress, cPanel ni produccion.
 
 Puede existir una carpeta `public_html/` con una instalacion local de WordPress para pruebas en `http://127.0.0.1:8088`. Esa carpeta esta ignorada por Git y no forma parte de la fuente versionada.
 
@@ -10,6 +13,10 @@ Puede existir una carpeta `public_html/` con una instalacion local de WordPress 
 
 ```text
 /
+├── src/                    # aplicacion Astro: paginas, componentes, datos, estilos y logica
+├── public/                 # assets publicos de la aplicacion Astro
+├── package.json            # dependencias y comandos de Astro
+├── astro.config.mjs        # configuracion de la aplicacion Astro
 ├── content/
 ├── docs/
 ├── website/
