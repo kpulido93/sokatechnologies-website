@@ -71,7 +71,7 @@ export const createOrganizationSchema = (): StructuredData => ({
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  email: "mailto:hola@sokatechnologies.com",
+  email: "mailto:info@sokatechnologies.com",
   areaServed: ["Panamá", "República Dominicana", "Latinoamérica"],
   knowsAbout: [
     "Software a medida",

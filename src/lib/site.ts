@@ -27,7 +27,7 @@ export const siteMeta = {
   name: "SokaTechnologies",
   shortName: "Soka",
   tagline: "Software, automatización e infraestructura para operar con más control.",
-  email: "hola@sokatechnologies.com",
+  email: "info@sokatechnologies.com",
   regions: "Panamá, República Dominicana y Latinoamérica",
   diagnosisHref: "/diagnostico/"
 } as const;
