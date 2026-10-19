@@ -431,7 +431,7 @@ textarea {
 
 .card-side,
 .card-report,
-.card-portik,
+.card-integrations,
 .card-support {
   grid-column: span 3;
 }
@@ -1284,6 +1284,26 @@ textarea {
   outline-offset: 3px;
 }
 
+@media (max-width: 1120px) {
+  .site-header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-radius: var(--radius-md);
+  }
+
+  .site-nav {
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: center;
+    gap: clamp(0.7rem, 2vw, 1.4rem);
+  }
+
+  .header-cta {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 1080px) {
   .hero,
   .portik-shell,
@@ -1332,7 +1352,7 @@ textarea {
 
   .card-side,
   .card-report,
-  .card-portik,
+  .card-integrations,
   .card-support {
     grid-column: span 1;
   }
@@ -1340,7 +1360,7 @@ textarea {
   .card-main,
   .card-side,
   .card-report,
-  .card-portik,
+  .card-integrations,
   .card-support {
     min-height: 0;
   }

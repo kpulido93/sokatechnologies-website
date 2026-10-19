@@ -26,7 +26,7 @@ export type SectorItem = {
 export const siteMeta = {
   name: "SokaTechnologies",
   shortName: "Soka",
-  tagline: "Software, automatización e infraestructura para operar con más control.",
+  tagline: "Conectamos sistemas, optimizamos procesos y convertimos datos en decisiones.",
   email: "info@sokatechnologies.com",
   regions: "Panamá, República Dominicana y Latinoamérica",
   diagnosisHref: "/diagnostico/"
@@ -37,6 +37,7 @@ export const navItems: NavItem[] = [
   { href: "/servicios/", label: "Servicios" },
   { href: "/productos/", label: "Productos" },
   { href: "/casos/", label: "Casos" },
+  { href: "/nosotros/", label: "Nosotros" },
   { href: "/contacto/", label: "Contacto" }
 ];
 
@@ -134,7 +135,8 @@ export const footerGroups = [
     links: [
       { href: "/", label: "Inicio" },
       { href: "/servicios/", label: "Servicios" },
-      { href: "/casos/", label: "Casos" }
+      { href: "/casos/", label: "Casos" },
+      { href: "/nosotros/", label: "Nosotros" }
     ]
   },
   {

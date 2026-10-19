@@ -1,0 +1,142 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const founderSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Kevin Alexander Pulido",
+  jobTitle: "Fundador y Director Técnico",
+  worksFor: {
+    "@type": "Organization",
+    name: "SokaTechnologies",
+    url: "https://sokatechnologies.com"
+  },
+  knowsAbout: [
+    "Desarrollo de software",
+    "Integración de sistemas",
+    "Infraestructura",
+    "DevOps",
+    "Business Intelligence"
+  ]
+};
+---
+
+<BaseLayout
+  title="Sobre SokaTechnologies y su fundador"
+  description="Conoce SokaTechnologies y a Kevin Alexander Pulido, Fundador y Director Técnico, con 10 años de experiencia profesional en tecnología."
+  canonicalPath="/nosotros/"
+  pageName="Nosotros"
+  schemas={[founderSchema]}
+>
+  <section class="page-hero section">
+    <p class="eyebrow">Sobre nosotros</p>
+    <h1>Tecnología con propósito. Soluciones para operaciones reales.</h1>
+    <p>
+      En SokaTechnologies creemos que una buena solución tecnológica debe responder a una
+      necesidad concreta, ser mantenible y ayudar a las personas a trabajar mejor.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+      <a class="button button-ghost" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Nuestra forma de trabajar"
+      title="Comprender el negocio antes de elegir la tecnología."
+      body="Nuestro enfoque combina comprensión del negocio, definición de alcance, pruebas, documentación y continuidad."
+    />
+
+    <div class="trust-grid">
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Desarrollo</p>
+        <h2>Software que responde al proceso.</h2>
+        <p>
+          Diseñamos sistemas internos, aplicaciones web e integraciones para necesidades operativas
+          concretas.
+        </p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Continuidad</p>
+        <h2>Infraestructura con criterio operativo.</h2>
+        <p>
+          Consideramos datos, soporte, monitoreo, DevOps y mantenimiento para que la solución pueda
+          evolucionar.
+        </p>
+      </article>
+      <article class="trust-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Información</p>
+        <h2>Datos útiles para decidir mejor.</h2>
+        <p>
+          Ordenamos fuentes, indicadores y reportes para facilitar la lectura de la operación y la
+          toma de decisiones.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <article class="detail-card js-reveal-card" data-card-interaction>
+      <p class="eyebrow">Kevin Alexander Pulido</p>
+      <h2>Fundador y Director Técnico</h2>
+      <p>
+        Kevin cuenta con 10 años de experiencia profesional en desarrollo de software,
+        administración de bases de datos, infraestructura, integración de sistemas y Business
+        Intelligence.
+      </p>
+      <p>
+        Desde SokaTechnologies lidera un enfoque consultivo: comprender el problema, proponer una
+        solución adecuada y acompañar su evolución.
+      </p>
+    </article>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Experiencia técnica"
+      title="Una trayectoria amplia, presentada con atribución clara."
+      body="La experiencia profesional internacional del fundador se distingue de los proyectos contratados directamente a SokaTechnologies."
+    />
+
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">SokaTechnologies</p>
+        <h2>Proyectos empresariales y soluciones propias.</h2>
+        <p>
+          La empresa desarrolla software, integraciones, automatizaciones, reporting, sitios web
+          corporativos e infraestructura para necesidades empresariales concretas.
+        </p>
+        <p>
+          Los proyectos se presentan de forma responsable, con casos anonimizados y sin publicar
+          nombres, capturas reales, cifras no verificadas ni información sensible.
+        </p>
+      </article>
+
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Experiencia profesional internacional</p>
+        <h2>Consultoría realizada mediante un contratante.</h2>
+        <p>
+          La trayectoria de Kevin incluye participación en iniciativas internacionales de monitoreo,
+          gestión de servicios TI, DevOps y Power BI para una empresa de servicios tecnológicos.
+        </p>
+        <p>
+          Estas iniciativas corresponden a experiencia profesional del fundador y no fueron
+          contratadas directamente a SokaTechnologies.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>Conversemos sobre el desafío tecnológico de tu empresa.</h2>
+      <p>
+        Revisemos el proceso, el contexto y las alternativas antes de definir una solución.
+      </p>
+      <a class="button button-primary" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
+    </div>
+  </section>
+</BaseLayout>
