@@ -431,7 +431,7 @@ textarea {
 
 .card-side,
 .card-report,
-.card-portik,
+.card-integrations,
 .card-support {
   grid-column: span 3;
 }
@@ -658,6 +658,43 @@ textarea {
   font-family: var(--font-display);
   line-height: 1.16;
   letter-spacing: -0.03em;
+}
+
+.profile-photo-slot {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 100%;
+  margin: 0;
+  padding: 2rem;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+  background:
+    radial-gradient(circle at center, rgba(85, 176, 255, 0.12), transparent 44%),
+    rgba(8, 18, 31, 0.58);
+}
+
+.profile-photo-label {
+  color: var(--color-accent-soft);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.profile-photo-slot strong {
+  margin-top: 0.7rem;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+}
+
+.profile-photo-slot figcaption {
+  max-width: 24rem;
+  margin-top: 0.8rem;
+  line-height: var(--leading-copy);
 }
 
 .detail-list {
@@ -1332,7 +1369,7 @@ textarea {
 
   .card-side,
   .card-report,
-  .card-portik,
+  .card-integrations,
   .card-support {
     grid-column: span 1;
   }
@@ -1340,7 +1377,7 @@ textarea {
   .card-main,
   .card-side,
   .card-report,
-  .card-portik,
+  .card-integrations,
   .card-support {
     min-height: 0;
   }
