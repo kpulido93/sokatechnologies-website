@@ -115,7 +115,27 @@ test("rejects excessive and duplicate submissions through the rate limiter", asy
   assert.equal(duplicate.status, 429);
 });
 
+test("rate limit cannot be bypassed by changing the unverified email", async () => {
+  const keys = [];
+  const rateLimiter = {
+    limit: async ({ key }) => {
+      keys.push(key);
+      return { success: keys.length === 1 };
+    }
+  };
+  const headers = { "CF-Connecting-IP": "203.0.113.8" };
+  const first = await handleRequest(request(validLead, headers), baseEnv(rateLimiter), { fetchImpl: providerOk });
+  const second = await handleRequest(
+    request({ ...validLead, email: "other@example.com" }, headers),
+    baseEnv(rateLimiter),
+    { fetchImpl: providerOk }
+  );
+  assert.equal(first.status, 200);
+  assert.equal(second.status, 429);
+  assert.deepEqual(keys, ["lead:203.0.113.8", "lead:203.0.113.8"]);
+});
+
 test("does not report success when Resend rejects the request", async () => {
-  const response = await handleRequest(request(), baseEnv(), async () => new Response("rejected", { status: 500 }));
+  const response = await handleRequest(request(), baseEnv(), { fetchImpl: async () => new Response("rejected", { status: 500 }) });
   assert.equal(response.status, 502);
 });
