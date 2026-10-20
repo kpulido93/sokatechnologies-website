@@ -87,7 +87,7 @@ const RECOMMENDATION_LIBRARY: Record<SokaRecommendationType, Omit<SokaRecommenda
     type: "infrastructure",
     title: infrastructureService.title,
     summary:
-      "Si hay señales de lentitud, continuidad frágil, backups inciertos o base técnica poco clara, conviene revisar infraestructura y soporte antes de escalar el resto.",
+      "Si hay señales de lentitud, continuidad frágil, backups inciertos o base técnica poco clara, conviene revisar infraestructura antes de escalar el resto.",
     ctaLabel: infrastructureService.ctaLabel,
     ctaHref: infrastructureService.ctaHref,
     relatedAreas: ["infrastructure", "performance", "trust"],

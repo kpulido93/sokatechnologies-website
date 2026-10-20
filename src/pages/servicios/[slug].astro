@@ -1,6 +1,5 @@
 ---
 import ServiceSeoPage from "../../components/ServiceSeoPage.astro";
-import { caseStudies } from "../../data/caseStudies";
 import { services } from "../../data/services";
 
 export const getStaticPaths = () =>
@@ -20,11 +19,9 @@ export const getStaticPaths = () =>
   }));
 
 const { page } = Astro.props;
-const relatedCases = caseStudies.filter((caseStudy) => page.relatedCaseSlugs.includes(caseStudy.slug));
 ---
 
 <ServiceSeoPage
   service={page}
-  relatedCases={relatedCases}
   canonicalPath={`/servicios/${page.slug}/`}
 />

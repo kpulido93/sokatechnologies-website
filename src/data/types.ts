@@ -25,6 +25,7 @@ export type ServiceContent = CatalogEntry & {
   metaDescription: string;
   heroTitle: string;
   heroBody: string;
+  audience: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
   secondaryCtaLabel?: string;
