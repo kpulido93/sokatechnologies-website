@@ -209,6 +209,39 @@ test("rate limit cannot be bypassed by changing the unverified email", async () 
   assert.deepEqual(keys, ["lead:203.0.113.8", "lead:203.0.113.8"]);
 });
 
+test("permits a retry with a fresh Turnstile token and the same Resend idempotency key", async () => {
+  const seenTokens = new Set();
+  const resendKeys = [];
+  let resendCalls = 0;
+  const fetchImpl = async (url, init) => {
+    if (String(url).includes("siteverify")) {
+      const token = new URLSearchParams(init.body).get("response");
+      const previouslyUsed = seenTokens.has(token);
+      seenTokens.add(token);
+      return new Response(JSON.stringify({
+        success: !previouslyUsed,
+        hostname: "prueba.sokatechnologies.com",
+        action: "lead"
+      }), { status: 200 });
+    }
+    resendKeys.push(init.headers["Idempotency-Key"]);
+    resendCalls += 1;
+    return new Response(JSON.stringify({ id: "test-email" }), {
+      status: resendCalls === 1 ? 502 : 200
+    });
+  };
+  const first = await handleRequest(request(), baseEnv(), { fetchImpl });
+  const retry = await handleRequest(
+    request({ ...validLead, turnstileToken: "new-single-use-token" }),
+    baseEnv(),
+    { fetchImpl }
+  );
+  assert.equal(first.status, 502);
+  assert.equal(retry.status, 200);
+  assert.deepEqual(resendKeys, ["test-lead-001", "test-lead-001"]);
+  assert.deepEqual([...seenTokens], ["valid-token", "new-single-use-token"]);
+});
+
 test("does not report success when Resend rejects the request", async () => {
   const response = await handleRequest(request(), baseEnv(), {
     fetchImpl: async (url) => String(url).includes("siteverify")
