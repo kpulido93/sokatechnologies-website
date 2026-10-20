@@ -184,6 +184,11 @@ const noteId = `${formId}-note`;
     };
     let idempotencyKey = createIdempotencyKey();
     let previousPayloadFingerprint = null;
+    let waitingForTurnstile = false;
+    let turnstilePoll = null;
+
+    const hasTurnstileToken = () =>
+      mode !== "live" || Boolean(form.querySelector('[name="cf-turnstile-response"]')?.value.trim());
 
     // A Turnstile token is single-use; reset it after any completed submission attempt.
     // The same idempotency key is retained for retries with identical lead details.
@@ -205,11 +210,34 @@ const noteId = `${formId}-note`;
     };
 
     const setBusy = (busy) => {
-      form.setAttribute("aria-busy", String(busy));
+      const disabled = busy || waitingForTurnstile;
+      form.setAttribute("aria-busy", String(disabled));
       if (!(submitButton instanceof HTMLButtonElement)) return;
-      submitButton.disabled = busy;
+      submitButton.disabled = disabled;
       submitButton.textContent = busy ? "Enviando…" : originalLabel;
     };
+
+    const waitForTurnstileToken = () => {
+      if (mode !== "live" || hasTurnstileToken()) {
+        waitingForTurnstile = false;
+        setBusy(false);
+        return;
+      }
+
+      waitingForTurnstile = true;
+      setBusy(false);
+      if (turnstilePoll !== null) return;
+
+      turnstilePoll = window.setInterval(() => {
+        if (!hasTurnstileToken()) return;
+        waitingForTurnstile = false;
+        window.clearInterval(turnstilePoll);
+        turnstilePoll = null;
+        setBusy(false);
+      }, 100);
+    };
+
+    waitForTurnstileToken();
 
     form.addEventListener(
       "invalid",
@@ -240,6 +268,13 @@ const noteId = `${formId}-note`;
       if (mode === "demo") {
         event.preventDefault();
         setStatus(successNode instanceof HTMLElement ? successNode : null);
+        return;
+      }
+
+      if (!hasTurnstileToken()) {
+        event.preventDefault();
+        waitForTurnstileToken();
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
         return;
       }
 
@@ -280,12 +315,22 @@ const noteId = `${formId}-note`;
         form.reset();
         idempotencyKey = createIdempotencyKey();
         previousPayloadFingerprint = null;
+        const tokenInput = form.querySelector('[name="cf-turnstile-response"]');
+        if (tokenInput instanceof HTMLInputElement || tokenInput instanceof HTMLTextAreaElement) {
+          tokenInput.value = "";
+        }
         resetTurnstile();
+        waitForTurnstileToken();
         setStatus(successNode instanceof HTMLElement ? successNode : null);
       } catch {
         // Siteverify might have consumed the token even when the mail provider failed.
         // Refresh the challenge while retaining the key and the visitor's entered fields.
+        const tokenInput = form.querySelector('[name="cf-turnstile-response"]');
+        if (tokenInput instanceof HTMLInputElement || tokenInput instanceof HTMLTextAreaElement) {
+          tokenInput.value = "";
+        }
         resetTurnstile();
+        waitForTurnstileToken();
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
       } finally {
         submitting = false;
