@@ -2,18 +2,30 @@
 import { contactServiceOptions } from "../lib/site";
 
 interface Props {
+  formType: "contact" | "diagnostico";
   title: string;
   body: string;
   buttonLabel: string;
 }
 
-const { title, body, buttonLabel } = Astro.props;
+const { formType, title, body, buttonLabel } = Astro.props;
 const provider = import.meta.env.PUBLIC_FORM_PROVIDER?.trim().toLowerCase() || "demo";
 const submitEndpoint = import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT?.trim() || "";
 const fallbackEmail = import.meta.env.PUBLIC_CONTACT_FALLBACK_EMAIL?.trim() || "info@sokatechnologies.com";
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() || "";
-const isDemoMode = provider === "demo" || submitEndpoint.length === 0;
-const formId = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-form`;
+
+const isAllowedEndpoint = (value: string) => {
+  try {
+    const url = new URL(value);
+    const localHost = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+    return (url.protocol === "https:" || (url.protocol === "http:" && localHost)) && !url.username && !url.password && !url.hash;
+  } catch {
+    return false;
+  }
+};
+
+const isLiveMode = provider === "worker" && isAllowedEndpoint(submitEndpoint);
+const formId = `${formType}-form`;
 const successId = `${formId}-success`;
 const errorId = `${formId}-error`;
 const noteId = `${formId}-note`;
@@ -34,13 +46,15 @@ const noteId = `${formId}-note`;
   <form
     class="contact-form"
     method="post"
-    action={submitEndpoint || undefined}
-    data-form-mode={isDemoMode ? "demo" : "live"}
-    data-form-provider={provider}
+    action={isLiveMode ? submitEndpoint : `mailto:${fallbackEmail}`}
+    enctype="application/x-www-form-urlencoded"
+    data-form-mode={isLiveMode ? "live" : "demo"}
+    data-form-provider={isLiveMode ? provider : "demo"}
     data-success-id={successId}
     data-error-id={errorId}
-    aria-describedby={noteId}
+    aria-describedby={`${noteId} ${successId} ${errorId}`}
   >
+    <input type="hidden" name="formType" value={formType} />
     <input type="hidden" name="formContext" value={title} />
 
     <label class="form-trap" aria-hidden="true">
@@ -65,24 +79,28 @@ const noteId = `${formId}-note`;
         />
       </label>
       <label>
-        <span>Email</span>
-        <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required />
+        <span>Correo electrónico</span>
+        <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required />
       </label>
       <label>
-        <span>Pais</span>
-        <input type="text" name="country" autocomplete="country-name" maxlength="80" required />
+        <span>Teléfono <small>(opcional)</small></span>
+        <input type="tel" name="phone" autocomplete="tel" maxlength="40" />
       </label>
       <label>
-        <span>Servicio de interes</span>
-        <select name="service" required>
-          <option value="">Selecciona una opcion</option>
+        <span>País <small>(opcional)</small></span>
+        <input type="text" name="country" autocomplete="country-name" maxlength="80" />
+      </label>
+      <label>
+        <span>Servicio de interés <small>(opcional)</small></span>
+        <select name="service">
+          <option value="">Selecciona una opción</option>
           {contactServiceOptions.map((option) => <option value={option}>{option}</option>)}
         </select>
       </label>
       <label>
-        <span>Tipo de problema</span>
-        <select name="problemType" required>
-          <option value="">Selecciona una opcion</option>
+        <span>Tipo de problema <small>(opcional)</small></span>
+        <select name="problemType">
+          <option value="">Selecciona una opción</option>
           <option value="manual">Proceso manual o disperso</option>
           <option value="reporting">Reportes o indicadores</option>
           <option value="infra">Infraestructura o continuidad</option>
@@ -92,25 +110,25 @@ const noteId = `${formId}-note`;
     </div>
 
     <label class="field-block">
-      <span>Descripcion breve</span>
+      <span>Descripción del problema</span>
       <textarea name="summary" rows="5" minlength="30" maxlength="1200" required></textarea>
     </label>
 
     <label class="checkbox-line">
-      <input type="checkbox" name="consent" required />
+      <input type="checkbox" name="consent" value="true" required />
       <span>
-        Acepto que SokaTechnologies me contacte sobre esta solicitud y confirmo que no incluire
-        contrasenas, tokens, llaves privadas ni datos sensibles. Consulta la
-        <a href="/politica-privacidad/">politica de privacidad</a>.
+        Acepto que SokaTechnologies me contacte sobre esta solicitud y confirmo que no incluiré
+        contraseñas, tokens, llaves privadas ni datos sensibles. Consulta la
+        <a href="/politica-privacidad/">política de privacidad</a>.
       </span>
     </label>
 
     {
-      turnstileSiteKey && (
-        <p class="form-note">
-          Turnstile configurado con clave publica. La verificacion del token debe hacerse siempre
-          del lado servidor.
-        </p>
+      isLiveMode && turnstileSiteKey && (
+        <>
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto"></div>
+          <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        </>
       )
     }
 
@@ -122,20 +140,26 @@ const noteId = `${formId}-note`;
     </div>
 
     <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
-      Validacion local completada. El envio real queda pendiente de conectar a un endpoint seguro;
-      mientras tanto usa el correo corporativo como canal alternativo.
+      {isLiveMode
+        ? "Solicitud enviada correctamente. Te contactaremos usando el correo indicado."
+        : "Validación local completada. El formulario está en modo demo y no se envió ninguna solicitud. Escríbenos al correo corporativo para contactarnos."}
     </p>
 
-    <p id={errorId} class="form-status form-status-error" role="alert" hidden>
-      No se pudo procesar la solicitud. Revisa los campos requeridos o usa el correo corporativo
-      mientras se conecta el backend del formulario.
+    <p id={errorId} class="form-status form-status-error" role="alert" aria-live="assertive" hidden>
+      No se pudo enviar la solicitud. Revisa los campos o usa el correo corporativo como alternativa.
     </p>
 
     <p id={noteId} class="form-note">
-      {isDemoMode
-        ? "Modo demo: el formulario valida campos y consentimiento, pero no envia ni almacena datos hasta configurar un endpoint seguro."
-        : `Modo ${provider}: el envio real depende del endpoint configurado en despliegue y nunca debe exponer secretos en el cliente.`}
+      {isLiveMode
+        ? "Envío seguro: la solicitud se valida en un Worker y se entrega por correo sin exponer credenciales."
+        : "Modo demo: el formulario valida los campos, pero no envía ni almacena datos. Usa el correo corporativo para iniciar la conversación."}
     </p>
+
+    <noscript>
+      <p class="form-note">
+        JavaScript está desactivado. Usa el botón de correo para enviar la solicitud desde tu cliente de email.
+      </p>
+    </noscript>
   </form>
 </section>
 
@@ -143,17 +167,25 @@ const noteId = `${formId}-note`;
   document.querySelectorAll(".contact-form").forEach((form) => {
     if (!(form instanceof HTMLFormElement)) return;
 
-    const successId = form.dataset.successId;
-    const errorId = form.dataset.errorId;
+    const successNode = document.getElementById(form.dataset.successId ?? "");
+    const errorNode = document.getElementById(form.dataset.errorId ?? "");
     const mode = form.dataset.formMode ?? "demo";
-    const successNode = successId ? document.getElementById(successId) : null;
-    const errorNode = errorId ? document.getElementById(errorId) : null;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalLabel = submitButton instanceof HTMLButtonElement ? submitButton.textContent : "";
+    let submitting = false;
 
     const setStatus = (target) => {
       [successNode, errorNode].forEach((node) => {
         if (!(node instanceof HTMLElement)) return;
         node.hidden = node !== target;
       });
+    };
+
+    const setBusy = (busy) => {
+      form.setAttribute("aria-busy", String(busy));
+      if (!(submitButton instanceof HTMLButtonElement)) return;
+      submitButton.disabled = busy;
+      submitButton.textContent = busy ? "Enviando…" : originalLabel;
     };
 
     form.addEventListener(
@@ -164,16 +196,13 @@ const noteId = `${formId}-note`;
       true,
     );
 
-    form.addEventListener("input", () => {
-      setStatus(null);
-    });
+    form.addEventListener("input", () => setStatus(null));
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       const trap = form.elements.namedItem("website");
 
       if (trap instanceof HTMLInputElement && trap.value.trim().length > 0) {
         event.preventDefault();
-        form.reset();
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
         return;
       }
@@ -188,6 +217,35 @@ const noteId = `${formId}-note`;
       if (mode === "demo") {
         event.preventDefault();
         setStatus(successNode instanceof HTMLElement ? successNode : null);
+        return;
+      }
+
+      event.preventDefault();
+      if (submitting) return;
+      submitting = true;
+      setBusy(true);
+      setStatus(null);
+
+      try {
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        const response = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json().catch(() => null);
+
+        if (!response.ok || result?.ok !== true) throw new Error("lead_submission_failed");
+
+        form.reset();
+        if (window.turnstile && typeof window.turnstile.reset === "function") window.turnstile.reset();
+        setStatus(successNode instanceof HTMLElement ? successNode : null);
+      } catch {
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
+      } finally {
+        submitting = false;
+        setBusy(false);
       }
     });
   });
