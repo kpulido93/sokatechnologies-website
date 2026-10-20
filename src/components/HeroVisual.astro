@@ -1,64 +1,70 @@
-<div class="hero-panel js-hero-panel">
+<div
+  class="hero-panel js-hero-panel"
+  role="img"
+  aria-label="Esquema visual de sistemas, procesos y datos conectados"
+>
   <div class="hero-panel-head">
-    <span class="panel-chip">malla operativa</span>
-    <span class="panel-chip">control consultivo</span>
+    <span class="panel-chip">mapa de operación</span>
+    <span class="panel-chip">sin datos sensibles</span>
   </div>
 
   <div class="hero-visual-grid">
     <article class="hero-panel-card card-main js-hero-panel-card" data-card-interaction>
-      <p class="card-label">Operación</p>
-      <strong>Estado general estable</strong>
-      <div class="card-meter">
-        <span style="--meter-size: 82%;"></span>
+      <div class="hero-node-head">
+        <span class="hero-node-index">01</span>
+        <p class="card-label">Fuentes</p>
       </div>
-      <ul class="panel-list">
-        <li>Procesos priorizados</li>
-        <li>Incidencias visibles</li>
-      </ul>
+      <strong>Información conectada</strong>
+      <p class="card-note">Archivos, APIs y herramientas que necesitan hablar entre sí.</p>
+      <div class="module-pill-group">
+        <span>APIs</span>
+        <span>CRM</span>
+        <span>datos</span>
+      </div>
     </article>
 
     <article class="hero-panel-card card-side js-hero-panel-card" data-card-interaction>
-      <p class="card-label">Automatización</p>
-      <strong>Flujos activos</strong>
-      <div class="signal-row">
+      <div class="hero-node-head">
+        <span class="hero-node-index">02</span>
+        <p class="card-label">Integración</p>
+      </div>
+      <strong>Procesos coordinados</strong>
+      <div class="signal-row" aria-hidden="true">
         <span class="hero-signal js-hero-signal"></span>
         <span class="hero-signal js-hero-signal is-cyan"></span>
         <span class="hero-signal js-hero-signal is-mint"></span>
       </div>
-      <p class="card-note">Reglas, validaciones y seguimiento de tareas.</p>
+      <p class="card-note">Reglas, validaciones y seguimiento con una lógica común.</p>
     </article>
 
     <article class="hero-panel-card card-report js-hero-panel-card" data-card-interaction>
-      <p class="card-label">Reportes</p>
-      <strong>Lectura ejecutiva</strong>
-      <div class="bar-cluster">
-        <span style="--bar-size: 46%;"></span>
-        <span style="--bar-size: 64%;"></span>
-        <span style="--bar-size: 58%;"></span>
-        <span style="--bar-size: 78%;"></span>
+      <div class="hero-node-head">
+        <span class="hero-node-index">03</span>
+        <p class="card-label">Decisiones</p>
       </div>
-      <p class="card-note">Indicadores simples para decidir más rápido.</p>
+      <strong>Datos con contexto</strong>
+      <ul class="panel-list">
+        <li>Indicadores claros</li>
+        <li>Acceso segmentado</li>
+      </ul>
     </article>
 
     <article class="hero-panel-card card-integrations js-hero-panel-card" data-card-interaction>
-      <p class="card-label">Integraciones</p>
-      <strong>Sistemas conectados</strong>
-      <div class="module-pill-group">
-        <span>APIs</span>
-        <span>datos</span>
-        <span>CRM</span>
+      <div class="hero-node-head">
+        <span class="hero-node-index">04</span>
+        <p class="card-label">Automatización</p>
       </div>
-      <p class="card-note">Información conectada para operar con más control.</p>
+      <strong>Tareas más claras</strong>
+      <p class="card-note">Menos pasos manuales y más trazabilidad para el equipo.</p>
     </article>
 
     <article class="hero-panel-card card-support js-hero-panel-card" data-card-interaction>
-      <p class="card-label">Infraestructura</p>
-      <strong>Continuidad y soporte</strong>
-      <ul class="panel-list">
-        <li>backups verificados</li>
-        <li>monitoreo básico</li>
-        <li>documentación mínima útil</li>
-      </ul>
+      <div class="hero-node-head">
+        <span class="hero-node-index">05</span>
+        <p class="card-label">Continuidad</p>
+      </div>
+      <strong>Infraestructura preparada</strong>
+      <p class="card-note">Operación, soporte y documentación para sostener la solución.</p>
     </article>
   </div>
 </div>

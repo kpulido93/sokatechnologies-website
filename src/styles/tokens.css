@@ -1,15 +1,23 @@
 :root {
+  --color-ink: #03111f;
+  --color-navy: #071c31;
+  --color-blue: #367dff;
+  --color-blue-bright: #66c6ff;
+  --color-turquoise: #32d0b6;
   --color-bg: #06101d;
   --color-bg-elevated: #0c1829;
   --color-surface: rgba(11, 24, 40, 0.82);
   --color-surface-strong: rgba(11, 24, 40, 0.96);
+  --color-surface-hover: rgba(18, 39, 63, 0.94);
   --color-border: rgba(135, 170, 230, 0.16);
   --color-border-strong: rgba(135, 170, 230, 0.28);
   --color-text: #edf3fb;
+  --color-text-strong: #f7fbff;
   --color-text-muted: #92a6c3;
-  --color-accent: #55b0ff;
-  --color-accent-soft: #90d9ff;
-  --color-accent-secondary: #22d4bf;
+  --color-accent: var(--color-blue);
+  --color-accent-soft: var(--color-blue-bright);
+  --color-accent-secondary: var(--color-turquoise);
+  --color-focus: #8fddff;
   --color-white: #ffffff;
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
   --font-body: "Manrope", "Segoe UI", sans-serif;
@@ -32,6 +40,7 @@
   --radius-sm: 1rem;
   --radius-md: 1.45rem;
   --radius-lg: 2rem;
+  --radius-xl: 2.4rem;
   --radius-pill: 999px;
   --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.2);
   --shadow-panel: 0 32px 80px rgba(0, 0, 0, 0.28);
