@@ -5,7 +5,7 @@ interface ImportMetaEnv {
   readonly CONTACT_EMAIL?: string;
   readonly ANALYTICS_PROVIDER?: string;
   readonly ANALYTICS_ID?: string;
-  readonly PUBLIC_FORM_PROVIDER?: "demo" | "formspree" | "netlify" | "worker" | "api";
+  readonly PUBLIC_FORM_PROVIDER?: "demo" | "worker";
   readonly PUBLIC_CONTACT_FORM_ENDPOINT?: string;
   readonly PUBLIC_CONTACT_FALLBACK_EMAIL?: string;
   readonly PUBLIC_CONTACT_WHATSAPP_URL?: string;

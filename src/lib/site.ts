@@ -1,4 +1,3 @@
-import { products } from "../data/products";
 import { services } from "../data/services";
 
 export type NavItem = {
@@ -124,8 +123,7 @@ export const sectorItems: SectorItem[] = [
 ];
 
 export const contactServiceOptions = [
-  ...services.map((service) => service.title),
-  ...products.map((product) => product.title)
+  ...services.map((service) => service.title)
 ];
 
 export const footerGroups = [
