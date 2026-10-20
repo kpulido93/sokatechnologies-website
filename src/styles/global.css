@@ -1840,6 +1840,16 @@ textarea {
 }
 
 @media (max-width: 520px) {
+  /* Allow long service headings to fit narrow mobile viewports (down to 320px). */
+  .interior-page > .page-hero {
+    padding: clamp(1rem, 5vw, 1.5rem);
+  }
+
+  .interior-page > .page-hero h1 {
+    font-size: clamp(1.9rem, 8.7vw, 2.75rem);
+    overflow-wrap: anywhere;
+  }
+
   .header-cta {
     width: 100%;
   }
