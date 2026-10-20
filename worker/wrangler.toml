@@ -3,9 +3,12 @@ main = "src/index.mjs"
 compatibility_date = "2026-10-20"
 
 [vars]
-ALLOWED_ORIGINS = "https://sokatechnologies.com"
+ALLOWED_ORIGINS = "https://prueba.sokatechnologies.com"
+TURNSTILE_EXPECTED_HOSTNAME = "prueba.sokatechnologies.com"
+TURNSTILE_EXPECTED_ACTION = "lead"
 
 [[ratelimits]]
 name = "RATE_LIMITER"
-namespace_id = "1001"
+# Replace before any deploy with a positive namespace ID from the Cloudflare account.
+namespace_id = "REPLACE_WITH_CLOUDFLARE_NAMESPACE_ID"
 simple = { limit = 5, period = 60 }

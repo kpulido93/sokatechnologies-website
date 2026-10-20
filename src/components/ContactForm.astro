@@ -24,7 +24,7 @@ const isAllowedEndpoint = (value: string) => {
   }
 };
 
-const isLiveMode = provider === "worker" && isAllowedEndpoint(submitEndpoint);
+const isLiveMode = provider === "worker" && isAllowedEndpoint(submitEndpoint) && Boolean(turnstileSiteKey);
 const formId = `${formType}-form`;
 const successId = `${formId}-success`;
 const errorId = `${formId}-error`;
@@ -126,7 +126,7 @@ const noteId = `${formId}-note`;
     {
       isLiveMode && turnstileSiteKey && (
         <>
-          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto"></div>
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="lead" data-theme="auto"></div>
           <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         </>
       )
@@ -173,6 +173,16 @@ const noteId = `${formId}-note`;
     const submitButton = form.querySelector('button[type="submit"]');
     const originalLabel = submitButton instanceof HTMLButtonElement ? submitButton.textContent : "";
     let submitting = false;
+    const createIdempotencyKey = () => {
+      if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+      if (globalThis.crypto?.getRandomValues) {
+        const bytes = new Uint8Array(16);
+        globalThis.crypto.getRandomValues(bytes);
+        return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+      }
+      return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    };
+    let idempotencyKey = createIdempotencyKey();
 
     const setStatus = (target) => {
       [successNode, errorNode].forEach((node) => {
@@ -231,7 +241,11 @@ const noteId = `${formId}-note`;
         const payload = Object.fromEntries(formData.entries());
         const response = await fetch(form.action, {
           method: "POST",
-          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Idempotency-Key": idempotencyKey
+          },
           body: JSON.stringify(payload),
         });
         const result = await response.json().catch(() => null);
@@ -239,6 +253,7 @@ const noteId = `${formId}-note`;
         if (!response.ok || result?.ok !== true) throw new Error("lead_submission_failed");
 
         form.reset();
+        idempotencyKey = createIdempotencyKey();
         if (window.turnstile && typeof window.turnstile.reset === "function") window.turnstile.reset();
         setStatus(successNode instanceof HTMLElement ? successNode : null);
       } catch {

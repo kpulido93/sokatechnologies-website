@@ -17,6 +17,7 @@ export const PROBLEM_TYPES = Object.freeze([
 
 const FORM_TYPES = new Set(["contact", "diagnostico"]);
 const EMAIL_PATTERN = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9._~:/-]{1,256}$/;
 const MAX_BODY_BYTES = 32 * 1024;
 
 export class InputError extends Error {
@@ -81,8 +82,13 @@ export function normalizeLead(input) {
 
 export async function parseRequestBody(request) {
   const contentType = (request.headers.get("content-type") || "").split(";", 1)[0].trim().toLowerCase();
-  if (!['application/json', 'application/x-www-form-urlencoded'].includes(contentType)) {
+  if (!["application/json", "application/x-www-form-urlencoded"].includes(contentType)) {
     throw new InputError("unsupported_content_type", 415);
+  }
+
+  const contentLength = request.headers.get("content-length");
+  if (contentLength && (!/^\d+$/.test(contentLength) || Number(contentLength) > MAX_BODY_BYTES)) {
+    throw new InputError("payload_too_large", 413);
   }
 
   const body = await request.text();
@@ -100,7 +106,20 @@ export async function parseRequestBody(request) {
 }
 
 export function parseAllowedOrigins(value = "") {
-  return new Set(String(value).split(",").map((origin) => origin.trim()).filter(Boolean));
+  return new Set(
+    String(value)
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter((origin) => {
+        if (!origin || origin === "*") return false;
+        try {
+          const url = new URL(origin);
+          return ["http:", "https:"].includes(url.protocol) && url.origin === origin;
+        } catch {
+          return false;
+        }
+      })
+  );
 }
 
 export function isAllowedOrigin(origin, allowedOrigins) {
@@ -114,6 +133,12 @@ export function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+export function parseIdempotencyKey(value) {
+  const key = typeof value === "string" ? value.trim() : "";
+  if (!IDEMPOTENCY_KEY_PATTERN.test(key)) throw new InputError("idempotency_key_required");
+  return key;
 }
 
 export { MAX_BODY_BYTES };
