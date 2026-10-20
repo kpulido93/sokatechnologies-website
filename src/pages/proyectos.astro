@@ -1,0 +1,88 @@
+---
+import CaseCard from "../components/CaseCard.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { caseStudies } from "../data/caseStudies";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Proyectos de software y experiencia tecnológica | SokaTechnologies"
+  description="Proyectos directos de SokaTechnologies en plataformas web, integración de datos, CRM y soluciones empresariales, junto con la experiencia internacional de su fundador."
+  canonicalPath="/proyectos/"
+  pageName="Proyectos"
+>
+  <PageHero
+    eyebrow="Proyectos empresariales"
+    title="Experiencia aplicada a problemas empresariales reales."
+    body="Presentamos dos proyectos directos de SokaTechnologies y distinguimos de forma visible la experiencia profesional internacional de su fundador."
+    primaryCtaLabel="Solicitar diagnóstico"
+    primaryCtaHref="/diagnostico/"
+    secondaryCtaLabel="Conocer servicios"
+    secondaryCtaHref="/servicios/"
+    signals={["proyectos directos", "resultados cualitativos", "sin datos identificables"]}
+  />
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="SokaTechnologies"
+      title="Problema, intervención y resultado sin exponer información sensible."
+      body="Estos proyectos corresponden a trabajos contratados directamente a SokaTechnologies. No se publican nombres de clientes, ubicaciones, sectores identificables, cifras inventadas ni capturas de sistemas reales."
+    />
+
+    <div class="case-grid">
+      {caseStudies.map((project) => <CaseCard caseStudy={project} />)}
+    </div>
+  </section>
+
+  <section class="section js-section">
+    <SectionHeading
+      eyebrow="Experiencia profesional internacional"
+      title="La trayectoria del fundador se presenta con atribución contractual clara."
+      body="Los trabajos de esta sección corresponden a Kevin Alexander Pulido como consultor contratado por una empresa internacional de servicios tecnológicos; no fueron proyectos contratados directamente a SokaTechnologies."
+    />
+
+    <div class="detail-grid">
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Consultoría tecnológica</p>
+        <h2>Integración y operación técnica</h2>
+        <ul class="detail-list">
+          <li>Integración de sistemas de monitoreo, soporte y telefonía.</li>
+          <li>Diseño y mejora de pipelines, CI/CD y releases.</li>
+          <li>Trabajo con infraestructura Windows, Linux y cloud.</li>
+        </ul>
+      </article>
+
+      <article class="detail-card js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Datos y autogestión</p>
+        <h2>Reportes para operar con más contexto</h2>
+        <ul class="detail-list">
+          <li>Power BI, reportes operativos y acceso segmentado.</li>
+          <li>Automatización de reportes y mantenimiento de información descriptiva.</li>
+          <li>Autogestión de datos sin modificar directamente los modelos de Power BI.</li>
+        </ul>
+      </article>
+    </div>
+
+    <aside class="detail-card js-reveal-card" data-card-interaction>
+      <p class="eyebrow">Nota de atribución</p>
+      <p>
+        Esta experiencia pertenece a la trayectoria profesional internacional de Kevin Alexander
+        Pulido. No se presentan nombres de terceros, clientes finales, capturas ni entregables
+        como proyectos contratados directamente a SokaTechnologies.
+      </p>
+    </aside>
+  </section>
+
+  <section class="final-panel section js-final-cta">
+    <div class="final-shell">
+      <p class="eyebrow">Siguiente paso</p>
+      <h2>Cuéntanos qué proceso necesita convertirse en una solución más clara.</h2>
+      <p>
+        Revisemos el contexto, las fuentes de información y el alcance posible antes de definir
+        una ruta de software, integración o datos.
+      </p>
+      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+    </div>
+  </section>
+</BaseLayout>

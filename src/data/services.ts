@@ -341,8 +341,8 @@ export const services: ServiceContent[] = [
       "Para empresas B2B, equipos comerciales y responsables de marketing que necesitan explicar mejor su oferta y facilitar conversaciones calificadas.",
     primaryCtaLabel: "Solicitar diagnóstico",
     primaryCtaHref: "/diagnostico/",
-    secondaryCtaLabel: "Ver casos",
-    secondaryCtaHref: "/casos/",
+    secondaryCtaLabel: "Ver proyectos",
+    secondaryCtaHref: "/proyectos/",
     painSignals: [
       "El sitio actual no explica con claridad qué hace la empresa ni para quién trabaja.",
       "La navegación no ayuda a generar conversaciones comerciales relevantes.",

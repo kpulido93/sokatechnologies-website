@@ -1,59 +1,32 @@
 ---
-import CaseCard from "../components/CaseCard.astro";
+import PageHero from "../components/PageHero.astro";
 import SectionHeading from "../components/SectionHeading.astro";
-import { caseStudies } from "../data/caseStudies";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="Casos anonimizados | SokaTechnologies"
-  description="Casos anonimizados de SokaTechnologies con foco en problema, enfoque, resultado cualitativo y servicios aplicados sin exponer información sensible."
-  canonicalPath="/casos/"
+  title="Proyectos | SokaTechnologies"
+  description="Explora proyectos de software a medida e integración empresarial desarrollados por SokaTechnologies."
+  canonicalPath="/proyectos/"
+  pageName="Proyectos"
 >
-  <section class="page-hero section">
-    <p class="eyebrow">Casos</p>
-    <h1>Experiencia presentada con criterio de confidencialidad.</h1>
-    <p>
-      Mostramos problema, enfoque, resultado cualitativo y servicios aplicados sin exponer
-      clientes reales, URLs, cifras sensibles ni capturas operativas.
-    </p>
-  </section>
+  <PageHero
+    eyebrow="Proyectos de SokaTechnologies"
+    title="Conoce proyectos empresariales de software e integración."
+    body="Explora experiencias reales de desarrollo e integración de sistemas, presentadas sin revelar información sensible de nuestros clientes."
+    primaryCtaLabel="Ver proyectos"
+    primaryCtaHref="/proyectos/"
+    secondaryCtaLabel="Solicitar diagnóstico"
+    secondaryCtaHref="/diagnostico/"
+    signals={["software a medida", "integración de datos", "resultados reales"]}
+  />
 
   <section class="section js-section">
     <SectionHeading
-      eyebrow="Casos anonimizados"
-      title="Referencias reales presentadas como portafolio seguro."
-      body="La página reúne empresa regulada en Panamá, servicios y cobranzas en República Dominicana, IVR, mensajería consentida, AutoInventario, Portik y EcomDemo."
+      eyebrow="Explora nuestros trabajos"
+      title="Descubre cómo abordamos desafíos tecnológicos empresariales."
+      body="En Proyectos encontrarás soluciones empresariales desarrolladas por SokaTechnologies y, en una sección diferenciada, experiencia profesional internacional de su fundador."
     />
-
-    <div class="case-grid">
-      {caseStudies.map((caseStudy) => <CaseCard caseStudy={caseStudy} />)}
-    </div>
-  </section>
-
-  <section class="section js-section">
-    <div class="trust-grid">
-      <article class="trust-card js-reveal-card" data-card-interaction>
-        <h3>Qué sí mostramos</h3>
-        <p>Problema, enfoque, servicios aplicados y resultado cualitativo.</p>
-      </article>
-      <article class="trust-card js-reveal-card" data-card-interaction>
-        <h3>Qué no mostramos</h3>
-        <p>Nombres, logos, cifras no validadas, credenciales, capturas ni información sensible.</p>
-      </article>
-      <article class="trust-card js-reveal-card" data-card-interaction>
-        <h3>Cómo usar estos casos</h3>
-        <p>Como referencia para conversaciones de diagnóstico, no como promesa automática de resultado.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="final-panel section js-final-cta">
-    <div class="final-shell">
-      <p class="eyebrow">Siguiente paso</p>
-      <h2>Si reconoces un problema similar, el siguiente paso es revisar tu caso real.</h2>
-      <p>El diagnóstico ayuda a evaluar si la ruta correcta es software, automatización, reporting, web o continuidad técnica.</p>
-      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
-    </div>
+    <a class="button button-primary" href="/proyectos/" data-link-shift>Ir a Proyectos</a>
   </section>
 </BaseLayout>
