@@ -183,6 +183,19 @@ const noteId = `${formId}-note`;
       return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     };
     let idempotencyKey = createIdempotencyKey();
+    let previousPayloadFingerprint = null;
+
+    // A Turnstile token is single-use; reset it after any completed submission attempt.
+    // The same idempotency key is retained for retries with identical lead details.
+    const resetTurnstile = () => {
+      try {
+        if (window.turnstile && typeof window.turnstile.reset === "function") {
+          window.turnstile.reset();
+        }
+      } catch {
+        // If the widget cannot refresh, the next request must still pass server validation.
+      }
+    };
 
     const setStatus = (target) => {
       [successNode, errorNode].forEach((node) => {
@@ -239,6 +252,18 @@ const noteId = `${formId}-note`;
       try {
         const formData = new FormData(form);
         const payload = Object.fromEntries(formData.entries());
+
+        // Turnstile tokens change between retries, but the Resend email payload does not.
+        // If a visitor edits their details, start a new idempotency scope.
+        const stablePayload = { ...payload };
+        delete stablePayload["cf-turnstile-response"];
+        delete stablePayload.turnstileToken;
+        const fingerprint = JSON.stringify(stablePayload);
+        if (previousPayloadFingerprint !== null && fingerprint !== previousPayloadFingerprint) {
+          idempotencyKey = createIdempotencyKey();
+        }
+        previousPayloadFingerprint = fingerprint;
+
         const response = await fetch(form.action, {
           method: "POST",
           headers: {
@@ -254,9 +279,13 @@ const noteId = `${formId}-note`;
 
         form.reset();
         idempotencyKey = createIdempotencyKey();
-        if (window.turnstile && typeof window.turnstile.reset === "function") window.turnstile.reset();
+        previousPayloadFingerprint = null;
+        resetTurnstile();
         setStatus(successNode instanceof HTMLElement ? successNode : null);
       } catch {
+        // Siteverify might have consumed the token even when the mail provider failed.
+        // Refresh the challenge while retaining the key and the visitor's entered fields.
+        resetTurnstile();
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
       } finally {
         submitting = false;
