@@ -12,16 +12,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   canonicalPath="/proyectos/"
   pageName="Proyectos"
 >
-  <PageHero
-    eyebrow="Proyectos empresariales"
-    title="Experiencia aplicada a problemas empresariales reales."
-    body="Presentamos dos proyectos directos de SokaTechnologies y distinguimos de forma visible la experiencia profesional internacional de su fundador."
-    primaryCtaLabel="Solicitar diagnóstico"
-    primaryCtaHref="/diagnostico/"
-    secondaryCtaLabel="Conocer servicios"
-    secondaryCtaHref="/servicios/"
-    signals={["proyectos directos", "resultados cualitativos", "sin datos identificables"]}
-  />
+  <div class="interior-page projects-page">
+    <PageHero
+      eyebrow="Proyectos empresariales"
+      title="Experiencia aplicada a problemas empresariales reales."
+      body="Presentamos dos proyectos directos de SokaTechnologies y distinguimos de forma visible la experiencia profesional internacional de su fundador."
+      primaryCtaLabel="Solicitar diagnóstico"
+      primaryCtaHref="/diagnostico/"
+      secondaryCtaLabel="Conocer servicios"
+      secondaryCtaHref="/servicios/"
+      signals={["proyectos directos", "resultados cualitativos", "sin datos identificables"]}
+    />
 
   <section class="section js-section">
     <SectionHeading
@@ -74,15 +75,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </aside>
   </section>
 
-  <section class="final-panel section js-final-cta">
-    <div class="final-shell">
-      <p class="eyebrow">Siguiente paso</p>
-      <h2>Cuéntanos qué proceso necesita convertirse en una solución más clara.</h2>
-      <p>
-        Revisemos el contexto, las fuentes de información y el alcance posible antes de definir
-        una ruta de software, integración o datos.
-      </p>
-      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
-    </div>
-  </section>
+    <section class="final-panel section js-final-cta">
+      <div class="final-shell">
+        <p class="eyebrow">Siguiente paso</p>
+        <h2>Cuéntanos qué proceso necesita convertirse en una solución más clara.</h2>
+        <p>
+          Revisemos el contexto, las fuentes de información y el alcance posible antes de definir
+          una ruta de software, integración o datos.
+        </p>
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

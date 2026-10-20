@@ -3,13 +3,17 @@ import type { ServiceContent } from "../data/types";
 
 interface Props {
   service: ServiceContent;
+  index: number;
 }
 
-const { service } = Astro.props;
+const { service, index } = Astro.props;
 ---
 
 <article class="service-card js-service-card js-reveal-card" data-card-interaction>
-  <p class="eyebrow">{service.title}</p>
+  <div class="service-card-head">
+    <span class="service-card-index" aria-hidden="true">{String(index).padStart(2, "0")}</span>
+    <p class="eyebrow">{service.title}</p>
+  </div>
   <h3>{service.headline}</h3>
   <p>{service.summary}</p>
   <dl class="service-detail-list">
