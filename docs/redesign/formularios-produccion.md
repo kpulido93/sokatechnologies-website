@@ -172,6 +172,8 @@ El codigo actual ya soporta:
 - estados accesibles via `role="status"` y `role="alert"`
 - bloqueo de envíos duplicados mientras una solicitud está en proceso
 - preservación de campos cuando falla el endpoint
+- reinicio del desafío Turnstile tras errores para evitar reutilizar tokens consumidos, conservando la clave de idempotencia si no cambian los datos
+- nueva clave de idempotencia si se cambian los campos entre intentos, para evitar conflictos del proveedor
 - CTA alternativo por correo
 
 No se activó todavía:
