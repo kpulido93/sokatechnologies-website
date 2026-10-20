@@ -1854,6 +1854,13 @@ textarea {
     width: 100%;
   }
 
+  .brand,
+  .brand-copy,
+  .hero-copy,
+  .hero-visual {
+    min-width: 0;
+  }
+
   .hero {
     gap: 0.6rem;
     padding-block: 0.7rem 0.35rem;
@@ -1920,5 +1927,25 @@ textarea {
   .audit-area-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header {
+    padding-inline: 0.55rem;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+  }
+
+  .brand-mark {
+    width: 2.35rem;
+  }
+
+  .brand-copy small {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
   }
 }
