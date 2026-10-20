@@ -76,9 +76,15 @@ La configuración de referencia es de 5 solicitudes por 60 segundos. Cloudflare 
 Rate Limiting API es eventual y local a la ubicación del Worker; no debe tratarse como contabilidad
 exacta ni como almacenamiento de leads.
 
-El navegador genera una clave de idempotencia por intento y la conserva si debe reintentarse. Tras
-un éxito genera una nueva clave. El Worker la pasa a Resend mediante `Idempotency-Key`; el proveedor
-debe conservar esa garantía para reintentos del mismo mensaje.
+El navegador genera una clave de idempotencia por intento y la conserva si debe reintentarse con los mismos datos. Tras
+un éxito o una edición de los datos comerciales, genera una nueva clave. El Worker la pasa a Resend
+mediante `Idempotency-Key`; el proveedor debe conservar esa garantía para reintentos del mismo mensaje.
+
+**Turnstile es de un solo uso:** el navegador reinicia el widget después de cada fallo de envío,
+incluyendo errores de Resend o una respuesta de red incierta, para adquirir un token nuevo antes
+del siguiente intento. El reinicio del challenge no rota la clave de idempotencia si el contenido
+del lead no cambió; así se pueden reintentar entregas sin duplicar correos. Si el usuario cambia
+los campos, la clave debe renovarse para evitar un `409` de Resend por petición distinta.
 
 ## Configuración aislada de Cloudflare
 
