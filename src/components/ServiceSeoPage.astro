@@ -25,16 +25,17 @@ const schemas = [
   pageName={service.title}
   schemas={schemas}
 >
-  <PageHero
-    eyebrow={service.title}
-    title={service.heroTitle}
-    body={service.heroBody}
-    primaryCtaLabel={service.primaryCtaLabel}
-    primaryCtaHref={service.primaryCtaHref}
-    secondaryCtaLabel={service.secondaryCtaLabel}
-    secondaryCtaHref={service.secondaryCtaHref}
-    signals={service.tags}
-  />
+  <div class="interior-page service-detail-page">
+    <PageHero
+      eyebrow={service.title}
+      title={service.heroTitle}
+      body={service.heroBody}
+      primaryCtaLabel={service.primaryCtaLabel}
+      primaryCtaHref={service.primaryCtaHref}
+      secondaryCtaLabel={service.secondaryCtaLabel}
+      secondaryCtaHref={service.secondaryCtaHref}
+      signals={service.tags}
+    />
 
   <section class="section js-section">
     <SectionHeading
@@ -138,12 +139,13 @@ const schemas = [
     </div>
   </section>
 
-  <section class="final-panel section js-final-cta">
-    <div class="final-shell">
-      <p class="eyebrow">Diagnóstico</p>
-      <h2>{service.finalCtaTitle}</h2>
-      <p>{service.finalCtaBody}</p>
-      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
-    </div>
-  </section>
+    <section class="final-panel section js-final-cta">
+      <div class="final-shell">
+        <p class="eyebrow">Diagnóstico</p>
+        <h2>{service.finalCtaTitle}</h2>
+        <p>{service.finalCtaBody}</p>
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

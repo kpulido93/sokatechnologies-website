@@ -29,18 +29,19 @@ const founderSchema = {
   pageName="Nosotros"
   schemas={[founderSchema]}
 >
-  <section class="page-hero section">
-    <p class="eyebrow">Sobre nosotros</p>
-    <h1>Tecnología con propósito. Soluciones para operaciones reales.</h1>
-    <p>
-      En SokaTechnologies creemos que una buena solución tecnológica debe responder a una
-      necesidad concreta, ser mantenible y ayudar a las personas a trabajar mejor.
-    </p>
-    <div class="hero-actions">
-      <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
-      <a class="button button-ghost" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
-    </div>
-  </section>
+  <div class="interior-page about-page">
+    <section class="page-hero section">
+      <p class="eyebrow">Sobre nosotros</p>
+      <h1>Tecnología con propósito. Soluciones para operaciones reales.</h1>
+      <p>
+        En SokaTechnologies creemos que una buena solución tecnológica debe responder a una
+        necesidad concreta, ser mantenible y ayudar a las personas a trabajar mejor.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-ghost" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
+      </div>
+    </section>
 
   <section class="section js-section">
     <SectionHeading
@@ -78,7 +79,7 @@ const founderSchema = {
   </section>
 
   <section class="section js-section">
-    <article class="detail-card js-reveal-card" data-card-interaction>
+    <article class="detail-card founder-card js-reveal-card" data-card-interaction>
       <p class="eyebrow">Kevin Alexander Pulido</p>
       <h2>Fundador y Director Técnico</h2>
       <p>
@@ -129,14 +130,15 @@ const founderSchema = {
     </div>
   </section>
 
-  <section class="final-panel section js-final-cta">
-    <div class="final-shell">
-      <p class="eyebrow">Siguiente paso</p>
-      <h2>Conversemos sobre el desafío tecnológico de tu empresa.</h2>
-      <p>
-        Revisemos el proceso, el contexto y las alternativas antes de definir una solución.
-      </p>
-      <a class="button button-primary" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
-    </div>
-  </section>
+    <section class="final-panel section js-final-cta">
+      <div class="final-shell">
+        <p class="eyebrow">Siguiente paso</p>
+        <h2>Conversemos sobre el desafío tecnológico de tu empresa.</h2>
+        <p>
+          Revisemos el proceso, el contexto y las alternativas antes de definir una solución.
+        </p>
+        <a class="button button-primary" href="/contacto/" data-link-shift>Conversemos sobre tu proyecto</a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
