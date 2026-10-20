@@ -14,9 +14,19 @@ export const initHeroTimeline = () => {
     const subtitle = select<HTMLElement>(".js-hero-subtitle");
     const ctas = select<HTMLElement>(".js-hero-cta");
     const visual = select<HTMLElement>(".js-hero-visual");
+    const panelHead = select<HTMLElement>(".hero-panel-head");
     const cards = select<HTMLElement>(".js-hero-panel-card");
     const signals = select<HTMLElement>(".js-hero-signal");
-    const motionTargets = [...eyebrow, ...title, ...subtitle, ...ctas, ...visual, ...cards, ...signals];
+    const motionTargets = [
+      ...eyebrow,
+      ...title,
+      ...subtitle,
+      ...ctas,
+      ...visual,
+      ...panelHead,
+      ...cards,
+      ...signals
+    ];
 
     if (motionTargets.length === 0) {
       return;
@@ -26,7 +36,7 @@ export const initHeroTimeline = () => {
 
     const tl = gsap.timeline({
       defaults: {
-        duration: 0.18,
+        duration: 0.24,
         ease: "power2.out",
         overwrite: "auto"
       }
@@ -61,6 +71,15 @@ export const initHeroTimeline = () => {
           autoAlpha: 0,
           y: 16,
           stagger: 0.05,
+          clearProps: "transform,opacity,visibility"
+        },
+        "-=0.06"
+      )
+      .from(
+        panelHead,
+        {
+          autoAlpha: 0,
+          y: 12,
           clearProps: "transform,opacity,visibility"
         },
         "-=0.06"
