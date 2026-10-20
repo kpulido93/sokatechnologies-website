@@ -140,7 +140,9 @@ const noteId = `${formId}-note`;
     </div>
 
     <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
-      Solicitud enviada correctamente. Te contactaremos usando el correo indicado.
+      {isLiveMode
+        ? "Solicitud enviada correctamente. Te contactaremos usando el correo indicado."
+        : "Validación local completada. El formulario está en modo demo y no se envió ninguna solicitud. Escríbenos al correo corporativo para contactarnos."}
     </p>
 
     <p id={errorId} class="form-status form-status-error" role="alert" aria-live="assertive" hidden>
