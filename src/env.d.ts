@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_CONTACT_WHATSAPP_URL?: string;
   readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
   readonly TURNSTILE_SECRET_KEY?: string;
+  readonly TURNSTILE_EXPECTED_HOSTNAME?: string;
+  readonly TURNSTILE_EXPECTED_ACTION?: string;
   readonly RESEND_API_KEY?: string;
   readonly RESEND_FROM_EMAIL?: string;
   readonly LEADS_TO_EMAIL?: string;

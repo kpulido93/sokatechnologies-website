@@ -45,11 +45,16 @@ Campos:
 - obligatorios: `formType` (`contact` o `diagnostico`), `name`, `company`, `email`, `summary`, `consent`
 - opcionales: `phone`, `country`, `service`, `problemType`
 - anti-spam: `website` debe estar vacío
-- Turnstile: `turnstileToken` o `cf-turnstile-response` cuando `TURNSTILE_SECRET_KEY` esté configurada
+- Turnstile: `turnstileToken` o `cf-turnstile-response`, obligatorio en cualquier envío real
 
 El catálogo válido de `service` contiene únicamente las siete categorías comerciales: software a medida, automatizaciones e integraciones, Power BI y Business Intelligence, consultoría TI y DevOps, infraestructura cloud/on-prem, sitios web corporativos y soporte/mantenimiento/mejora continua.
 
-Respuestas relevantes: `200` solo después de una respuesta exitosa de Resend, `400` para datos inválidos, `403` para origen o Turnstile rechazado, `429` para rate limit, `502` si Resend rechaza el envío y `503` si falta configuración segura del Worker.
+El endpoint también exige la ruta exacta `/api/leads`, `CF-Connecting-IP` e `Idempotency-Key`. El
+cuerpo está limitado a 32 KiB. Respuestas relevantes: `200` solo después de una respuesta exitosa
+de Resend, `400` para datos inválidos o Turnstile ausente, `403` para origen o Turnstile rechazado,
+`404` para una ruta distinta, `413` para un cuerpo demasiado grande, `415` para un tipo de contenido
+no admitido, `429` para rate limit, `502` si Resend rechaza o no responde y `503` si falta una
+configuración segura de IP, rate limiter o Turnstile.
 
 El Worker no registra el contenido del lead. Escapa los datos antes de construir el HTML, usa el correo validado únicamente como `Reply-To` y fuerza `info@sokatechnologies.com` como destinatario aprobado.
 
@@ -60,14 +65,20 @@ Privadas o gestionadas fuera de Git:
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL`
 - `LEADS_TO_EMAIL=info@sokatechnologies.com`
-- `TURNSTILE_SECRET_KEY` (activa la verificación server-side)
+- `TURNSTILE_SECRET_KEY` (obligatoria para cualquier envío real)
 
 Configuración no secreta:
 
-- `ALLOWED_ORIGINS`: lista separada por comas de orígenes exactos, sin permitir `*`
+- `ALLOWED_ORIGINS`: lista separada por comas de orígenes exactos, sin permitir `*`; la referencia
+  de staging usa `https://prueba.sokatechnologies.com`
+- `TURNSTILE_EXPECTED_HOSTNAME`: hostname exacto devuelto por Siteverify
+- `TURNSTILE_EXPECTED_ACTION`: acción exacta del widget, actualmente `lead`
 - binding `RATE_LIMITER`: obligatorio; la configuración de referencia usa 5 solicitudes por 60 segundos
 
-El archivo `worker/wrangler.toml` contiene una configuración de referencia. Hay que reemplazar el `namespace_id`, confirmar los dominios y cargar los secretos con el mecanismo de Cloudflare antes de cualquier despliegue.
+El archivo `worker/wrangler.toml` contiene una configuración de referencia. Hay que reemplazar el
+`namespace_id`, confirmar el widget de staging, verificar el dominio remitente y cargar los secretos
+con el mecanismo de Cloudflare antes de cualquier despliegue. El detalle operativo está en
+`docs/redesign/tarea-04b1-preparacion-leads.md`.
 
 ## Recomendacion principal
 
@@ -161,6 +172,8 @@ El codigo actual ya soporta:
 - estados accesibles via `role="status"` y `role="alert"`
 - bloqueo de envíos duplicados mientras una solicitud está en proceso
 - preservación de campos cuando falla el endpoint
+- reinicio del desafío Turnstile tras errores para evitar reutilizar tokens consumidos, conservando la clave de idempotencia si no cambian los datos
+- nueva clave de idempotencia si se cambian los campos entre intentos, para evitar conflictos del proveedor
 - CTA alternativo por correo
 
 No se activó todavía:
@@ -181,7 +194,7 @@ Mantener `demo` mientras se valida contenido, UX, consentimiento y política de 
 
 Mover a `Cloudflare Worker + Turnstile + Resend`.
 
-Para probar localmente la lógica sin credenciales se ejecuta `npm test`; las pruebas usan respuestas simuladas y un rate limiter falso inyectado solo en el test. No existe un interruptor de simulación en el Worker que pueda activarse accidentalmente en producción.
+Para probar localmente la lógica sin credenciales se ejecuta `npm test`; las pruebas usan respuestas simuladas y un rate limiter falso inyectado solo en el test. También cubren hostname/action de Turnstile, IP ausente, tamaño/ruta, idempotencia y errores de red. No existe un interruptor de simulación en el Worker que pueda activarse accidentalmente en producción.
 
 Instalación y comprobaciones:
 
@@ -204,7 +217,7 @@ Si el proceso comercial lo requiere, integrar el Worker con API propia, CRM o au
 
 - El Worker preparado todavía no está desplegado ni conectado al formulario de staging.
 - La limitación de tasa depende de configurar el binding real; no se utiliza un contador en memoria.
-- El widget Turnstile solo se renderiza cuando el modo Worker y el sitekey público están configurados; la verificación real depende del secreto del Worker.
+- El widget Turnstile solo se renderiza cuando el modo Worker, el endpoint HTTPS y el sitekey público están configurados; la verificación real exige secreto, hostname y action del Worker.
 - Si se elige Netlify Forms, harian falta atributos especificos de Netlify en el markup final.
 - Si se elige Formspree, hay que revisar limites, dominios autorizados y politica de retencion antes de publicar.
 
