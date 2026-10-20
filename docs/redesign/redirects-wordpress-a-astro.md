@@ -33,6 +33,7 @@ Preparar un mapa inicial de redirects para migrar desde la web actual en WordPre
 - Mantener trailing slash consistente en Astro.
 - No redirigir en cadena.
 - No mandar todo al home; si no hay equivalencia clara, documentar el vacio y decidirlo antes del corte.
+- La ruta compatible `/casos/` conserva temporalmente el acceso al portafolio, pero su destino canónico es `/proyectos/`. Si se aprueba un `301`, debe apuntar directamente a `/proyectos/` para evitar cadenas.
 
 ## Leyenda
 
@@ -53,10 +54,16 @@ Estado:
 | `/` | `/` | Sin redirect | `P0` | Bajo | Confirmado |
 | `/servicios/` | `/servicios/` | Sin redirect | `P0` | Bajo | Confirmado |
 | `/soluciones/` | `/productos/` | `301` | `P0` | Medio: cambia de etiqueta editorial, pero conserva la intencion de productos y soluciones operativas | Confirmado |
-| `/casos-de-exito/` | `/casos/` | `301` | `P0` | Bajo | Confirmado |
+| `/casos-de-exito/` | `/proyectos/` | `301` | `P0` | Bajo | Destino actualizado en Tarea 02-B2; pendiente de configurar |
 | `/contacto/` | `/contacto/` | Sin redirect | `P0` | Bajo | Confirmado |
 | `/portik/` | `/productos/portik/` | `301` | `P0` | Bajo | Confirmado |
 | `/politica-privacidad/` | `/politica-privacidad/` | Sin redirect | `P1` | Bajo | Confirmado |
+
+## Compatibilidad temporal de Astro
+
+| URL actual | Destino futuro | Redirect recomendado | Prioridad | Riesgo | Estado |
+|---|---|---|---|---|---|
+| `/casos/` | `/proyectos/` | `301` | `P1` | Bajo | Pendiente de aprobación y configuración de infraestructura |
 
 ## Redirects probables por slugs legacy
 
@@ -99,6 +106,7 @@ Estas rutas nuevas deben responder `200` despues del corte o del staging final:
 - `/productos/autoinventario/`
 - `/productos/autowhatsapp/`
 - `/casos/`
+- `/proyectos/`
 - `/contacto/`
 - `/diagnostico/`
 

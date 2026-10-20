@@ -35,8 +35,7 @@ export const siteMeta = {
 export const navItems: NavItem[] = [
   { href: "/", label: "Inicio" },
   { href: "/servicios/", label: "Servicios" },
-  { href: "/productos/", label: "Productos" },
-  { href: "/casos/", label: "Casos" },
+  { href: "/proyectos/", label: "Proyectos" },
   { href: "/nosotros/", label: "Nosotros" },
   { href: "/contacto/", label: "Contacto" }
 ];
@@ -135,7 +134,7 @@ export const footerGroups = [
     links: [
       { href: "/", label: "Inicio" },
       { href: "/servicios/", label: "Servicios" },
-      { href: "/casos/", label: "Casos" },
+      { href: "/proyectos/", label: "Proyectos" },
       { href: "/nosotros/", label: "Nosotros" }
     ]
   },
@@ -147,17 +146,12 @@ export const footerGroups = [
     }))
   },
   {
-    title: "Productos",
+    title: "Información",
     links: [
-      { href: "/productos/", label: "Productos" },
-      { href: "/productos/portik/", label: "Portik" },
-      { href: "/productos/autoinventario/", label: "AutoInventario" },
-      { href: "/productos/autowhatsapp/", label: "AutoWhatsapp" },
-      { href: "/demos/ecommerce/", label: "Demo e-commerce" },
+      { href: "/contacto/", label: "Contacto" },
+      { href: "/nosotros/", label: "Nosotros" },
       { href: "/politica-privacidad/", label: "Política de privacidad" },
-      { href: "/terminos/", label: "Términos" },
-      { href: "/diagnostico/", label: "Solicitar diagnóstico" },
-      { href: "/contacto/", label: "Contacto" }
+      { href: "/terminos/", label: "Términos" }
     ]
   },
   {
@@ -165,8 +159,7 @@ export const footerGroups = [
     links: [
       { href: "/contacto/", label: "Abrir conversación" },
       { href: "/diagnostico/", label: "Solicitar diagnóstico" },
-      { href: "/casos/", label: "Casos anonimizados" },
-      { href: "/productos/", label: "Productos" },
+      { href: "/proyectos/", label: "Ver proyectos" },
       { href: `mailto:${siteMeta.email}`, label: siteMeta.email }
     ]
   }

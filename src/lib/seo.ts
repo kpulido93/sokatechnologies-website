@@ -8,7 +8,7 @@ const SITE_DESCRIPTION =
   "Software, automatización, Power BI e infraestructura para empresas que necesitan operar con más control.";
 
 const SEGMENT_LABELS: Record<string, string> = {
-  casos: "Casos",
+  casos: "Proyectos",
   contacto: "Contacto",
   demos: "Demos",
   diagnostico: "Diagnóstico",
@@ -26,7 +26,8 @@ const SEGMENT_LABELS: Record<string, string> = {
   automatizaciones: "Automatizaciones",
   dashboards: "Power BI y Business Intelligence",
   terminos: "Términos",
-  "mantenimiento-mejora-continua": "Soporte, mantenimiento y mejora continua"
+  "mantenimiento-mejora-continua": "Soporte, mantenimiento y mejora continua",
+  proyectos: "Proyectos"
 };
 
 export const getSiteUrl = () => new URL(SITE_URL);

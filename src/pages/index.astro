@@ -1,6 +1,7 @@
 ---
 import HeroVisual from "../components/HeroVisual.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import { featuredCaseStudies } from "../data/caseStudies";
 import { services } from "../data/services";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { noiseProblems, noiseResults, processSteps } from "../lib/site";
@@ -27,7 +28,7 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
         <a class="button button-primary js-hero-cta" href="/diagnostico/" data-link-shift>
           Solicitar diagnóstico
         </a>
-        <a class="button button-ghost js-hero-cta" href="/casos/" data-link-shift>
+        <a class="button button-ghost js-hero-cta" href="/proyectos/" data-link-shift>
           Ver proyectos
         </a>
       </div>
@@ -147,19 +148,25 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
   <section class="section js-section js-cases">
     <SectionHeading
       eyebrow="Proyectos empresariales"
-      title="Experiencia aplicada a desafíos reales, presentada con confidencialidad."
-      body="Presentamos proyectos de software e integración sin exponer nombres, cifras sensibles, capturas reales ni información operativa de clientes."
+      title="Dos proyectos directos de software e integración."
+      body="Presentamos el problema, la intervención y el resultado cualitativo sin exponer nombres, ubicaciones, cifras sensibles ni información operativa."
     />
 
-    <div class="detail-card case-selection-note">
-      <p class="eyebrow">Selección en validación</p>
-      <h3>Presentaremos casos anonimizados con alcance y permisos confirmados.</h3>
-      <p>
-        La selección definitiva de proyectos empresariales se revisará en la Tarea 02-B para
-        evitar combinaciones de sector, ubicación o detalles que puedan identificar a un cliente.
-      </p>
-      <a class="button button-ghost" href="/casos/" data-link-shift>Consultar referencias disponibles</a>
+    <div class="detail-grid">
+      {
+        featuredCaseStudies.map((project) => (
+          <article class="detail-card js-reveal-card" data-card-interaction>
+            <p class="eyebrow">Proyecto directo</p>
+            <h3>{project.title}</h3>
+            <p>{project.summary}</p>
+            <p>
+              <strong>Resultado cualitativo:</strong> {project.outcomes[0]}.
+            </p>
+          </article>
+        ))
+      }
     </div>
+    <a class="button button-ghost" href="/proyectos/" data-link-shift>Ver proyectos</a>
   </section>
 
   <section class="section js-section">
