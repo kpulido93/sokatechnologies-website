@@ -137,7 +137,8 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
   try {
     const lead = normalizeLead(await parseRequestBody(request));
     const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
-    const rateResult = await rateLimit(env, `lead:${clientIp}:${lead.email}`);
+    // The bucket must not be reset by choosing a different unverified email address.
+    const rateResult = await rateLimit(env, `lead:${clientIp}`);
 
     if (rateResult === "not_configured") return jsonResponse({ ok: false, error: "rate_limit_not_configured" }, 503, origin, allowedOrigins);
     if (rateResult === "blocked") return jsonResponse({ ok: false, error: "rate_limited" }, 429, origin, allowedOrigins);
