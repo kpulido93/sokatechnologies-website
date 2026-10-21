@@ -138,6 +138,15 @@ activación y debe conservar el contenedor actual y el rollback existente.
 ```bash
 set -euo pipefail
 
+current=soka-web-demo-2026-8091
+rollback=soka-web-demo-2026-8091-pre-ssd-20261020T233258
+
+test "$(docker inspect -f '{{.State.Status}}' "$current")" = running
+test "$(docker inspect -f '{{.HostConfig.RestartPolicy.Name}}' "$current")" = unless-stopped
+test "$(docker inspect -f '{{(index (index .HostConfig.PortBindings "80/tcp") 0).HostIp}}:{{(index (index .HostConfig.PortBindings "80/tcp") 0).HostPort}}' "$current")" = '0.0.0.0:8091'
+test "$(docker inspect -f '{{(index .Mounts 0).Source}}' "$current")" = /srv/fast-storage/soka-web/site
+test "$(docker inspect -f '{{.State.Status}}' "$rollback")" = exited
+
 docker inspect soka-web-04b3-preview-8093
 curl -fsSI http://127.0.0.1:8093/
 curl -fsSI http://127.0.0.1:8093/contacto/
@@ -147,61 +156,118 @@ test -d /srv/fast-storage/soka-web/releases/03608c2-demo
 test -r /srv/fast-storage/soka-web/releases/03608c2-demo/index.html
 ```
 
-Confirmar que no existe otro proceso usando el puerto 8091 y que el rollback sigue en estado
-`exited` antes de continuar.
+El puerto 8091 no debe estar libre en este punto: debe pertenecer al contenedor `current` esperado.
+Este preflight confirma su estado `running`, el bind de `/srv/fast-storage/soka-web/site`, el
+puerto `0.0.0.0:8091` y la política `unless-stopped`. El contenedor `rollback` solo se comprueba
+como respaldo de emergencia y no se utiliza para el cambio normal.
 
 ### 2. Sustitución reversible
 
-La sustitución deja el contenedor anterior con nombre nuevo y conserva sus datos Docker:
+La sustitución conserva el contenedor que funciona actualmente desde SSD. Solo se renombra
+temporalmente para liberar el nombre; su imagen, bind, puerto y política `unless-stopped` no se
+modifican. El alias debe estar libre antes de empezar.
 
 ```bash
 set -euo pipefail
 
 current=soka-web-demo-2026-8091
+previous=soka-web-demo-2026-8091-previous-ssd
 candidate=soka-web-04b3:03608c2-demo
 release=/srv/fast-storage/soka-web/releases/03608c2-demo
-failed="${current}-failed-$(date -u +%Y%m%dT%H%M%SZ)"
+
+if docker inspect "$previous" >/dev/null 2>&1; then
+  echo "El alias de rollback ya existe; detenerse y revisarlo manualmente" >&2
+  exit 1
+fi
+
+check_http() {
+  local url code
+  for url in \
+    http://127.0.0.1:8091/ \
+    http://127.0.0.1:8091/contacto/ \
+    http://127.0.0.1:8091/diagnostico/ \
+    https://prueba.sokatechnologies.com/ \
+    https://prueba.sokatechnologies.com/contacto/ \
+    https://prueba.sokatechnologies.com/diagnostico/; do
+    code=$(curl --fail --silent --show-error --connect-timeout 5 --max-time 15 -o /dev/null -w '%{http_code}' "$url") || return 1
+    test "$code" = 200 || return 1
+  done
+}
+
+restore_previous() {
+  if docker inspect "$current" >/dev/null 2>&1; then
+    docker stop "$current" || true
+    docker rm "$current" || true
+  fi
+  docker rename "$previous" "$current"
+  docker start "$current"
+  check_http
+}
 
 docker stop "$current"
-docker rename "$current" "$failed"
+docker rename "$current" "$previous"
 
-docker run -d \
+if ! docker run -d \
   --name "$current" \
   --restart unless-stopped \
   -p 0.0.0.0:8091:80 \
   --mount type=bind,src="$release",dst=/usr/share/nginx/html,readonly \
-  "$candidate"
+  "$candidate"; then
+  restore_previous
+  exit 1
+fi
 
-curl -fsSI http://127.0.0.1:8091/
-curl -fsSI https://prueba.sokatechnologies.com/
+if ! check_http; then
+  restore_previous
+  exit 1
+fi
 ```
 
-Si cualquiera de las verificaciones falla, no se continúa con pruebas de leads: se ejecuta el
-rollback inmediatamente.
+El `restore_previous` elimina únicamente el candidato fallido, renombra el contenedor SSD original
+a su nombre `soka-web-demo-2026-8091` y lo inicia con su configuración original. Así se recuperan
+el mismo bind, el puerto 8091 y `unless-stopped` tanto si falla `docker run` como si falla cualquier
+GET local o público posterior.
 
 ## Rollback exacto
 
-El contenedor anterior conserva el puerto 8091 configurado y la imagen
-`soka-web-preview:t04a-85ee748`. El rollback no reconstruye imágenes ni toca el release:
+El rollback normal utiliza el contenedor SSD original conservado bajo el alias
+`soka-web-demo-2026-8091-previous-ssd`. No reconstruye imágenes ni toca el release:
 
 ```bash
 set -euo pipefail
 
 current=soka-web-demo-2026-8091
-rollback=soka-web-demo-2026-8091-pre-ssd-20261020T233258
-failed="${current}-failed-rollback-$(date -u +%Y%m%dT%H%M%SZ)"
+previous=soka-web-demo-2026-8091-previous-ssd
 
 docker stop "$current" || true
-docker rename "$current" "$failed"
-docker rename "$rollback" "$current"
+docker rm "$current" || true
+docker rename "$previous" "$current"
 docker start "$current"
 
-curl -fsSI http://127.0.0.1:8091/
-curl -fsSI https://prueba.sokatechnologies.com/
+for url in \
+  http://127.0.0.1:8091/ \
+  http://127.0.0.1:8091/contacto/ \
+  http://127.0.0.1:8091/diagnostico/ \
+  https://prueba.sokatechnologies.com/ \
+  https://prueba.sokatechnologies.com/contacto/ \
+  https://prueba.sokatechnologies.com/diagnostico/; do
+  test "$(curl --fail --silent --show-error --connect-timeout 5 --max-time 15 -o /dev/null -w '%{http_code}' "$url")" = 200
+done
 ```
 
-Después del rollback, verificar que el contenedor responde y conservar el contenedor fallido para
-diagnóstico. No ejecutar `docker system prune`, eliminar releases ni borrar el rollback.
+El contenedor anterior mantiene su configuración original porque nunca se recrea ni se ejecuta
+`docker update`: el bind sigue apuntando a `/srv/fast-storage/soka-web/site`, el puerto es
+`0.0.0.0:8091` y la política es `unless-stopped`. El candidato eliminado es el único que se
+retira; los releases, el alias de rollback y el respaldo `pre-ssd` se conservan.
+
+### Respaldo de emergencia pre-SSD
+
+`soka-web-demo-2026-8091-pre-ssd-20261020T233258` es solo una segunda opción si el contenedor SSD
+original está dañado o no puede restaurarse. Su imagen es `soka-web-preview:t04a-85ee748`, no tiene
+bind de release y su política observada es `no`; por tanto no sustituye al rollback normal y requiere
+aprobación y verificación manual adicional. No eliminarlo ni cambiar su política automáticamente.
+
+En ningún caso ejecutar `docker system prune`, eliminar releases ni borrar respaldos.
 
 ## Activación de leads: NO-GO
 
