@@ -145,59 +145,79 @@ Capturas y resultado estructurado, fuera del repositorio:
 Los errores `ERR_BLOCKED_BY_CLIENT` registrados para las tipografías externas son consecuencia de
 la política de bloqueo del arnés, no errores de la aplicación. No hubo tráfico externo POST real.
 
-## Imagen Docker live: no creada deliberadamente
+## Artefactos: build estático sí, snapshot versionado todavía no
 
-La tarea solicitó validar el release estático manual existente y no repetir un `docker build`. Por
-tanto, no se creó la imagen ni el contenedor Docker previstos en la documentación inicial. Estos
-valores quedan como referencia para una futura activación aislada, no como artefactos existentes:
+El único artefacto validado en 04-B5 es el directorio `dist/` dentro del worktree del
+SSD, compilado desde `a168afee65e1e950cfc5819ce6287fbb0c70d315`.
+**No** existe una imagen Docker live ni un snapshot de release en
+`/srv/fast-storage/soka-web/releases/` creado por esta tarea.
 
-```text
-Imagen prevista: soka-web-04b5:2449a17-live
-Release previsto: /srv/fast-storage/soka-web/releases/04b5-2449a17-live
-Puerto previsto: 127.0.0.1:8094
-Contenedor previsto: soka-web-04b5-preview-8094
-```
+Para evitar saturar el HDD, no se debe ejecutar `docker build` mientras el Docker Root Dir
+siga siendo `/var/lib/docker`, salvo que se valide y apruebe primero una estrategia de
+almacenamiento de imágenes/caché con capacidad suficiente.
 
-No se debe reutilizar `/srv/fast-storage/soka-web/site` para el candidato porque es el bind mount
-del staging principal.
+### Materialización futura del release en SSD — NO EJECUTADA
 
-### Construcción futura, no ejecutada
-
-La futura construcción Docker, si se autoriza, deberá recibir la Site Key únicamente como variable
-pública local, sin registrar el comando en logs ni incluir otros secretos:
+Si se aprueba conservar un artefacto independiente del worktree, utilizar una **copia
+versionada** del HTML estático ya comprobado. Esta acción no activa formularios públicos
+ni modifica los contenedores existentes, pero requiere autorización operativa y una
+inspección previa de la fuente y el espacio libre:
 
 ```bash
-export PUBLIC_TURNSTILE_SITE_KEY='[SITE_KEY_PUBLICA_AUTORIZADA]'
+set -euo pipefail
+worktree=/srv/fast-storage/soka-web/worktrees/04b5-live
+source_dir="$worktree/dist"
+releases_dir=/srv/fast-storage/soka-web/releases
+release="$releases_dir/04b5-a168afe-live"
 
-docker build --progress=plain \
-  --build-arg PUBLIC_FORM_PROVIDER=worker \
-  --build-arg PUBLIC_CONTACT_FORM_ENDPOINT=https://soka-leads-worker.sokatech.workers.dev/api/leads \
-  --build-arg PUBLIC_TURNSTILE_SITE_KEY="$PUBLIC_TURNSTILE_SITE_KEY" \
-  --tag soka-web-04b5:2449a17-live .
+test "$(git -C "$worktree" rev-parse HEAD)" = a168afee65e1e950cfc5819ce6287fbb0c70d315
+test -s "$source_dir/contacto/index.html"
+test -s "$source_dir/diagnostico/index.html"
+test -s "$source_dir/politica-privacidad/index.html"
+test ! -e "$release"
+
+mkdir -p "$releases_dir"
+temp="$(mktemp -d "$releases_dir/.04b5-a168afe-live.XXXXXX")"
+cp -a "$source_dir/." "$temp/"
+test -s "$temp/contacto/index.html"
+test -s "$temp/diagnostico/index.html"
+test -s "$temp/politica-privacidad/index.html"
+mv -T "$temp" "$release"
+printf 'Release creado: %s\n' "$release"
 ```
 
-Antes de arrancar el preview se debe comprobar que `127.0.0.1:8094` está libre. El candidato se
-debe ejecutar sin bind mount al directorio demo y sin política de reinicio:
+Esta copia es **un paso futuro pendiente**, no evidencia de que el directorio ya exista.
+Verificar después los formularios `live`, el endpoint y el widget dentro de la copia,
+sin mostrar la Site Key en logs. Conservar el snapshot sin modificar sus archivos para
+identificar con claridad el candidato y permitir regresar al release anterior.
 
-```bash
-docker run --detach \
-  --name soka-web-04b5-preview-8094 \
-  --publish 127.0.0.1:8094:80 \
-  --restart no \
-  soka-web-04b5:2449a17-live
-```
+Para un preview adicional sin Docker, servir esta copia en un **puerto libre**, solo sobre
+`127.0.0.1`, interceptando solicitudes externas durante QA; no reutilizar el 8094 si el
+preview Python de 04-B5 continúa funcionando.
 
-La comprobación del HTML debe confirmar en Contacto y Diagnóstico:
+### Publicación futura — aprobación separada
+
+La publicación eventual del snapshot mediante Nginx deberá montar **ese directorio
+versionado** como `/usr/share/nginx/html` en modo solo lectura. Aplicar entonces
+el preflight y el mecanismo de rollback del runbook 04-B3, conservando el contenedor
+original de 8091. **No** montar `/srv/fast-storage/soka-web/site` como fuente
+del candidato live ni asumir que una imagen Docker contiene el release en SSD.
+
+Crear o reconstruir una imagen Docker es una ruta alternativa, **no necesaria** para
+promocionar este HTML estático; requeriría planificar su uso de disco en `/var/lib/docker`
+y un procedimiento independiente. No hay imagen live creada en este PR.
+
+La revisión del HTML debe confirmar:
 
 - `data-form-mode="live"`.
 - `data-submit-endpoint="https://soka-leads-worker.sokatech.workers.dev/api/leads"`.
 - `data-action="lead"` en el widget Turnstile.
 - Fallback `mailto:info@sokatechnologies.com`.
 - Enlace a `/politica-privacidad/`.
-- Ausencia de `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, tokens y credenciales.
+- Ausencia de `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, tokens o credenciales privadas.
 
-El valor público de Turnstile puede aparecer en el HTML; ninguna clave privada puede aparecer en
-la imagen, el HTML, los logs o el repositorio.
+La Site Key pública sí estará en el HTML; **ningún secreto** debe estar presente en el
+artefacto, los logs o el repositorio.
 
 ## Pruebas funcionales ejecutadas
 
@@ -216,11 +236,15 @@ construcción local. No se usó una clave ficticia ni se permitió tráfico real
 1. Obtener la Site Key pública aprobada mediante un canal local seguro.
 2. Confirmar que el responsable legal, privacidad colombiana, retención, consentimiento y
    procedimiento de consultas/reclamos están aprobados.
-3. Verificar con acceso de solo lectura la distribución actual de `soka-leads-worker`; Wrangler no
-   está instalado en este equipo y esa verificación quedó pendiente.
-4. Construir, si se aprueba, una imagen Docker live con los tres argumentos públicos y etiquetarla
-   con el SHA; esta tarea no la construyó.
-5. Inspeccionar el HTML y ejecutar el candidato solo en `127.0.0.1:8094`.
+3. Verificar nuevamente con acceso de solo lectura la distribución de `soka-leads-worker`;
+   puede utilizarse `npx --yes wrangler@4.151.3 deployments status --name soka-leads-worker`
+   desde una sesión autorizada. La última distribución comunicada fue original 100 %,
+   candidata con secretos 0 %. No modificarla en esta tarea.
+4. Si se autoriza generar un artefacto de publicación, materializar el snapshot HTML **en SSD**
+   siguiendo el procedimiento de copia y verificación anterior; no usar `docker build`
+   mientras su almacenamiento en HDD no se haya resuelto.
+5. Comprobar el HTML versionado y ejecutarlo solo en un puerto local libre, con el origen
+   de Turnstile/Worker simulado para pruebas; no exponerlo mediante Tunnel.
 6. Ejecutar Chromium con mocks para respuestas 200, 400, 403, 429, 502 y 503, sin permitir tráfico
    hacia el Worker.
 7. Validar Contacto y Diagnóstico a 320, 390, 768 y 1440 px, teclado, reduced motion, consola,
@@ -248,10 +272,12 @@ tarea.
 - **GO técnico condicionado a revisión del PR:** el release estático live y su frontend fueron
   validados en SSD; no existe imagen Docker como resultado de esta tarea.
 - **NO-GO para activación pública:** no se aprobaron privacidad, consentimiento ni operación real.
-- **Pendiente:** instalar o habilitar Wrangler de forma autorizada para verificar la distribución
-  actual del Worker antes de cualquier activación; no se modificó la distribución.
-- **Pendiente:** decidir si la futura publicación aislada requiere una imagen Docker, sin reutilizar
-  el bind mount de staging.
+- **Pendiente:** verificar de nuevo la distribución del Worker con Wrangler en modo lectura
+  antes de activar; `npx --yes wrangler@4.151.3` permite ejecutarlo sin instalación global.
+- **Pendiente:** materializar y verificar un snapshot versionado del HTML estático en SSD,
+  **solo cuando se autorice** una futura preparación de publicación; no existe hoy.
+- **HDD:** Docker conserva `/var/lib/docker`; no volver a ejecutar `docker build` sin
+  resolver capacidad/caché y aprobar el procedimiento.
 - **Sin secretos:** no se leyó, copió ni incluyó ninguna clave privada; el repositorio no recibió
   archivos `.env`.
 
