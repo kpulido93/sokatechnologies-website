@@ -1,227 +1,226 @@
 # Tarea 04-B3 — Activación controlada de formularios en staging
 
-Fecha: 2026-10-20
+Fecha de actualización: 2026-10-21
 Rama: `codex/tarea-04b3-activacion-staging`
-Estado: candidato preparado; activación pública bloqueada hasta aprobación
+PR: #13
+Commit validado: `03608c29fce0fde8bbb1087fbd99b1d42d695ddb`
 
-## Alcance y decisión de activación
+## Alcance y decisión
 
-Astro continúa con `output: "static"` y Nginx solo sirve los archivos generados. El envío real,
-si se aprueba, ocurre desde el navegador hacia el Worker independiente:
+Astro continúa como sitio estático (`output: "static"`). Nginx sirve los archivos generados y
+los formularios permanecen en modo demo. Esta tarea documenta el candidato preparado y el
+procedimiento reversible para publicar un release en el puerto 8091; no activa el Worker ni
+recibe leads reales.
+
+La activación pública permanece en **NO-GO** hasta completar la revisión legal de privacidad,
+consentimiento, proveedores, retención y primer envío controlado. No se modifican DNS, Cloudflare,
+WordPress, producción, Resend ni Turnstile.
+
+## Estado real del despliegue
+
+Los valores siguientes proceden de `docker inspect` en LPT-KEVIN.
+
+### Staging principal — no modificado en esta validación
+
+| Elemento | Valor |
+|---|---|
+| Contenedor | `soka-web-demo-2026-8091` |
+| Estado | `running` |
+| Imagen observada | `sha256:defaa5c5cfe0e7d0be0ea43471340b98322a7629ee548e30eb1787f59bffab52` |
+| Puerto | `0.0.0.0:8091 -> 80/tcp` |
+| Publicación | `--restart unless-stopped` |
+| Bind read-only | `/srv/fast-storage/soka-web/site:/usr/share/nginx/html` |
+| Comando | `nginx -g daemon off;` |
+
+### Candidato de este PR
+
+| Elemento | Valor |
+|---|---|
+| Contenedor | `soka-web-04b3-preview-8093` |
+| Estado | `running` |
+| Imagen | `soka-web-04b3:03608c2-demo` |
+| Puerto | `127.0.0.1:8093 -> 80/tcp` |
+| Publicación | `--restart no` |
+| Bind read-only | `/srv/fast-storage/soka-web/releases/03608c2-demo:/usr/share/nginx/html` |
+| Comando | `nginx -g daemon off;` |
+
+El release versionado que se montó en 8093 es independiente de `/srv/fast-storage/soka-web/site`.
+No se modificaron los contenedores de 8091 ni 8092.
+
+### Preview anterior y rollback
+
+`soka-web-ssd-preview-8092` continúa siendo un preview anterior que monta
+`/srv/fast-storage/soka-web/site` en `127.0.0.1:8092` con política `no`. No se utiliza para el
+candidato nuevo.
+
+El rollback existente es:
+
+| Elemento | Valor |
+|---|---|
+| Contenedor | `soka-web-demo-2026-8091-pre-ssd-20261020T233258` |
+| Estado observado | `exited` |
+| Imagen | `soka-web-preview:t04a-85ee748` |
+| Puerto configurado | `0.0.0.0:8091 -> 80/tcp` |
+| Política | `no` |
+| Montajes | ninguno |
+
+No eliminar ni reutilizar este contenedor para otro propósito antes de una activación aprobada.
+
+## Formulario y privacidad
+
+El build publicado en 8093 mantiene:
+
+- `data-form-mode="demo"` en Contacto y Diagnóstico.
+- Acción HTML `mailto:info@sokatechnologies.com` como alternativa sin JavaScript.
+- Mensaje explícito de que la validación local no envía solicitudes.
+- Sin credenciales privadas ni configuración real de Resend o Turnstile.
+
+La política de privacidad sigue siendo un borrador. Antes de activar recepción real deben
+confirmarse el responsable legal, la base jurídica, el consentimiento, proveedores, transferencias,
+retención, eliminación y acceso al buzón.
+
+## Validación del candidato en 8093
+
+### Rutas HTTP
+
+Se verificaron con HTTP 200 en `http://127.0.0.1:8093`:
 
 ```text
-POST https://soka-leads-worker.sokatech.workers.dev/api/leads
+/
+/servicios/
+/proyectos/
+/nosotros/
+/contacto/
+/diagnostico/
+/politica-privacidad/
+/servicios/consultoria-ti-devops/
+/servicios/dashboards/
 ```
 
-Esta tarea prepara el build y el formulario, pero no cambia la distribución del Worker, no publica
-la imagen en `8091`, no ejecuta envíos reales y no modifica DNS, Cloudflare Tunnel, WordPress o
-producción.
+El release contiene 22 páginas Astro y el `404.html` de fallback; por eso el recuento bruto de
+archivos HTML es 23.
 
-La activación queda en **NO-GO** mientras la política de privacidad siga siendo un borrador y no
-exista aprobación expresa del fundador sobre consentimiento, proveedores, retención y primer envío.
+### Chromium
 
-## Cambios implementados
+La matriz ejecutada contra `http://127.0.0.1:8093` cubrió 7 rutas a 320, 390, 768 y 1440 px:
 
-### Configuración pública de build
+- 28 comprobaciones de página.
+- 0 errores de consola.
+- 0 respuestas HTTP de error observadas por Chromium.
+- 0 casos con `document.scrollWidth > document.clientWidth`.
+- Navegación por teclado: 42 elementos enfocables por viewport; foco visible en la secuencia
+  comprobada.
+- `prefers-reduced-motion: reduce`: activo durante la prueba.
+- Contacto y Diagnóstico: modo `demo`, confirmación visible, campos y consentimiento conservados,
+  0 solicitudes `POST` y fallback `mailto:info@sokatechnologies.com`.
 
-`Dockerfile` declara únicamente estos argumentos públicos, con valores seguros por defecto:
+La inspección de límites geométricos también encontró el honeypot desplazado fuera de pantalla y
+tarjetas decorativas del Hero recortadas dentro del viewport a 320 px. Son falsos positivos para
+scroll horizontal porque el ancho real del documento no aumentó; quedan conservados en la evidencia
+para revisión visual.
 
-| Argumento | Valor por defecto | Uso |
-|---|---|---|
-| `PUBLIC_FORM_PROVIDER` | `demo` | Selecciona el modo del formulario |
-| `PUBLIC_CONTACT_FORM_ENDPOINT` | vacío | URL HTTPS del Worker |
-| `PUBLIC_TURNSTILE_SITE_KEY` | vacío | Site Key pública de Turnstile |
+Evidencia local, fuera del repositorio:
 
-Los valores se incorporan durante `npm run build`; cambiar variables en un contenedor Nginx ya
-construido no cambia el HTML estático. No se aceptan argumentos privados y no se copian secretos
-al runtime:
+```text
+/srv/fast-storage/soka-web/evidence/03608c2-demo/
+```
 
-- `RESEND_API_KEY`
-- `TURNSTILE_SECRET_KEY`
-- credenciales de Cloudflare
-- secretos de otros clientes
+Incluye `chromium-results.json` y capturas de Inicio, Contacto y Diagnóstico en los cuatro anchos.
+No contiene secretos ni datos de clientes.
 
-El modo efectivo permanece en `demo` si falta el proveedor Worker, el endpoint HTTPS o la Site Key.
+## Publicar un release en 8091
 
-### Formulario sin JavaScript
+Este procedimiento no se ejecutó durante la validación. Requiere aprobación explícita de la
+activación y debe conservar el contenedor actual y el rollback existente.
 
-En modo Worker, el endpoint se guarda en `data-submit-endpoint` y se usa solo para el `fetch` con
-`Idempotency-Key`, JSON y token Turnstile. La acción HTML sigue siendo `mailto:` para que un
-navegador sin JavaScript no intente enviar un `POST` incompleto al Worker. El enlace visible
-`Escribir por correo` mantiene la misma alternativa.
-
-El formulario conserva:
-
-- campos y validaciones del contrato aprobado;
-- token Turnstile `lead` únicamente en modo Worker;
-- la misma clave de idempotencia si se reintentan datos idénticos;
-- una clave nueva si cambian los datos;
-- campos ante errores y reinicio del widget;
-- confirmación solo tras una respuesta `200` con `ok: true`;
-- modo demo sin solicitudes `POST`.
-
-## Privacidad: propuesta pendiente de revisión legal
-
-La página `/politica-privacidad/` sigue marcada como borrador. El siguiente texto es una base de
-trabajo y no debe presentarse como política definitiva.
-
-### Responsable
-
-**Pendiente de completar por la empresa:** razón social o nombre legal del responsable, domicilio,
-jurisdicción aplicable y canal formal adicional, si corresponde. El canal operativo disponible para
-esta propuesta es `info@sokatechnologies.com`.
-
-### Finalidad y alcance
-
-Los datos enviados en Contacto o Diagnóstico se utilizarían para entender la solicitud, responder
-al remitente, coordinar una conversación y, cuando corresponda, preparar un diagnóstico o propuesta.
-No se solicitan contraseñas, tokens, llaves privadas, accesos ni datos sensibles de terceros.
-
-### Datos recopilados
-
-- Obligatorios: nombre, empresa, correo electrónico, descripción del problema y consentimiento.
-- Opcionales: teléfono, país, servicio de interés y tipo de problema.
-- Datos técnicos: Cloudflare puede tratar datos técnicos necesarios para seguridad, Turnstile y
-  limitación de abuso. El alcance exacto, incluida la IP procesada por el Worker para rate limit,
-  debe confirmarse en la revisión legal y en la documentación de los proveedores.
-
-### Proveedores y transferencias
-
-- **Cloudflare Turnstile:** comprobación antiabuso del formulario; el widget se restringirá al
-  hostname `prueba.sokatechnologies.com` y usará la acción `lead`.
-- **Cloudflare Workers:** recepción y validación server-side del endpoint `/api/leads`.
-- **Resend:** entrega del mensaje al destinatario comercial `info@sokatechnologies.com`, usando un
-  remitente de dominio verificado y el correo validado del prospecto únicamente como Reply-To.
-
-La ubicación de procesamiento, las transferencias internacionales, las garantías aplicables y las
-condiciones contractuales de cada proveedor están **pendientes de confirmar**; no se inventan en
-este repositorio.
-
-### Retención, eliminación y derechos
-
-El periodo de conservación de solicitudes, el procedimiento de eliminación y los responsables de
-atenderlo están **pendientes de decisión legal y operativa**. La política final debe indicar cómo
-ejercer los derechos que correspondan —por ejemplo, acceso, rectificación, supresión, oposición o
-limitación— mediante `info@sokatechnologies.com`, junto con la jurisdicción y los plazos aplicables.
-
-La base jurídica del tratamiento y el texto definitivo del consentimiento también requieren
-revisión legal; el checkbox actual no sustituye esa aprobación.
-
-### Bloqueos antes de activar
-
-1. Confirmar responsable, domicilio, jurisdicción y base jurídica.
-2. Aprobar el texto de consentimiento y la política final.
-3. Confirmar proveedores, transferencias, retención, eliminación y acceso al buzón.
-4. Confirmar el widget Turnstile, su hostname/action y los secretos del Worker fuera de Git.
-5. Confirmar dominio remitente verificado en Resend y registros DNS sin sustituir SPF, MX o DMARC.
-6. Aprobar el primer envío controlado desde staging.
-
-## Pruebas de build
-
-### Demo local, sin valores públicos
+### 1. Preflight
 
 ```bash
-npm ci
-npm test
-npm run check
-npm run build
-docker build -t soka-web-demo-2026:04b3-demo .
-docker run --rm --name soka-web-demo-04b3-demo -p 127.0.0.1:8092:80 soka-web-demo-2026:04b3-demo
+set -euo pipefail
+
+docker inspect soka-web-04b3-preview-8093
+curl -fsSI http://127.0.0.1:8093/
+curl -fsSI http://127.0.0.1:8093/contacto/
+curl -fsSI http://127.0.0.1:8093/diagnostico/
+
+test -d /srv/fast-storage/soka-web/releases/03608c2-demo
+test -r /srv/fast-storage/soka-web/releases/03608c2-demo/index.html
 ```
 
-Comprobaciones esperadas:
+Confirmar que no existe otro proceso usando el puerto 8091 y que el rollback sigue en estado
+`exited` antes de continuar.
+
+### 2. Sustitución reversible
+
+La sustitución deja el contenedor anterior con nombre nuevo y conserva sus datos Docker:
 
 ```bash
-curl -fsS http://127.0.0.1:8092/contacto/ | rg 'data-form-mode="demo"'
-curl -fsS http://127.0.0.1:8092/diagnostico/ | rg 'data-form-mode="demo"'
+set -euo pipefail
+
+current=soka-web-demo-2026-8091
+candidate=soka-web-04b3:03608c2-demo
+release=/srv/fast-storage/soka-web/releases/03608c2-demo
+failed="${current}-failed-$(date -u +%Y%m%dT%H%M%SZ)"
+
+docker stop "$current"
+docker rename "$current" "$failed"
+
+docker run -d \
+  --name "$current" \
+  --restart unless-stopped \
+  -p 0.0.0.0:8091:80 \
+  --mount type=bind,src="$release",dst=/usr/share/nginx/html,readonly \
+  "$candidate"
+
+curl -fsSI http://127.0.0.1:8091/
+curl -fsSI https://prueba.sokatechnologies.com/
 ```
 
-### Candidato Worker, solo después de disponer de la Site Key pública autorizada
-
-La variable `PUBLIC_TURNSTILE_SITE_KEY` debe existir únicamente en el entorno local autorizado;
-no se escribe en Git ni en este documento:
-
-```bash
-export PUBLIC_TURNSTILE_SITE_KEY='[SITE_KEY_PUBLICA_PROPORCIONADA_LOCALMENTE]'
-docker build \
-  --build-arg PUBLIC_FORM_PROVIDER=worker \
-  --build-arg PUBLIC_CONTACT_FORM_ENDPOINT=https://soka-leads-worker.sokatech.workers.dev/api/leads \
-  --build-arg PUBLIC_TURNSTILE_SITE_KEY="$PUBLIC_TURNSTILE_SITE_KEY" \
-  -t soka-web-demo-2026:04b3-candidato .
-docker run --rm --name soka-web-demo-04b3-candidato -p 127.0.0.1:8092:80 soka-web-demo-2026:04b3-candidato
-```
-
-Validar el HTML sin imprimir la Site Key completa ni secretos:
-
-```bash
-curl -fsS http://127.0.0.1:8092/contacto/ | rg 'data-form-mode="live"|soka-leads-worker\.sokatech\.workers\.dev/api/leads|cf-turnstile'
-curl -fsS http://127.0.0.1:8092/diagnostico/ | rg 'data-form-mode="live"|soka-leads-worker\.sokatech\.workers\.dev/api/leads|cf-turnstile'
-```
-
-La validez de Turnstile no se prueba desde `localhost`: el token debe obtenerse después, desde
-`https://prueba.sokatechnologies.com`, cuyo hostname está autorizado en el widget.
-
-## Resultado de esta preparación
-
-- `npm ci`: correcto; sin vulnerabilidades durante la instalación.
-- `npm audit`: 0 vulnerabilidades.
-- `npm audit --omit=dev`: 0 vulnerabilidades.
-- `npm test`: 26/26 pruebas del Worker correctas.
-- `npm run check`: 0 errores, advertencias o hints.
-- `npm run build`: 22 páginas estáticas generadas.
-- `git diff --check`: correcto.
-- El build demo confirmó `data-form-mode="demo"`, `mailto:info@sokatechnologies.com` y ninguna
-  URL del Worker en el HTML final.
-- No se generó un build live con una Site Key real: el worktree no contiene una configuración local
-  autorizada con `PUBLIC_TURNSTILE_SITE_KEY`, y no se inventó ni se copió una.
-
-El build Docker se intentó con BuildKit y con el builder legado, ambos con límite de tiempo. El
-primero quedó bloqueado durante la copia de configuración y el segundo en la resolución de la etapa
-base; no se creó una imagen candidata. Un `docker create` temporal también quedó bloqueado por el
-daemon y fue cancelado. El contenedor existente `soka-web-demo-2026-8091` permaneció activo y no se
-detuvo, reinició ni modificó. Por ello, la validación con Nginx en `8092` y la publicación del
-candidato quedan pendientes de recuperar el funcionamiento del daemon Docker.
-
-## Runbook de activación posterior
-
-Solo después de aprobación legal y del fundador:
-
-1. Confirmar que el Worker activo conserva `ALLOWED_ORIGINS=https://prueba.sokatechnologies.com`,
-   hostname/action de Turnstile, binding `RATE_LIMITER` y los cuatro secretos configurados fuera de
-   Git.
-2. Construir la imagen candidata con los tres `--build-arg` públicos anteriores.
-3. Ejecutarla en `127.0.0.1:8092` y revisar Contacto, Diagnóstico, consola, teclado y móvil.
-4. Conservar el contenedor actual de `8091` como rollback.
-5. Sustituir exclusivamente el contenedor de `8091` por la imagen candidata.
-6. Desde el dominio autorizado, realizar una solicitud de prueba en Contacto y otra en Diagnóstico.
-7. Confirmar dos correos en `info@sokatechnologies.com`, Reply-To, contenido mínimo y ausencia de
-   secretos en el mensaje o logs.
-8. Si alguna comprobación falla, restaurar el contenedor anterior y reconstruir modo demo.
-
-No se debe usar un override de versión del Worker desde el navegador para el flujo normal; el
-frontend debe llamar a la URL HTTPS estable cuando la activación haya sido aprobada.
+Si cualquiera de las verificaciones falla, no se continúa con pruebas de leads: se ejecuta el
+rollback inmediatamente.
 
 ## Rollback exacto
 
+El contenedor anterior conserva el puerto 8091 configurado y la imagen
+`soka-web-preview:t04a-85ee748`. El rollback no reconstruye imágenes ni toca el release:
+
 ```bash
-docker stop soka-web-demo-2026-8091
-docker rename soka-web-demo-2026-8091 soka-web-demo-2026-8091-failed-04b3
-docker run -d --name soka-web-demo-2026-8091 \
-  --restart unless-stopped \
-  -p 127.0.0.1:8091:80 \
-  soka-web-demo-2026-03b-previous
+set -euo pipefail
+
+current=soka-web-demo-2026-8091
+rollback=soka-web-demo-2026-8091-pre-ssd-20261020T233258
+failed="${current}-failed-rollback-$(date -u +%Y%m%dT%H%M%SZ)"
+
+docker stop "$current" || true
+docker rename "$current" "$failed"
+docker rename "$rollback" "$current"
+docker start "$current"
+
+curl -fsSI http://127.0.0.1:8091/
+curl -fsSI https://prueba.sokatechnologies.com/
 ```
 
-Los nombres `soka-web-demo-2026-03b-previous` y la política exacta de reinicio deben sustituirse
-por los valores observados en el host antes de ejecutar; este bloque es una plantilla operativa,
-no se ejecuta en esta tarea. Para volver a demo se reconstruye con los valores por defecto, sin
-endpoint ni Site Key.
+Después del rollback, verificar que el contenedor responde y conservar el contenedor fallido para
+diagnóstico. No ejecutar `docker system prune`, eliminar releases ni borrar el rollback.
 
-## Estado de secretos y recomendación
+## Activación de leads: NO-GO
 
-No se han leído, copiado, impreso ni versionado secretos. El worktree local del Worker queda fuera
-de esta rama. `worker/wrangler.toml` y la distribución del Worker no se modifican.
+La publicación del HTML candidato no activa el Worker. La activación real requeriría, en una tarea
+posterior y con aprobación separada:
 
-**Recomendación: NO-GO para activación pública.** El código candidato puede revisarse en un puerto
-temporal, pero la activación debe esperar la aprobación legal, la Site Key pública autorizada y el
-runbook de rollback verificado contra los nombres reales del host.
+1. aprobación legal y del fundador;
+2. confirmación de secretos del Worker fuera de Git;
+3. verificación de origen, Turnstile, rate limit e idempotencia;
+4. una prueba real de Contacto y otra de Diagnóstico desde el hostname autorizado;
+5. confirmación de recepción en `info@sokatechnologies.com`;
+6. rollback inmediato si falla cualquier comprobación.
+
+No se deben usar overrides de versión del Worker desde el navegador ni activar Resend, Turnstile o
+el tráfico real como parte de este PR.
+
+## Resultado
+
+El candidato `03608c29fce0fde8bbb1087fbd99b1d42d695ddb` está validado en el preview local 8093 y
+el runbook queda alineado con releases versionados en SSD. La recomendación para fusionar el código
+es **GO técnico condicionado a la revisión del PR #13**. La recomendación para activar leads
+públicos sigue siendo **NO-GO**.
