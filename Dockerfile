@@ -9,6 +9,14 @@ COPY astro.config.mjs tsconfig.json ./
 COPY public ./public
 COPY src ./src
 
+# Only public build-time values are accepted here; private Worker secrets never enter this image.
+ARG PUBLIC_FORM_PROVIDER=demo
+ARG PUBLIC_CONTACT_FORM_ENDPOINT=
+ARG PUBLIC_TURNSTILE_SITE_KEY=
+ENV PUBLIC_FORM_PROVIDER=${PUBLIC_FORM_PROVIDER}
+ENV PUBLIC_CONTACT_FORM_ENDPOINT=${PUBLIC_CONTACT_FORM_ENDPOINT}
+ENV PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
+
 RUN npm run build
 
 FROM nginx:1.29-alpine AS runtime
