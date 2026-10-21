@@ -158,44 +158,94 @@ almacenamiento de imágenes/caché con capacidad suficiente.
 
 ### Materialización futura del release en SSD — NO EJECUTADA
 
-Si se aprueba conservar un artefacto independiente del worktree, utilizar una **copia
-versionada** del HTML estático ya comprobado. Esta acción no activa formularios públicos
-ni modifica los contenedores existentes, pero requiere autorización operativa y una
-inspección previa de la fuente y el espacio libre:
+**Condición de integridad antes de copiar:** el SHA de Git identifica el código fuente,
+pero `dist/` está ignorado por Git y puede modificarse sin que `rev-parse HEAD` cambie.
+En la prueba 04-B5 se validó el `dist/` local con mocks, **pero no se guardó en ese
+momento un manifiesto de checksums**. Por tanto, antes de materializar un release para
+publicación, será obligatorio **reconstruir Astro en SSD, repetir el QA sobre ese
+mismo `dist/` y registrar su manifiesto SHA-256**. No se permite simplemente
+copiar el `dist/` actual y asumir que es el previamente validado.
+
+El procedimiento futuro, **no ejecutado en esta tarea**, tendrá dos etapas:
+
+**A. Reconstrucción, QA y fijación de evidencia.** Desde el worktree en el commit
+`a168afee65e1e950cfc5819ce6287fbb0c70d315`, recompilar con los tres
+valores públicos autorizados, utilizando caché npm y temporales en el SSD;
+ejecutar `npm run check`, `npm test` y las pruebas Chromium con mocks
+bloqueando todos los POST externos. Si existe cualquier fallo, detenerse y no
+generar el artefacto. **Solo después del PASS sobre el build recién generado**
+crear el siguiente manifiesto, conservándolo junto a la evidencia QA fuera del
+repositorio:
 
 ```bash
 set -euo pipefail
 worktree=/srv/fast-storage/soka-web/worktrees/04b5-live
 source_dir="$worktree/dist"
-releases_dir=/srv/fast-storage/soka-web/releases
-release="$releases_dir/04b5-a168afe-live"
+evidence=/srv/fast-storage/soka-web/evidence/04b5-a168afe-live
 
 test "$(git -C "$worktree" rev-parse HEAD)" = a168afee65e1e950cfc5819ce6287fbb0c70d315
 test -s "$source_dir/contacto/index.html"
 test -s "$source_dir/diagnostico/index.html"
+# Requisito previo manual: build fresco + QA mock y responsive PASS documentados.
+mkdir -p "$evidence"
+(
+  cd "$source_dir"
+  find . -type f -print0 | sort -z | xargs -0 sha256sum
+) > "$evidence/dist.sha256"
+test -s "$evidence/dist.sha256"
+```
+
+La evidencia debe indicar **qué build fue probado, en qué momento y con qué
+resultados**; no crear un manifiesto sobre un `dist/` desconocido para eludir
+el QA. Una vez obtenido, no modificar la salida ni cambiar la Site Key
+hasta crear y verificar el snapshot.
+
+**B. Copia atómica y verificación del snapshot.** Este bloque solo puede
+ejecutarse con el manifiesto de la etapa A y su QA aprobada, antes de
+cualquier publicación:
+
+```bash
+set -euo pipefail
+worktree=/srv/fast-storage/soka-web/worktrees/04b5-live
+source_dir="$worktree/dist"
+evidence=/srv/fast-storage/soka-web/evidence/04b5-a168afe-live
+manifest="$evidence/dist.sha256"
+releases_dir=/srv/fast-storage/soka-web/releases
+release="$releases_dir/04b5-a168afe-live"
+
+file_hashes() {
+  ( cd "$1" && find . -type f -print0 | sort -z | xargs -0 sha256sum )
+}
+
+test "$(git -C "$worktree" rev-parse HEAD)" = a168afee65e1e950cfc5819ce6287fbb0c70d315
+test -s "$manifest"
+test -s "$source_dir/contacto/index.html"
+test -s "$source_dir/diagnostico/index.html"
 test -s "$source_dir/politica-privacidad/index.html"
 test ! -e "$release"
+file_hashes "$source_dir" | cmp -s "$manifest" -
 
 mkdir -p "$releases_dir"
 temp="$(mktemp -d "$releases_dir/.04b5-a168afe-live.XXXXXX")"
 cp -a "$source_dir/." "$temp/"
-# El directorio temporal de mktemp nace con permisos 700; Nginx debe poder leerlo.
+# El directorio temporal de mktemp nace en 700; Nginx necesita lectura/travesía.
 chmod -R a+rX "$temp"
-test -s "$temp/contacto/index.html"
-test -s "$temp/diagnostico/index.html"
-test -s "$temp/politica-privacidad/index.html"
+file_hashes "$temp" | cmp -s "$manifest" -
 mv -T "$temp" "$release"
-printf 'Release creado: %s\n' "$release"
+printf 'Snapshot verificado: %s\n' "$release"
 ```
 
-Esta copia es **un paso futuro pendiente**, no evidencia de que el directorio ya exista.
-Verificar después los formularios `live`, el endpoint y el widget dentro de la copia,
-sin mostrar la Site Key en logs. Conservar el snapshot sin modificar sus archivos para
-identificar con claridad el candidato y permitir regresar al release anterior.
+La comparación del manifiesto verifica **contenido y listado de archivos** tanto
+antes como después de copiar. Cualquier diferencia debe impedir la promoción,
+sin borrar la evidencia ni los releases anteriores.
 
-Para un preview adicional sin Docker, servir esta copia en un **puerto libre**, solo sobre
-`127.0.0.1`, interceptando solicitudes externas durante QA; no reutilizar el 8094 si el
-preview Python de 04-B5 continúa funcionando.
+Esta copia es **un paso futuro pendiente**, no evidencia de que el directorio
+ya exista. Conservar el snapshot sin modificar sus archivos para identificar
+con claridad el candidato y permitir regresar al release anterior.
+
+Para un preview adicional sin Docker, servir la copia en un **puerto libre**,
+solo sobre `127.0.0.1`, interceptando solicitudes externas durante QA;
+no reutilizar el 8094 si el preview Python de 04-B5 sigue funcionando.
 
 ### Publicación futura — aprobación separada
 
@@ -276,8 +326,9 @@ tarea.
 - **NO-GO para activación pública:** no se aprobaron privacidad, consentimiento ni operación real.
 - **Pendiente:** verificar de nuevo la distribución del Worker con Wrangler en modo lectura
   antes de activar; `npx --yes wrangler@4.151.3` permite ejecutarlo sin instalación global.
-- **Pendiente:** materializar y verificar un snapshot versionado del HTML estático en SSD,
-  **solo cuando se autorice** una futura preparación de publicación; no existe hoy.
+- **Pendiente:** reconstruir en SSD y repetir QA para registrar un manifiesto SHA-256 del
+  artefacto exacto; únicamente entonces materializar y verificar el snapshot versionado en SSD,
+  **solo cuando se autorice**. Ninguno de estos pasos de promoción se ejecutó en esta tarea.
 - **HDD:** Docker conserva `/var/lib/docker`; no volver a ejecutar `docker build` sin
   resolver capacidad/caché y aprobar el procedimiento.
 - **Sin secretos:** no se leyó, copió ni incluyó ninguna clave privada; el repositorio no recibió
