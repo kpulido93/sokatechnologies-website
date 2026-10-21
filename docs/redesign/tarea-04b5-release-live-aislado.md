@@ -179,6 +179,8 @@ test ! -e "$release"
 mkdir -p "$releases_dir"
 temp="$(mktemp -d "$releases_dir/.04b5-a168afe-live.XXXXXX")"
 cp -a "$source_dir/." "$temp/"
+# El directorio temporal de mktemp nace con permisos 700; Nginx debe poder leerlo.
+chmod -R a+rX "$temp"
 test -s "$temp/contacto/index.html"
 test -s "$temp/diagnostico/index.html"
 test -s "$temp/politica-privacidad/index.html"
