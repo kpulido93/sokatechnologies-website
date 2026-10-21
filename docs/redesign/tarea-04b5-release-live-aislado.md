@@ -48,7 +48,7 @@ Consultas realizadas en modo lectura:
 | BuildKit | Builder `default`, operativo, BuildKit `v0.34.0` |
 | Puerto 8091 | Ocupado por el contenedor esperado; no se detuvo |
 | Puerto 8094 | Preview estático aislado en `127.0.0.1:8094`; no Docker, no túnel |
-| Wrangler | No instalado localmente; no fue posible verificar distribuciones desde esta máquina |
+| Wrangler | Sin instalación fija; el operador verificó mediante CLI temporal la distribución original 100 % / candidata 0 %. Repetir la comprobación de solo lectura antes de activar |
 | Site Key pública | Consumida por la build local; su valor no se registró ni se versionó |
 
 Contenedores existentes verificados sin detenerlos ni modificarlos:
