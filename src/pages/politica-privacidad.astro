@@ -20,30 +20,167 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     signals={["borrador", "sin revisión legal final", "no publicar sin validar"]}
   />
 
-  <section class="section js-section">
+  <section class="section js-section" aria-labelledby="privacy-sections-title">
     <div class="legal-stack">
-      <article class="legal-card js-reveal-card" data-card-interaction>
-        <h2>Información que puede recopilarse</h2>
-        <ul class="detail-list">
-          <li>nombre, empresa, correo, país y mensaje enviado voluntariamente</li>
-          <li>tipo de servicio o solicitud de interés</li>
-          <li>información técnica básica del sitio para operación y seguridad</li>
-        </ul>
-      </article>
-      <article class="legal-card js-reveal-card" data-card-interaction>
-        <h2>Información que no debe enviarse</h2>
-        <ul class="detail-list">
-          <li>contraseñas, tokens, llaves privadas o accesos</li>
-          <li>dumps de base de datos o archivos confidenciales</li>
-          <li>información sensible de terceros sin autorización</li>
-        </ul>
-      </article>
-      <article class="legal-card js-reveal-card" data-card-interaction>
-        <h2>Estado del documento</h2>
+      <aside class="legal-card" role="note" aria-labelledby="privacy-draft-title">
+        <h2 id="privacy-draft-title">BORRADOR — Pendiente de revisión legal</h2>
         <p>
-          Este texto es un borrador informativo sujeto a revisión legal. Antes de publicación final
-          deben confirmarse herramientas reales, cookies, canales y entidad responsable.
+          Esta versión conserva información pendiente de completar y no constituye una política
+          definitiva. No debe presentarse como documento legal final ni utilizarse para activar
+          formularios reales sin revisión y aprobación.
         </p>
+        <p><strong>Última actualización:</strong> [FECHA DE PUBLICACIÓN]</p>
+      </aside>
+
+      <h2 id="privacy-sections-title">Secciones de la política de privacidad</h2>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>1. Responsable del tratamiento</h2>
+        <p>
+          SokaTechnologies es una marca de servicios tecnológicos operada actualmente por
+          <strong>[NOMBRE LEGAL COMPLETO]</strong>, persona natural con domicilio en
+          <strong>[PAÍS Y DATOS DE CONTACTO LEGAL REQUERIDOS]</strong>, en proceso de formalización
+          empresarial.
+        </p>
+        <p>Para consultas relacionadas con el tratamiento de datos personales, puede escribir a:</p>
+        <p><strong>info@sokatechnologies.com</strong></p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>2. Información que recopilamos</h2>
+        <p>Cuando utiliza nuestros formularios de contacto o diagnóstico, podemos solicitar:</p>
+        <ul class="detail-list">
+          <li>Nombre, empresa y correo electrónico.</li>
+          <li>Teléfono y país, cuando sean proporcionados.</li>
+          <li>Servicio de interés y tipo de problema.</li>
+          <li>Descripción de la necesidad o proyecto.</li>
+          <li>Confirmación de consentimiento para gestionar la solicitud.</li>
+        </ul>
+        <p>
+          Si solicita una auditoría de su sitio web, también podemos tratar la URL pública indicada,
+          nombre, empresa, correo, WhatsApp opcional, país, tipo de empresa, descripción del problema
+          principal y aceptación del formulario.
+        </p>
+        <p>
+          También pueden procesarse datos técnicos necesarios para la seguridad y prevención de
+          abuso, incluyendo información de conexión utilizada por Cloudflare Turnstile.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>3. Finalidad del tratamiento</h2>
+        <p>Utilizamos la información para:</p>
+        <ul class="detail-list">
+          <li>Responder consultas comerciales.</li>
+          <li>Evaluar necesidades tecnológicas.</li>
+          <li>Preparar reuniones, diagnósticos o propuestas solicitadas.</li>
+          <li>Gestionar comunicaciones relacionadas con la solicitud.</li>
+          <li>Proteger los formularios contra envíos automatizados y uso indebido.</li>
+          <li>
+            Generar reportes preliminares sobre URLs públicas en la herramienta de auditoría,
+            mediante reglas locales y, cuando corresponda, análisis externo de rendimiento.
+          </li>
+        </ul>
+        <p>
+          Los datos enviados mediante estos formularios no se utilizarán automáticamente para
+          suscripciones de marketing sin la autorización que corresponda.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>4. Proveedores tecnológicos</h2>
+        <p>
+          Para operar nuestro sitio web y gestionar solicitudes utilizamos servicios de terceros,
+          entre ellos:
+        </p>
+        <p><strong>Cloudflare:</strong> infraestructura, seguridad y validación de solicitudes mediante Turnstile.</p>
+        <p><strong>Resend:</strong> procesamiento y envío de notificaciones de formularios al correo corporativo.</p>
+        <p>
+          <strong>Google PageSpeed Insights:</strong> si se habilita el procesamiento de auditorías
+          en el servidor, se consulta este servicio utilizando la URL pública proporcionada para
+          obtener métricas técnicas del sitio. El flujo actual no remite a Google PageSpeed los
+          datos de contacto ni la descripción del problema introducidos en el formulario.
+        </p>
+        <p>
+          Estos proveedores pueden procesar información técnica o personal necesaria para prestar
+          sus servicios, conforme a sus propias condiciones y acuerdos aplicables.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>5. Almacenamiento y conservación</h2>
+        <p>
+          Las solicitudes de Contacto y Diagnóstico, cuando se habiliten, se entregarán al correo
+          corporativo de SokaTechnologies. En el modo local, la vista previa de Auditoría no envía
+          solicitudes por correo ni las almacena; el endpoint de auditoría previsto para servidor
+          genera reportes sin persistirlos ni enviarlos por correo en su implementación actual.
+        </p>
+        <p>
+          El uso de servicios de correo e infraestructura puede implicar almacenamiento temporal y
+          registros operativos administrados por los proveedores.
+        </p>
+        <p>
+          Los datos se conservarán durante <strong>[PERIODO DE RETENCIÓN POR DEFINIR]</strong>,
+          considerando la finalidad de la solicitud y las obligaciones legales aplicables.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>6. Transferencias internacionales</h2>
+        <p>
+          Debido al uso de proveedores tecnológicos internacionales, determinados datos pueden ser
+          procesados fuera del país de residencia del usuario.
+        </p>
+        <p>
+          Las condiciones y salvaguardas aplicables a estas transferencias se verificarán conforme
+          a la legislación correspondiente.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>7. Seguridad de la información</h2>
+        <p>
+          Aplicamos medidas técnicas y organizativas orientadas a proteger las solicitudes
+          recibidas, incluyendo conexiones HTTPS, validación antiabuso y control de acceso a los
+          servicios utilizados.
+        </p>
+        <p>
+          Solicitamos expresamente que los formularios no se utilicen para transmitir contraseñas,
+          claves privadas, credenciales ni información sensible innecesaria.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>8. Derechos de los titulares</h2>
+        <p>
+          Los usuarios pueden solicitar información sobre el tratamiento de sus datos y ejercer los
+          derechos que les reconozca la legislación aplicable, incluyendo, cuando corresponda,
+          acceso, corrección, actualización o eliminación.
+        </p>
+        <p>Las solicitudes pueden enviarse a:</p>
+        <p><strong>info@sokatechnologies.com</strong></p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>9. Cookies y tecnologías de seguridad</h2>
+        <p>
+          El sitio puede utilizar tecnologías necesarias para su operación y seguridad, incluyendo
+          servicios de prevención de spam.
+        </p>
+        <p>
+          Antes de la publicación definitiva se verificará qué cookies o identificadores utilizan
+          efectivamente el sitio y sus proveedores, y si corresponde implementar un aviso o
+          mecanismo de consentimiento adicional.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>10. Actualizaciones</h2>
+        <p>
+          Esta política podrá actualizarse cuando cambien nuestros servicios, proveedores,
+          actividades de tratamiento o situación jurídica.
+        </p>
+        <p>La versión vigente estará disponible en el sitio web de SokaTechnologies.</p>
       </article>
     </div>
   </section>
