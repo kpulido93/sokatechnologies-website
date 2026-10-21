@@ -57,6 +57,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <li>Confirmación de consentimiento para gestionar la solicitud.</li>
         </ul>
         <p>
+          Si solicita una auditoría de su sitio web, también podemos tratar la URL pública indicada,
+          nombre, empresa, correo, WhatsApp opcional, país, tipo de empresa, descripción del problema
+          principal y aceptación del formulario.
+        </p>
+        <p>
           También pueden procesarse datos técnicos necesarios para la seguridad y prevención de
           abuso, incluyendo información de conexión utilizada por Cloudflare Turnstile.
         </p>
@@ -71,6 +76,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <li>Preparar reuniones, diagnósticos o propuestas solicitadas.</li>
           <li>Gestionar comunicaciones relacionadas con la solicitud.</li>
           <li>Proteger los formularios contra envíos automatizados y uso indebido.</li>
+          <li>
+            Generar reportes preliminares sobre URLs públicas en la herramienta de auditoría,
+            mediante reglas locales y, cuando corresponda, análisis externo de rendimiento.
+          </li>
         </ul>
         <p>
           Los datos enviados mediante estos formularios no se utilizarán automáticamente para
@@ -87,6 +96,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <p><strong>Cloudflare:</strong> infraestructura, seguridad y validación de solicitudes mediante Turnstile.</p>
         <p><strong>Resend:</strong> procesamiento y envío de notificaciones de formularios al correo corporativo.</p>
         <p>
+          <strong>Google PageSpeed Insights:</strong> si se habilita el procesamiento de auditorías
+          en el servidor, se consulta este servicio utilizando la URL pública proporcionada para
+          obtener métricas técnicas del sitio. El flujo actual no remite a Google PageSpeed los
+          datos de contacto ni la descripción del problema introducidos en el formulario.
+        </p>
+        <p>
           Estos proveedores pueden procesar información técnica o personal necesaria para prestar
           sus servicios, conforme a sus propias condiciones y acuerdos aplicables.
         </p>
@@ -94,7 +109,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
       <article class="legal-card js-reveal-card" data-card-interaction>
         <h2>5. Almacenamiento y conservación</h2>
-        <p>Las solicitudes recibidas se entregan al correo corporativo de SokaTechnologies.</p>
+        <p>
+          Las solicitudes de Contacto y Diagnóstico, cuando se habiliten, se entregarán al correo
+          corporativo de SokaTechnologies. En el modo local, la vista previa de Auditoría no envía
+          solicitudes por correo ni las almacena; el endpoint de auditoría previsto para servidor
+          genera reportes sin persistirlos ni enviarlos por correo en su implementación actual.
+        </p>
         <p>
           El uso de servicios de correo e infraestructura puede implicar almacenamiento temporal y
           registros operativos administrados por los proveedores.
