@@ -29,6 +29,7 @@ const formId = `${formType}-form`;
 const successId = `${formId}-success`;
 const errorId = `${formId}-error`;
 const noteId = `${formId}-note`;
+const fallbackAction = `mailto:${fallbackEmail}`;
 ---
 
 <section class="contact-panel js-reveal">
@@ -46,10 +47,11 @@ const noteId = `${formId}-note`;
   <form
     class="contact-form"
     method="post"
-    action={isLiveMode ? submitEndpoint : `mailto:${fallbackEmail}`}
+    action={fallbackAction}
     enctype="application/x-www-form-urlencoded"
     data-form-mode={isLiveMode ? "live" : "demo"}
     data-form-provider={isLiveMode ? provider : "demo"}
+    data-submit-endpoint={isLiveMode ? submitEndpoint : ""}
     data-success-id={successId}
     data-error-id={errorId}
     aria-describedby={`${noteId} ${successId} ${errorId}`}
@@ -278,6 +280,13 @@ const noteId = `${formId}-note`;
         return;
       }
 
+      const submitEndpoint = form.dataset.submitEndpoint;
+      if (!submitEndpoint) {
+        event.preventDefault();
+        setStatus(errorNode instanceof HTMLElement ? errorNode : null);
+        return;
+      }
+
       event.preventDefault();
       if (submitting) return;
       submitting = true;
@@ -299,7 +308,7 @@ const noteId = `${formId}-note`;
         }
         previousPayloadFingerprint = fingerprint;
 
-        const response = await fetch(form.action, {
+        const response = await fetch(submitEndpoint, {
           method: "POST",
           headers: {
             Accept: "application/json",
