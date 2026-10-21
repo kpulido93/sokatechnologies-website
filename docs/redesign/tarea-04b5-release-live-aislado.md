@@ -1,14 +1,27 @@
 # Tarea 04-B5 — Release live aislado de formularios
 
-**Estado:** bloqueado de forma segura; no se creó ni publicó un release live.
+**Estado:** release estático live validado en SSD; no se creó una imagen Docker ni se publicó en
+staging.
 
-**Código revisado:** `2449a1706d40159b99b4ecd327ab28e1ff044eed`
+**Código revisado:** `a168afee65e1e950cfc5819ce6287fbb0c70d315`
 
 **Rama:** `codex/tarea-04b5-release-live-aislado`
 
 ## Resultado ejecutivo
 
-El repositorio y el Dockerfile están preparados para recibir tres valores públicos de build:
+El release se construyó manualmente desde el commit `a168afee65e1e950cfc5819ce6287fbb0c70d315`
+en el SSD, utilizando la Site Key pública autorizada únicamente durante la compilación local. El
+resultado estático quedó en:
+
+```text
+/srv/fast-storage/soka-web/worktrees/04b5-live/dist
+```
+
+No se ejecutó `docker build`, no se creó una imagen Docker y no se modificó ningún contenedor
+existente. El preview aislado se sirvió con Python en `127.0.0.1:8094`, sin túnel ni exposición
+externa.
+
+La configuración pública utilizada fue:
 
 ```text
 PUBLIC_FORM_PROVIDER=worker
@@ -16,13 +29,12 @@ PUBLIC_CONTACT_FORM_ENDPOINT=https://soka-leads-worker.sokatech.workers.dev/api/
 PUBLIC_TURNSTILE_SITE_KEY=<SITE_KEY_PUBLICA_AUTORIZADA>
 ```
 
-La Site Key pública autorizada para `prueba.sokatechnologies.com` no estaba disponible en el
-entorno local. No se inventó una clave, no se usó una clave de pruebas y no se declaró completada
-la integración live. Por tanto, no se construyó la imagen live, no se creó el release live en SSD,
-no se ocupó el puerto 8094 y no se ejecutó ningún envío al Worker o a Resend.
+Contacto y Diagnóstico quedaron en modo live, con el endpoint del Worker, acción Turnstile `lead`,
+fallback `mailto:info@sokatechnologies.com` y enlace a `/politica-privacidad/`. La clave privada
+de Turnstile, Resend y cualquier credencial de Cloudflare no se leyó ni se incorporó al release.
 
-El build demo existente sí se validó con las dependencias actuales, pruebas del Worker y un preview
-local aislado. La activación pública queda **NO-GO**.
+La validación técnica aislada queda **GO para revisión del PR**. La activación pública de leads
+permanece **NO-GO**.
 
 ## Preflight de infraestructura
 
@@ -35,9 +47,9 @@ Consultas realizadas en modo lectura:
 | Storage driver | `overlayfs` |
 | BuildKit | Builder `default`, operativo, BuildKit `v0.34.0` |
 | Puerto 8091 | Ocupado por el contenedor esperado; no se detuvo |
-| Puerto 8094 | Libre; no se utilizó |
+| Puerto 8094 | Preview estático aislado en `127.0.0.1:8094`; no Docker, no túnel |
 | Wrangler | No instalado localmente; no fue posible verificar distribuciones desde esta máquina |
-| Site Key pública | No presente en el entorno de shell ni en archivos `.env` reales encontrados |
+| Site Key pública | Consumida por la build local; su valor no se registró ni se versionó |
 
 Contenedores existentes verificados sin detenerlos ni modificarlos:
 
@@ -47,12 +59,13 @@ Contenedores existentes verificados sin detenerlos ni modificarlos:
 | `soka-web-ssd-preview-8092` | misma imagen | `127.0.0.1:8092->80/tcp` | `/srv/fast-storage/soka-web/site` → `/usr/share/nginx/html` | `no` | running |
 | `soka-web-04b3-preview-8093` | `soka-web-04b3:03608c2-demo` | `127.0.0.1:8093->80/tcp` | `/srv/fast-storage/soka-web/releases/03608c2-demo` → `/usr/share/nginx/html` | `no` | running |
 
-Las tres URLs locales respondieron HTTP 200. No se modificó `/srv/fast-storage/soka-web/site`, ningún
-release existente, el túnel, DNS, Worker, Resend, Turnstile ni producción.
+Las URLs de los tres contenedores existentes y las rutas del preview `8094` respondieron HTTP 200.
+No se modificó `/srv/fast-storage/soka-web/site`, ningún release existente, el túnel, DNS, Worker,
+Resend, Turnstile ni producción.
 
-## Validación de código y build demo
+## Validación de código y build del release
 
-Comandos ejecutados sobre el commit base:
+Comandos ejecutados sobre el commit del release:
 
 | Comando | Resultado |
 |---|---|
@@ -64,49 +77,79 @@ Comandos ejecutados sobre el commit base:
 | `npm run build` | PASS; 22 páginas estáticas |
 | `git diff --check` | PASS |
 
-El build disponible sin la Site Key conserva el modo demo en Contacto y Diagnóstico, la acción
-`mailto:info@sokatechnologies.com` y los enlaces a `/politica-privacidad/`. No se utilizó para
-declarar un release live.
+El release live validado contiene `data-form-mode="live"` en Contacto y Diagnóstico, el endpoint
+correcto, el widget con `data-action="lead"`, el fallback `mailto:info@sokatechnologies.com` y
+los enlaces a `/politica-privacidad/`.
 
-## Evidencia Chromium del build demo
+## Release estático live validado en SSD
 
-Se ejecutó un preview estático local aislado en `127.0.0.1:18018`, sin túnel ni exposición
-externa. Se aplicó `prefers-reduced-motion: reduce` y se revisaron Contacto y Diagnóstico en
+| Elemento | Resultado |
+|---|---|
+| Worktree | `/srv/fast-storage/soka-web/worktrees/04b5-live` |
+| Commit | `a168afee65e1e950cfc5819ce6287fbb0c70d315` |
+| Salida | `/srv/fast-storage/soka-web/worktrees/04b5-live/dist` |
+| Servidor | `python3 -m http.server`, bind `127.0.0.1` |
+| Puerto | `8094` |
+| Imagen Docker | No creada; no se ejecutó Docker build |
+| Rutas HTTP comprobadas | `/`, `/contacto/`, `/diagnostico/`, `/politica-privacidad/`, `/servicios/` |
+| Resultado | HTTP 200 en todas las rutas |
+
+El directorio `dist/` no se copió al repositorio y la Site Key pública no se guardó en el código,
+la documentación ni los artefactos versionados.
+
+## Evidencia Chromium del release live
+
+Se ejecutó Chromium sobre `http://127.0.0.1:8094`, sin túnel ni exposición externa. El arnés
+interceptó el script de Turnstile y todas las solicitudes al Worker; cualquier otro destino externo
+fue bloqueado. Se aplicó `prefers-reduced-motion: reduce` y se revisaron Contacto y Diagnóstico en
 320, 390, 768 y 1440 px.
 
 | Comprobación | Resultado |
 |---|---|
-| 8 combinaciones de página y viewport | PASS |
-| `document.scrollWidth <= document.clientWidth` | PASS en 8/8 |
-| Consola, excepciones y recursos HTTP | 0 errores observados |
-| Campos obligatorios y consentimiento | PASS |
-| Mensaje demo explícito tras validación local | PASS |
-| POST al Worker o a Resend | 0 |
+| 8 combinaciones de página y viewport | PASS; 8/8 |
+| `document.scrollWidth <= document.clientWidth` | PASS; 8/8 |
+| Modo live, endpoint y acción `lead` | PASS en ambos formularios |
+| Consentimiento obligatorio | PASS en Contacto y Diagnóstico |
+| Token Turnstile ausente | PASS; no se envía la solicitud |
+| Respuestas mock 200, 400, 403, 429, 502 y 503 | PASS en ambos formularios |
+| Conservación de campos ante error | PASS |
+| Limpieza de campos tras 200 | PASS |
+| Renovación de token tras error | PASS |
+| Misma `Idempotency-Key` con datos idénticos | PASS |
+| Nueva `Idempotency-Key` al cambiar datos | PASS |
+| Prevención de doble envío | PASS; una solicitud mock |
+| POST real a Worker o Resend | 0; todos los POST fueron interceptados |
 | Fallback `mailto:info@sokatechnologies.com` | PASS |
 | Enlace `/politica-privacidad/` | PASS |
-| Turnstile live | No probado: falta la Site Key autorizada |
+| Errores de aplicación | Ninguno; las cargas externas fueron bloqueadas intencionadamente |
+
+La matriz funcional acumuló 22 casos PASS: consentimiento y token ausente en ambos formularios,
+12 combinaciones de respuesta HTTP, dos reintentos con datos idénticos, dos con datos modificados y
+dos pruebas de doble envío. El arnés registró cero POST que escaparan hacia el Worker y cero llamadas
+a Resend.
 
 Capturas y resultado estructurado, fuera del repositorio:
 
 ```text
-/tmp/soka-04b5-qa/results.json
-/tmp/soka-04b5-qa/contacto-320px.png
-/tmp/soka-04b5-qa/contacto-390px.png
-/tmp/soka-04b5-qa/contacto-768px.png
-/tmp/soka-04b5-qa/contacto-1440px.png
-/tmp/soka-04b5-qa/diagnostico-320px.png
-/tmp/soka-04b5-qa/diagnostico-390px.png
-/tmp/soka-04b5-qa/diagnostico-768px.png
-/tmp/soka-04b5-qa/diagnostico-1440px.png
+/tmp/soka-04b5-live-qa/results.json
+/tmp/soka-04b5-live-qa/contacto-320px.png
+/tmp/soka-04b5-live-qa/contacto-390px.png
+/tmp/soka-04b5-live-qa/contacto-768px.png
+/tmp/soka-04b5-live-qa/contacto-1440px.png
+/tmp/soka-04b5-live-qa/diagnostico-320px.png
+/tmp/soka-04b5-live-qa/diagnostico-390px.png
+/tmp/soka-04b5-live-qa/diagnostico-768px.png
+/tmp/soka-04b5-live-qa/diagnostico-1440px.png
 ```
 
-Estas pruebas validan únicamente el modo demo. No prueban la aceptación de tokens Turnstile, el
-endpoint Worker, Resend ni los reintentos live.
+Los errores `ERR_BLOCKED_BY_CLIENT` registrados para las tipografías externas son consecuencia de
+la política de bloqueo del arnés, no errores de la aplicación. No hubo tráfico externo POST real.
 
-## Preview live aislado: no creado
+## Imagen Docker live: no creada deliberadamente
 
-Estos valores son los previstos para una ejecución posterior, una vez entregada la Site Key pública
-por un canal local seguro:
+La tarea solicitó validar el release estático manual existente y no repetir un `docker build`. Por
+tanto, no se creó la imagen ni el contenedor Docker previstos en la documentación inicial. Estos
+valores quedan como referencia para una futura activación aislada, no como artefactos existentes:
 
 ```text
 Imagen prevista: soka-web-04b5:2449a17-live
@@ -115,14 +158,13 @@ Puerto previsto: 127.0.0.1:8094
 Contenedor previsto: soka-web-04b5-preview-8094
 ```
 
-El directorio, la imagen y el contenedor anteriores **no existen como resultado de esta tarea**.
 No se debe reutilizar `/srv/fast-storage/soka-web/site` para el candidato porque es el bind mount
 del staging principal.
 
 ### Construcción futura, no ejecutada
 
-La Site Key debe estar disponible únicamente como variable pública local, sin registrar el comando
-en logs ni incluir otros secretos:
+La futura construcción Docker, si se autoriza, deberá recibir la Site Key únicamente como variable
+pública local, sin registrar el comando en logs ni incluir otros secretos:
 
 ```bash
 export PUBLIC_TURNSTILE_SITE_KEY='[SITE_KEY_PUBLICA_AUTORIZADA]'
@@ -157,16 +199,17 @@ La comprobación del HTML debe confirmar en Contacto y Diagnóstico:
 El valor público de Turnstile puede aparecer en el HTML; ninguna clave privada puede aparecer en
 la imagen, el HTML, los logs o el repositorio.
 
-## Pruebas funcionales permitidas
+## Pruebas funcionales ejecutadas
 
-No se enviaron solicitudes al Worker ni a Resend. Una prueba desde `localhost` no sería una prueba
-válida de Turnstile porque el Worker está restringido a `https://prueba.sokatechnologies.com`.
+No se enviaron solicitudes al Worker ni a Resend. Una prueba desde `localhost` no es una prueba de
+aceptación real de Turnstile porque el Worker está restringido a `https://prueba.sokatechnologies.com`;
+la validación realizada fue exclusivamente del frontend mediante mocks.
 
 Las 26 pruebas existentes del Worker cubren validación de campos, consentimiento, honeypot, origen,
 Turnstile, rate limit, reintentos, idempotencia, errores del proveedor y respuestas controladas.
 
-Las pruebas Chromium live con mocks quedan pendientes de la Site Key y del HTML live. No se deben
-simular cambiando el modo demo ni usando una clave ficticia para declarar esa fase aprobada.
+Las pruebas Chromium live se ejecutaron sobre el HTML live con la Site Key autorizada durante la
+construcción local. No se usó una clave ficticia ni se permitió tráfico real.
 
 ## Runbook de activación futura — no ejecutado
 
@@ -175,8 +218,9 @@ simular cambiando el modo demo ni usando una clave ficticia para declarar esa fa
    procedimiento de consultas/reclamos están aprobados.
 3. Verificar con acceso de solo lectura la distribución actual de `soka-leads-worker`; Wrangler no
    está instalado en este equipo y esa verificación quedó pendiente.
-4. Construir la imagen live con los tres argumentos públicos y etiquetarla con el SHA.
-5. Inspeccionar el HTML y ejecutar el contenedor solo en `127.0.0.1:8094`.
+4. Construir, si se aprueba, una imagen Docker live con los tres argumentos públicos y etiquetarla
+   con el SHA; esta tarea no la construyó.
+5. Inspeccionar el HTML y ejecutar el candidato solo en `127.0.0.1:8094`.
 6. Ejecutar Chromium con mocks para respuestas 200, 400, 403, 429, 502 y 503, sin permitir tráfico
    hacia el Worker.
 7. Validar Contacto y Diagnóstico a 320, 390, 768 y 1440 px, teclado, reduced motion, consola,
@@ -201,14 +245,16 @@ tarea.
 
 ## Riesgos y decisión
 
-- **NO-GO para release live:** falta la Site Key pública autorizada.
+- **GO técnico condicionado a revisión del PR:** el release estático live y su frontend fueron
+  validados en SSD; no existe imagen Docker como resultado de esta tarea.
 - **NO-GO para activación pública:** no se aprobaron privacidad, consentimiento ni operación real.
 - **Pendiente:** instalar o habilitar Wrangler de forma autorizada para verificar la distribución
-  actual del Worker antes de cualquier activación.
-- **Pendiente:** repetir la matriz Chromium con HTML live y mocks una vez disponible la Site Key.
+  actual del Worker antes de cualquier activación; no se modificó la distribución.
+- **Pendiente:** decidir si la futura publicación aislada requiere una imagen Docker, sin reutilizar
+  el bind mount de staging.
 - **Sin secretos:** no se leyó, copió ni incluyó ninguna clave privada; el repositorio no recibió
   archivos `.env`.
 
-La recomendación para fusionar este PR es **NO-GO técnico hasta proporcionar la Site Key pública y
-completar las pruebas live aisladas**. La recomendación para cualquier activación pública permanece
-**NO-GO** incluso después de esas pruebas hasta recibir aprobación legal y expresa del fundador.
+La recomendación para revisión/fusión del alcance técnico es **GO**, sujeta a la revisión del PR.
+La recomendación para cualquier activación pública permanece **NO-GO** hasta recibir aprobación legal
+y expresa del fundador, además de pruebas reales controladas desde el hostname autorizado.
