@@ -143,7 +143,7 @@ CONSENT_EVIDENCE_MODE compartido: off
 - `@cloudflare/vitest-plugin` y Miniflare mantienen estado temporal efímero. Si se requiere conservar evidencia de laboratorio, debe hacerse mediante un procedimiento separado y nunca dentro de Git.
 - La suite no valida una entrega de correo: solo distingue las respuestas HTTP simuladas de Resend según la lógica existente.
 - El catálogo sigue identificando el aviso de privacidad como borrador. Esto mantiene el GO técnico local separado del GO jurídico y operativo.
-- `npm audit --omit=optional` reporta una vulnerabilidad moderada transitoria en `fast-uri` (`3.0.0–3.1.8`), con corrección disponible. No se ejecutó `npm audit fix` porque podría introducir cambios de dependencias ajenos a esta tarea; debe resolverse antes de usar esta suite en CI o producción.
+- `npm audit` reporta `0 vulnerabilities` después de fijar únicamente la dependencia transitoria `fast-uri` en `3.1.9` mediante un override raíz. `ajv` y las demás dependencias permanecen sin actualización masiva; no se ejecutó `npm audit fix`.
 
 ## Checklist GO/NO-GO
 
