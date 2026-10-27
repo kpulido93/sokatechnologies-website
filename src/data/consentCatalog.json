@@ -1,0 +1,21 @@
+{
+  "noticeVersion": "privacy-colombia-draft-v1",
+  "authorizations": [
+    {
+      "version": "contact-response-v1",
+      "version_date": "2026-10-26",
+      "formType": "contact",
+      "purpose": "contact_response",
+      "text": "Autorizo a SokaTechnologies a tratar los datos personales que envío en este formulario para atender mi solicitud de contacto y comunicarse conmigo sobre ella, de acuerdo con el aviso de privacidad publicado.",
+      "hash": "668ffea10aacd42a43107032a8c085b99ce68651b4f5d952d35fdd844bcc37f5"
+    },
+    {
+      "version": "diagnostico-response-v1",
+      "version_date": "2026-10-26",
+      "formType": "diagnostico",
+      "purpose": "diagnostic_response",
+      "text": "Autorizo a SokaTechnologies a tratar los datos personales que envío en este formulario para revisar mi solicitud de diagnóstico, comunicarse conmigo sobre ella y orientar los próximos pasos, de acuerdo con el aviso de privacidad publicado.",
+      "hash": "c1e566b5e0c13a5274c20ec17a47f98c6d1a368563d9bd908f7b28cc5f076dd4"
+    }
+  ]
+}

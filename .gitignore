@@ -94,6 +94,9 @@ backup-*/
 *.rar
 *.7z
 
+# Migración declarativa del Worker; no es un dump ni contiene datos.
+!worker/0001_consent_evidence.sql
+
 # Dependencias y builds no esperados en este repo
 node_modules/
 dist/
