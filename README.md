@@ -89,6 +89,7 @@ Todo cambio en `public_html/` es local. Si una modificacion del tema debe conser
 - `docs/deployment-checklist.md`
 - `docs/consent-evidence.md`
 - `docs/d1-local-operations.md`
+- `docs/d1-native-runtime-tests.md`
 
 ## Child theme
 

@@ -2,6 +2,9 @@
   "name": "sokatechnologies-web-demo",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "fast-uri": "3.1.9"
+  },
   "engines": {
     "node": ">=22.22.0"
   },
@@ -11,7 +14,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test worker/test/*.test.mjs"
+    "test": "node --test worker/test/*.test.mjs",
+    "test:native-runtime": "vitest run --config vitest.native.config.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -20,7 +24,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@cloudflare/vitest-plugin": "^1.4.8",
+    "@msw/cloudflare": "^0.2.0",
     "@types/node": "^26.1.1",
-    "typescript": "^6.0.3"
+    "msw": "^3.0.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.12"
   }
 }
