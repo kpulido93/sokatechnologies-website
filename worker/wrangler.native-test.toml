@@ -1,0 +1,28 @@
+name = "soka-leads-native-runtime-test"
+main = "src/index.mjs"
+compatibility_date = "2026-10-20"
+send_metrics = false
+
+[vars]
+ALLOWED_ORIGINS = "https://prueba.sokatechnologies.com"
+TURNSTILE_EXPECTED_HOSTNAME = "prueba.sokatechnologies.com"
+TURNSTILE_EXPECTED_ACTION = "lead"
+TURNSTILE_SECRET_KEY = "synthetic-turnstile-secret"
+CONSENT_EVIDENCE_MODE = "required"
+CONSENT_EVIDENCE_HMAC_KEY = "synthetic-native-runtime-hmac-key"
+RESEND_API_KEY = "synthetic-resend-api-key"
+RESEND_FROM_EMAIL = "SokaTechnologies <no-reply@example.invalid>"
+LEADS_TO_EMAIL = "info@sokatechnologies.com"
+
+[[d1_databases]]
+binding = "CONSENT_DB"
+database_name = "soka-consent-evidence-native-runtime-test"
+migrations_dir = "."
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "9001"
+
+  [ratelimits.simple]
+  limit = 100
+  period = 60
