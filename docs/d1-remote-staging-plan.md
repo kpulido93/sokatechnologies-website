@@ -250,23 +250,23 @@ database_id = "<D1_DATABASE_ID_STAGING>"
 migrations_dir = "."
 ```
 
-La configuración anterior es ilustrativa y no debe guardarse como archivo operativo sin revisión. El Worker de staging debe tener un control de destinatario que no admita el buzón comercial, o un `fetch` de Resend simulado que falle si intenta salir. No se debe copiar el código actual como si el destinatario fijo fuera configurable.
+La configuración anterior es ilustrativa y no debe guardarse como archivo operativo sin revisión. Antes de ejecutar comandos remotos se debe aprobar un **archivo Wrangler separado** para el Worker de pruebas (`<STAGING_CONFIG_PATH>`), con nombre, cuenta y binding revisados. **Toda migración, actualización de secreto o despliegue de staging debe especificar `--config <STAGING_CONFIG_PATH>`**: invocar Wrangler desde una ruta distinta puede seleccionar el Worker equivocado. El flag `--env staging` solo se utilizará si en ese archivo existe un bloque `env.staging` aprobado; tener un Worker separado llamado staging no equivale a definir ese entorno. El Worker de staging debe tener un control de destinatario que no admita el buzón comercial, o un `fetch` de Resend simulado que falle si intenta salir. No se debe copiar el código actual como si el destinatario fijo fuera configurable.
 
 ### Fase C — Aplicar y verificar migración
 
 **NO EJECUTAR SIN AUTORIZACIÓN EXPLÍCITA.** Aplicar una migración remota cambia datos y esquema.
 
 ```bash
-npx wrangler d1 migrations list <STAGING_DB_NAME> --remote
-npx wrangler d1 migrations apply <STAGING_DB_NAME> --remote
-npx wrangler d1 execute <STAGING_DB_NAME> --remote --command "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'consent_evidence'"
-npx wrangler d1 execute <STAGING_DB_NAME> --remote --command "PRAGMA index_list('consent_evidence')"
+npx wrangler d1 migrations list <STAGING_DB_NAME> --config <STAGING_CONFIG_PATH> --remote
+npx wrangler d1 migrations apply <STAGING_DB_NAME> --config <STAGING_CONFIG_PATH> --remote
+npx wrangler d1 execute <STAGING_DB_NAME> --config <STAGING_CONFIG_PATH> --remote --command "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'consent_evidence'"
+npx wrangler d1 execute <STAGING_DB_NAME> --config <STAGING_CONFIG_PATH> --remote --command "PRAGMA index_list('consent_evidence')"
 ```
 
 Controles obligatorios:
 
 - Revisar que el nombre usado sea el de la base de staging y no el binding o recurso actual por accidente.
-- Confirmar `consent_evidence`, clave primaria, `UNIQUE` de `request_id` e `idempotency_key_hash`, `CHECK` de estados e índice de consulta.
+- Confirmar `consent_evidence`, clave primaria, `UNIQUE` de `request_id` e `idempotency_key_hash`, `CHECK` de estados e índice de consulta. Antes de aplicar la migración, comprobar que el `migrations_dir` de la configuración exclusiva de staging apunta a `worker/0001_consent_evidence.sql` y que no hay migraciones de otros ambientes.
 - Insertar solo un registro sintético de prueba y eliminarlo mediante el procedimiento aprobado; no cargar leads reales.
 - Guardar salida sanitizada y el hash de la migración, nunca payloads personales.
 
@@ -275,9 +275,9 @@ Controles obligatorios:
 **NO EJECUTAR SIN AUTORIZACIÓN EXPLÍCITA.** Estos comandos escriben secretos remotos.
 
 ```bash
-npx wrangler secret put CONSENT_EVIDENCE_HMAC_KEY --env staging
-npx wrangler secret put TURNSTILE_SECRET_KEY --env staging
-npx wrangler secret put RESEND_API_KEY --env staging
+npx wrangler secret put CONSENT_EVIDENCE_HMAC_KEY --config <STAGING_CONFIG_PATH>
+npx wrangler secret put TURNSTILE_SECRET_KEY --config <STAGING_CONFIG_PATH>
+npx wrangler secret put RESEND_API_KEY --config <STAGING_CONFIG_PATH>
 ```
 
 Orden y requisitos:
