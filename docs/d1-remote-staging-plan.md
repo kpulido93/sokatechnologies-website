@@ -115,7 +115,7 @@ flowchart LR
 Controles de diseño:
 
 - **Límite de cuenta:** el Worker y D1 se crean en la cuenta y ambiente autorizados, con nombres inequívocos de staging.
-- **Límite de tráfico:** no se añade ruta pública ni se cambia la distribución del Worker existente. El acceso de prueba debe ser privado o explícitamente restringido.
+- **Límite de tráfico:** no se añade ruta pública ni se cambia la distribución del Worker existente. **Un Worker recién desplegado puede quedar accesible por `workers.dev` aunque no se configure DNS ni una ruta personalizada**. El futuro despliegue debe deshabilitar `workers.dev` y las URL de preview/versiones cuando no exista un mecanismo de acceso aprobado, o proteger explícitamente cada punto de entrada con Cloudflare Access y una política verificada. Sin entrada HTTP autorizada no se ejecutan pruebas remotas por HTTP: antes debe aprobarse un canal privado, un hostname protegido o una estrategia de invocación controlada. Fuente: https://developers.cloudflare.com/workers/configuration/routing/workers-dev/.
 - **Límite de datos:** solo payloads sintéticos; ningún correo, teléfono, mensaje, IP, documento o dato de cliente real.
 - **Límite de correo:** por defecto el despacho debe ser un mock que falla si intenta salir. Si se aprueba un proveedor remoto, debe existir un sink de pruebas distinto y un control de destinatario que no permita el buzón comercial.
 - **Límite de administración:** las consultas por `request_id`, exportaciones, reconciliaciones y eliminaciones no deben exponerse como endpoints públicos.
@@ -138,7 +138,7 @@ Los nombres son ejemplos no reservados. No contienen identificadores de cuenta, 
 | Acceso | Access, allowlist u otro control aprobado | Restringir el origen y la administración. | Pendiente de diseño y plan. |
 | Observabilidad | Métricas y alertas del Worker/D1 | Detectar consumo, fallos y tráfico no esperado. | Pendiente de configuración. |
 
-No debe crearse un DNS público solo para facilitar pruebas. Si se requiere un hostname, debe aprobarse como parte del acceso restringido y no apuntar a la distribución pública actual.
+No debe crearse un DNS público solo para facilitar pruebas. Si se requiere un hostname, debe aprobarse como parte del acceso restringido y no apuntar a la distribución pública actual. **La ausencia de DNS personalizado no bloquea automáticamente `workers.dev` ni las URL de versión o previsualización**; todas deben quedar deshabilitadas o protegidas según la modalidad aprobada.
 
 ## 5. Permisos mínimos y separación de funciones
 
@@ -228,10 +228,12 @@ Después de la aprobación:
 
 **NO EJECUTAR SIN AUTORIZACIÓN EXPLÍCITA.** Crear o desplegar un Worker remoto es una mutación.
 
-La futura configuración debe ser independiente, conceptualmente equivalente a:
+La futura configuración debe ser independiente. El ejemplo siguiente deshabilita las rutas automáticas de `workers.dev` y las URL de preview/versiones; cualquier canal posterior de pruebas HTTP deberá diseñarse y aprobarse explícitamente antes del deploy:
 
 ```toml
 name = "<STAGING_WORKER_NAME>"
+workers_dev = false
+preview_urls = false
 main = "src/index.mjs"
 compatibility_date = "<FECHA_APROBADA>"
 
@@ -284,7 +286,7 @@ Orden y requisitos:
 2. Registrar solo el identificador de versión, fecha y responsable; nunca el valor.
 3. Usar una clave Turnstile asociada exclusivamente al origen de staging.
 4. No proporcionar una API key de Resend mientras el proveedor de pruebas no tenga un sink no comercial, límites y contrato revisados. La opción preferida para la primera batería es un mock que bloquee toda salida.
-5. Probar que falta de clave, clave incorrecta y proveedor no disponible producen fail-closed antes de guardar o enviar.
+5. Comprobar que **la ausencia de HMAC** bloquea la persistencia y el envío. Una clave HMAC no vacía, pero distinta de la aprobada, **no se puede identificar automáticamente en el primer evento** con el esquema actual: antes de desplegar, definir una verificación no reveladora de versión/identidad del secreto y continuidad histórica; probar conflictos ante reintentos con una clave distinta. Si el proveedor no está disponible, la evidencia puede haberse guardado y el resultado debe quedar en el estado técnico correspondiente (`resend_uncertain` o rechazo definitivo), sin afirmar entrega ni reintentar de forma insegura.
 
 ### Fase E — Pruebas sintéticas y control de tráfico
 
@@ -402,7 +404,7 @@ Un rollback técnico nunca autoriza eliminar evidencia real, omitir una solicitu
 | D1 creado en cuenta o ambiente equivocado | Datos fuera del alcance aprobado. | Confirmar identidad de cuenta, registrar ID fuera de Git y doble aprobación. | Abierto. |
 | Resend llega al buzón comercial | Exposición o tratamiento no autorizado. | Mock por defecto, sink separado, allowlist de destinatario y bloqueo de la dirección comercial. | NO-GO. |
 | Se reutiliza HMAC | Huellas y continuidad mezcladas entre ambientes. | Generación y secreto separados; no compartir ni recalcular históricos. | Pendiente. |
-| Origen de staging queda público | Ingreso no autorizado y consumo. | Access/allowlist, origen único, rate limit separado, sin DNS público por defecto. | Pendiente. |
+| Origen de staging queda público | Ingreso no autorizado y consumo, incluso por `workers.dev` o URL de preview/versiones. | `workers_dev = false` y `preview_urls = false` por defecto; cualquier entrada de prueba posterior requiere Access/allowlist verificada, origen único y rate limit separado. | Pendiente. |
 | Time Travel se toma como backup permanente | Pérdida después de 7/30 días o restauración destructiva. | Retención corta, exportación controlada solo si se aprueba, procedimiento de restauración. | Documentado. |
 | Pruebas consumen límites | Fallos o costo inesperado. | Datos pequeños, índices, alertas, una base y limpieza. | Pendiente de métricas. |
 | Tratamiento real antes de aprobación | Riesgo jurídico y operativo. | Matriz GO/NO-GO, modo demo y ausencia de PII. | Activo. |
