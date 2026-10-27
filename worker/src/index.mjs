@@ -122,16 +122,22 @@ const leadRows = (lead) => [
   ["Descripción", lead.summary]
 ];
 
-const renderHtml = (lead) => {
+const renderHtml = (lead, requestId = "") => {
   const rows = leadRows(lead)
     .map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value).replaceAll("\n", "<br>")}</dd>`)
     .join("");
-  return `<h1>Nueva solicitud B2B</h1><dl>${rows}</dl>`;
+  const reference = requestId
+    ? `<p>Referencia interna de consentimiento: <code>${escapeHtml(requestId)}</code></p>`
+    : "";
+  return `<h1>Nueva solicitud B2B</h1>${reference}<dl>${rows}</dl>`;
 };
 
-const renderText = (lead) => leadRows(lead).map(([label, value]) => `${label}: ${value}`).join("\n");
+const renderText = (lead, requestId = "") => [
+  requestId ? `Referencia interna de consentimiento: ${requestId}` : "",
+  ...leadRows(lead).map(([label, value]) => `${label}: ${value}`)
+].filter(Boolean).join("\n");
 
-const sendLead = async (env, lead, idempotencyKey, fetchImpl) => {
+const sendLead = async (env, lead, idempotencyKey, fetchImpl, requestId = "") => {
   if (!hasEmailConfiguration(env)) throw new Error("email_not_configured");
 
   let response;
@@ -149,8 +155,8 @@ const sendLead = async (env, lead, idempotencyKey, fetchImpl) => {
         to: [APPROVED_RECIPIENT],
         reply_to: lead.email,
         subject: `Nueva solicitud ${lead.formType === "diagnostico" ? "de diagnóstico" : "de contacto"}`,
-        html: renderHtml(lead),
-        text: renderText(lead)
+        html: renderHtml(lead, requestId),
+        text: renderText(lead, requestId)
       })
     });
   } catch {
@@ -170,6 +176,8 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
   if (request.method === "OPTIONS") return corsResponse(origin, allowedOrigins);
   if (request.method !== "POST") return jsonResponse({ ok: false, error: "method_not_allowed" }, 405, origin, allowedOrigins);
   if (!isAllowedOrigin(origin, allowedOrigins)) return jsonResponse({ ok: false, error: "origin_not_allowed" }, 403, origin, allowedOrigins);
+  const consentMode = getConsentEvidenceMode(env);
+  if (consentMode === "invalid") return jsonResponse({ ok: false, error: "consent_mode_invalid" }, 503, origin, allowedOrigins);
 
   try {
     const idempotencyKey = parseIdempotencyKey(request.headers.get("Idempotency-Key"));
@@ -190,20 +198,51 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
     }
 
     let consentState = null;
-    if (getConsentEvidenceMode(env) === "required") {
+    if (consentMode === "required") {
       try {
         const store = createConsentEvidenceStore(env.CONSENT_DB);
-        const candidate = await buildConsentEvidence({ lead, idempotencyKey });
+        const candidate = await buildConsentEvidence({
+          lead,
+          idempotencyKey,
+          contentHmacKey: env.CONSENT_EVIDENCE_HMAC_KEY
+        });
         const existing = await store.findByIdempotencyKeyHash(candidate.idempotency_key_hash);
         if (existing && !isSameEvidenceScope(existing, candidate)) {
           throw new ConsentEvidenceError("idempotency_conflict", 409);
         }
 
         const result = existing ? { record: existing } : await store.recordEvidence(candidate);
-        consentState = { store, evidence: result.record };
+        if (!isSameEvidenceScope(result.record, candidate)) {
+          throw new ConsentEvidenceError("idempotency_conflict", 409);
+        }
+
         if (result.record.technical_status === "resend_accepted") {
           return jsonResponse({ ok: true, message: "Solicitud recibida" }, 200, origin, allowedOrigins);
         }
+        if (result.record.technical_status === "resend_uncertain") {
+          return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 503, origin, allowedOrigins);
+        }
+        if (result.record.technical_status === "resend_dispatching") {
+          return jsonResponse({ ok: false, error: "provider_processing" }, 202, origin, allowedOrigins);
+        }
+
+        const claim = await store.claimDispatch(result.record.request_id);
+        if (!isSameEvidenceScope(claim.record, candidate)) {
+          throw new ConsentEvidenceError("idempotency_conflict", 409);
+        }
+        if (!claim.claimed) {
+          if (claim.record.technical_status === "resend_accepted") {
+            return jsonResponse({ ok: true, message: "Solicitud recibida" }, 200, origin, allowedOrigins);
+          }
+          if (claim.record.technical_status === "resend_uncertain") {
+            return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 503, origin, allowedOrigins);
+          }
+          if (claim.record.technical_status === "resend_dispatching") {
+            return jsonResponse({ ok: false, error: "provider_processing" }, 202, origin, allowedOrigins);
+          }
+          throw new Error("consent_dispatch_not_claimed");
+        }
+        consentState = { store, evidence: claim.record };
       } catch (error) {
         if (error instanceof ConsentEvidenceError) {
           return jsonResponse({ ok: false, error: error.code }, error.status, origin, allowedOrigins);
@@ -213,12 +252,13 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
     }
 
     try {
-      await sendLead(env, lead, idempotencyKey, fetchImpl);
+      await sendLead(env, lead, idempotencyKey, fetchImpl, consentState?.evidence.request_id);
     } catch (error) {
       if (consentState) {
         const status = error instanceof EmailProviderUncertainError ? "resend_uncertain" : "resend_error";
         try {
-          await consentState.store.updateTechnicalStatus(consentState.evidence.request_id, status);
+          const result = await consentState.store.completeDispatch(consentState.evidence.request_id, status);
+          if (!result.updated) return jsonResponse({ ok: false, error: "consent_status_persist_failed" }, 503, origin, allowedOrigins);
         } catch {
           return jsonResponse({ ok: false, error: "consent_status_persist_failed" }, 503, origin, allowedOrigins);
         }
@@ -231,7 +271,8 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
 
     if (consentState) {
       try {
-        await consentState.store.updateTechnicalStatus(consentState.evidence.request_id, "resend_accepted");
+        const result = await consentState.store.completeDispatch(consentState.evidence.request_id, "resend_accepted");
+        if (!result.updated) return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 502, origin, allowedOrigins);
       } catch {
         return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 502, origin, allowedOrigins);
       }

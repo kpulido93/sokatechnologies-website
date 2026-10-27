@@ -19,6 +19,7 @@ const columns = [
   "notice_version",
   "authorization_version",
   "authorization_hash",
+  "content_fingerprint",
   "purpose",
   "accepted",
   "idempotency_key_hash",
@@ -28,10 +29,13 @@ const columns = [
 ];
 
 class MockD1Database {
-  constructor({ failInsert = false, failUpdate = false } = {}) {
+  constructor({ failInsert = false, failUpdate = false, failComplete = false, beforeInsert = null } = {}) {
     this.rows = [];
     this.failInsert = failInsert;
     this.failUpdate = failUpdate;
+    this.failComplete = failComplete;
+    this.beforeInsert = beforeInsert;
+    this.claimAttempts = 0;
   }
 
   prepare(sql) {
@@ -64,7 +68,8 @@ class MockD1Statement {
   async run() {
     if (this.sql.startsWith("INSERT")) {
       if (this.database.failInsert) throw new Error("mock_insert_failed");
-      const idempotencyKeyHash = this.values[9];
+      if (this.database.beforeInsert) await this.database.beforeInsert();
+      const idempotencyKeyHash = this.values[10];
       if (this.database.rows.some((row) => row.idempotency_key_hash === idempotencyKeyHash)) {
         return { meta: { changes: 0 } };
       }
@@ -74,8 +79,23 @@ class MockD1Statement {
 
     if (this.sql.startsWith("UPDATE")) {
       if (this.database.failUpdate) throw new Error("mock_update_failed");
+      if (this.sql.includes("SET technical_status = 'resend_dispatching'")) {
+        this.database.claimAttempts += 1;
+        const row = this.database.rows.find((candidate) => candidate.request_id === this.values[1]);
+        if (!row || !["evidence_recorded", "resend_error"].includes(row.technical_status)) return { meta: { changes: 0 } };
+        row.technical_status = "resend_dispatching";
+        row.updated_at = this.values[0];
+        return { meta: { changes: 1 } };
+      }
+
+      if (this.database.failComplete) throw new Error("mock_complete_failed");
       const row = this.database.rows.find((candidate) => candidate.request_id === this.values[2]);
       if (!row) return { meta: { changes: 0 } };
+      if (this.sql.includes("IN ('resend_dispatching', 'resend_uncertain')")) {
+        if (!["resend_dispatching", "resend_uncertain"].includes(row.technical_status)) return { meta: { changes: 0 } };
+      } else if (this.sql.includes("resend_dispatching") && row.technical_status !== "resend_dispatching") {
+        return { meta: { changes: 0 } };
+      }
       row.technical_status = this.values[0];
       row.updated_at = this.values[1];
       return { meta: { changes: 1 } };
@@ -113,6 +133,7 @@ const baseEnv = (database, mode = "required") => ({
   ALLOWED_ORIGINS: origin,
   CONSENT_EVIDENCE_MODE: mode,
   CONSENT_DB: database,
+  CONSENT_EVIDENCE_HMAC_KEY: "synthetic-consent-hmac-key",
   RATE_LIMITER: { limit: async () => ({ success: true }) },
   TURNSTILE_SECRET_KEY: "synthetic-turnstile-secret",
   TURNSTILE_EXPECTED_HOSTNAME: "prueba.sokatechnologies.com",
@@ -134,7 +155,7 @@ const request = (payload = validLead(), headers = {}) => new Request("https://le
   body: JSON.stringify(payload)
 });
 
-const provider = ({ resendStatuses = [200], turnstileSuccess = true, resendError = false, calls = [] } = {}) => {
+const provider = ({ resendStatuses = [200], turnstileSuccess = true, resendError = false, resendGate = null, calls = [] } = {}) => {
   let resendCall = 0;
   return async (url, init) => {
     calls.push({ url: String(url), init });
@@ -146,12 +167,44 @@ const provider = ({ resendStatuses = [200], turnstileSuccess = true, resendError
       }), { status: 200 });
     }
     if (resendError) throw new Error("synthetic_network_failure");
+    if (resendGate) await resendGate.promise;
     const status = resendStatuses[Math.min(resendCall++, resendStatuses.length - 1)];
     return new Response(status === 200 ? JSON.stringify({ id: "synthetic-email" }) : "rejected", { status });
   };
 };
 
 const resendCalls = (calls) => calls.filter((call) => call.url.includes("api.resend.com"));
+
+const createBarrier = (participants) => {
+  let arrived = 0;
+  let release;
+  const released = new Promise((resolve) => {
+    release = resolve;
+  });
+  return {
+    wait: async () => {
+      arrived += 1;
+      if (arrived === participants) release();
+      await released;
+    }
+  };
+};
+
+const createDeferred = () => {
+  let resolve;
+  const promise = new Promise((resolvePromise) => {
+    resolve = resolvePromise;
+  });
+  return { promise, resolve };
+};
+
+const waitFor = async (predicate) => {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    if (predicate()) return;
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+  throw new Error("test_condition_timeout");
+};
 
 test("catalog hashes match the exact authorization text", () => {
   for (const item of consentCatalog.authorizations) {
@@ -171,7 +224,12 @@ test("records valid consent before accepting the Resend result and stores no lea
   assert.equal(evidence.technical_status, "resend_accepted");
   assert.equal(evidence.purpose, "contact_response");
   assert.equal(resendCalls(calls).length, 1);
-  assert.equal(await createConsentEvidenceStore(database).findByRequestId(evidence.request_id).then((row) => row.event_id), evidence.event_id);
+  const stored = await createConsentEvidenceStore(database).findByRequestId(evidence.request_id);
+  assert.equal(stored.event_id, evidence.event_id);
+  assert.equal(stored.accepted, true);
+  const notification = JSON.parse(resendCalls(calls)[0].init.body);
+  assert.match(notification.text, new RegExp(evidence.request_id));
+  assert.equal(stored.request_id, evidence.request_id);
   assert.doesNotMatch(JSON.stringify(evidence), /Test Contact|Synthetic Company|test@example|Solicitud sintética|turnstile|203\.0\.113\.8/i);
 });
 
@@ -234,21 +292,83 @@ test("fails closed when consent storage is unavailable or cannot write", async (
     assert.equal((await response.json()).error, "consent_storage_error");
     assert.equal(resendCalls(calls).length, 0);
   });
+
+  await t.test("fingerprint key is required", async () => {
+    const calls = [];
+    const env = baseEnv(new MockD1Database());
+    delete env.CONSENT_EVIDENCE_HMAC_KEY;
+    const response = await handleRequest(request(), env, { fetchImpl: provider({ calls }) });
+    assert.equal(response.status, 503);
+    assert.equal((await response.json()).error, "consent_fingerprint_key_missing");
+    assert.equal(resendCalls(calls).length, 0);
+  });
 });
 
-test("stores one evidence event for concurrent identical requests", async () => {
+test("fails closed for an unknown evidence mode", async () => {
   const database = new MockD1Database();
   const calls = [];
-  const fetchImpl = provider({ calls });
-  const [first, second] = await Promise.all([
+  const response = await handleRequest(request(), baseEnv(database, "requierd"), { fetchImpl: provider({ calls }) });
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).error, "consent_mode_invalid");
+  assert.equal(database.rows.length, 0);
+  assert.equal(resendCalls(calls).length, 0);
+});
+
+test("stores one evidence event and gives one process the dispatch claim", async () => {
+  const insertBarrier = createBarrier(2);
+  const resendGate = createDeferred();
+  const database = new MockD1Database({ beforeInsert: insertBarrier.wait });
+  const calls = [];
+  const fetchImpl = provider({ calls, resendGate });
+  const responsesPromise = Promise.all([
     handleRequest(request(), baseEnv(database), { fetchImpl }),
     handleRequest(request(), baseEnv(database), { fetchImpl })
   ]);
 
-  assert.equal(first.status, 200);
-  assert.equal(second.status, 200);
+  await waitFor(() => database.claimAttempts === 2);
+  assert.equal(resendCalls(calls).length, 1);
+  resendGate.resolve();
+  const responses = await responsesPromise;
+
+  assert.deepEqual(responses.map((response) => response.status).sort(), [200, 202]);
   assert.equal(database.rows.length, 1);
   assert.equal(new Set(resendCalls(calls).map(({ init }) => init.headers["Idempotency-Key"])).size, 1);
+});
+
+test("rejects a same-key content change after the winning evidence is read back", async () => {
+  const database = new MockD1Database();
+  const calls = [];
+  const first = await handleRequest(request(), baseEnv(database), { fetchImpl: provider({ calls }) });
+  const changed = await handleRequest(
+    request({ ...validLead(), summary: "Otra solicitud sintética con contenido diferente para la misma clave." }),
+    baseEnv(database),
+    { fetchImpl: provider({ calls }) }
+  );
+
+  assert.equal(first.status, 200);
+  assert.equal(changed.status, 409);
+  assert.equal((await changed.json()).error, "idempotency_conflict");
+  assert.equal(database.rows.length, 1);
+  assert.equal(resendCalls(calls).length, 1);
+});
+
+test("rejects concurrent cross-form reuse without sending the losing request", async () => {
+  const insertBarrier = createBarrier(2);
+  const database = new MockD1Database({ beforeInsert: insertBarrier.wait });
+  const calls = [];
+  const fetchImpl = provider({ calls });
+  const [contact, diagnostico] = await Promise.all([
+    handleRequest(request(validLead("contact")), baseEnv(database), { fetchImpl }),
+    handleRequest(
+      request(validLead("diagnostico"), { "Idempotency-Key": "synthetic-idempotency-key" }),
+      baseEnv(database),
+      { fetchImpl }
+    )
+  ]);
+
+  assert.deepEqual([contact.status, diagnostico.status].sort(), [200, 409]);
+  assert.equal(database.rows.length, 1);
+  assert.equal(resendCalls(calls).length, 1);
 });
 
 test("retries a Resend error with the same evidence and idempotency reference", async () => {
@@ -271,17 +391,55 @@ test("retries a Resend error with the same evidence and idempotency reference", 
   assert.equal(database.rows[0].technical_status, "resend_accepted");
 });
 
-test("marks an uncertain Resend result without claiming success", async () => {
+test("blocks automatic retries after uncertainty and allows only explicit reconciliation", async () => {
   const database = new MockD1Database();
   const calls = [];
-  const response = await handleRequest(request(), baseEnv(database), {
+  const first = await handleRequest(request(), baseEnv(database), {
     fetchImpl: provider({ calls, resendError: true })
   });
+  const automaticRetry = await handleRequest(request(), baseEnv(database), {
+    fetchImpl: provider({ calls })
+  });
+  const evidence = database.rows[0];
+  const store = createConsentEvidenceStore(database);
+  const reconciliation = await store.reconcilePending(evidence.request_id, "resend_error");
+  const recovered = await handleRequest(request(), baseEnv(database), {
+    fetchImpl: provider({ calls })
+  });
 
-  assert.equal(response.status, 502);
-  assert.equal((await response.json()).error, "provider_result_uncertain");
+  assert.equal(first.status, 502);
+  assert.equal((await first.json()).error, "provider_result_uncertain");
+  assert.equal(automaticRetry.status, 503);
+  assert.equal((await automaticRetry.json()).error, "provider_result_uncertain");
+  assert.equal(reconciliation.updated, true);
+  assert.equal(recovered.status, 200);
   assert.equal(database.rows.length, 1);
-  assert.equal(database.rows[0].technical_status, "resend_uncertain");
+  assert.equal(database.rows[0].technical_status, "resend_accepted");
+  assert.equal(resendCalls(calls).length, 2);
+});
+
+test("does not reopen dispatch after the accepted status write is lost", async () => {
+  const database = new MockD1Database({ failComplete: true });
+  const calls = [];
+  const first = await handleRequest(request(), baseEnv(database), { fetchImpl: provider({ calls }) });
+  const retry = await handleRequest(request(), baseEnv(database), { fetchImpl: provider({ calls }) });
+
+  assert.equal(first.status, 502);
+  assert.equal((await first.json()).error, "provider_result_uncertain");
+  assert.equal(retry.status, 202);
+  assert.equal((await retry.json()).error, "provider_processing");
+  assert.equal(database.rows[0].technical_status, "resend_dispatching");
+  assert.equal(resendCalls(calls).length, 1);
+
+  database.failComplete = false;
+  const reconciliation = await createConsentEvidenceStore(database).reconcilePending(
+    database.rows[0].request_id,
+    "resend_accepted"
+  );
+  const recovered = await handleRequest(request(), baseEnv(database), { fetchImpl: provider({ calls }) });
+  assert.equal(reconciliation.updated, true);
+  assert.equal(recovered.status, 200);
+  assert.equal(resendCalls(calls).length, 1);
 });
 
 test("keeps demo mode from invoking the submission endpoint", async () => {

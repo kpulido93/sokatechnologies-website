@@ -19,7 +19,8 @@ Contacto/Diagnóstico
               └── modo required:
                     Turnstile válido
                     → registra evidencia mínima en D1
-                    → envía a Resend
+                    → reclama atómicamente el despacho
+                    → un único proceso envía a Resend
                     → actualiza estado técnico de la evidencia
 ```
 
@@ -30,7 +31,7 @@ Archivos principales:
 - `src/data/consentCatalog.json`: catálogo de autorizaciones y hashes.
 - `src/components/ContactForm.astro`: muestra la autorización y envía sus metadatos.
 - `worker/src/consentCatalog.mjs`: lectura del catálogo desde el Worker.
-- `worker/src/consentEvidence.mjs`: validación, hash de idempotencia y adaptador D1.
+- `worker/src/consentEvidence.mjs`: validación, huellas de idempotencia y adaptador D1.
 - `worker/0001_consent_evidence.sql`: esquema SQL versionado; no se ejecuta automáticamente.
 - `worker/src/index.mjs`: flujo de persistencia, Resend y estados técnicos.
 
@@ -54,6 +55,8 @@ En modo `required`, el Worker acepta una autorización solo cuando coinciden tod
 
 La finalidad del evento se deriva del catálogo, no de un campo enviado por el navegador. No existe un checkbox ni una finalidad de marketing activa.
 
+`privacy-colombia-draft-v1` identifica el aviso provisional que hoy se muestra, por lo que el modo `required` no debe activarse con este catálogo. Antes de cualquier activación, el catálogo y la página deben cambiar juntos a una versión inmutable del aviso jurídicamente aprobada y realmente mostrada al titular; `notice_version` debe conservar esa referencia junto con el hash de autorización.
+
 ## 3. Evento mínimo
 
 En modo `required`, el Worker genera la evidencia después de validar el formulario y Turnstile, antes de llamar a Resend:
@@ -67,10 +70,11 @@ En modo `required`, el Worker genera la evidencia después de validar el formula
 | `notice_version` | Versión del aviso validada contra el catálogo. |
 | `authorization_version` | Versión de autorización validada contra el catálogo. |
 | `authorization_hash` | SHA-256 del texto definido en el catálogo. |
+| `content_fingerprint` | HMAC-SHA-256 del contenido normalizado de la solicitud; no contiene PII en claro y excluye Turnstile. |
 | `purpose` | Finalidad derivada: `contact_response` o `diagnostic_response`. |
 | `accepted` | Siempre `true` para una fila creada; la ausencia de consentimiento no crea evidencia. |
 | `idempotency_key_hash` | SHA-256 de `Idempotency-Key`; nunca se guarda la clave original. |
-| `technical_status` | `evidence_recorded`, `resend_accepted`, `resend_error` o `resend_uncertain`. |
+| `technical_status` | `evidence_recorded`, `resend_dispatching`, `resend_accepted`, `resend_error` o `resend_uncertain`. |
 | `created_at`, `updated_at` | Marcas técnicas para seguimiento interno. |
 
 No se guardan nombre, empresa, correo, teléfono, descripción, mensaje completo, token Turnstile, IP, user-agent, documento de identidad ni secretos.
@@ -82,6 +86,7 @@ No se guardan nombre, empresa, correo, teléfono, descripción, mensaje completo
 - `event_id` como clave primaria.
 - `request_id` e `idempotency_key_hash` únicos.
 - Restricciones para formularios, finalidades, consentimiento y estados válidos.
+- Huella HMAC de contenido para impedir reutilizar una clave con otra solicitud.
 - Índice para localizar una evidencia por `request_id`.
 
 `createConsentEvidenceStore()` usa la interfaz estándar de D1 (`prepare`, `bind`, `first`, `run`) y expone solo estas operaciones internas:
@@ -89,28 +94,35 @@ No se guardan nombre, empresa, correo, teléfono, descripción, mensaje completo
 - Buscar por hash de idempotencia.
 - Buscar por `request_id`.
 - Insertar una evidencia con `INSERT OR IGNORE`.
-- Actualizar el estado técnico.
+- Reclamar y completar el despacho con compare-and-set.
+- Reconciliar manualmente un estado incierto o un despacho atascado.
 
 No hay rutas HTTP de consulta, exportación ni eliminación. El adaptador solo puede ser utilizado por código interno del Worker o por una futura tarea autenticada y aprobada.
 
-No se añadió un binding D1 al `wrangler.toml` ni un `database_id`. Las pruebas usan `MockD1Database`; no se ejecutó una migración local ni remota.
+No se añadió un binding D1 al `wrangler.toml` ni un `database_id`. La suite usa `MockD1Database` y aplica la migración real en una base SQLite `:memory:` mediante la biblioteca estándar local de Python; no se ejecutó una migración remota.
 
 ## 5. Idempotencia y estados de Resend
 
-La clave recibida en `Idempotency-Key` se transforma en SHA-256 antes de persistirse. La restricción única evita crear dos eventos para la misma referencia.
+La clave recibida en `Idempotency-Key` se transforma en SHA-256 antes de persistirse. La solicitud normalizada se transforma en un HMAC-SHA-256 con `CONSENT_EVIDENCE_HMAC_KEY`; Turnstile, la clave original y valores temporales quedan fuera de la huella. La restricción única evita crear dos eventos para la misma referencia y la huella impide reutilizarla con contenido diferente.
 
 - Si la evidencia ya está en `resend_accepted`, un reintento válido no vuelve a llamar a Resend.
-- Si está en `evidence_recorded`, `resend_error` o `resend_uncertain`, el reintento puede continuar usando la misma clave de Resend.
-- Las solicitudes concurrentes pueden llegar a Resend con la misma clave, pero la tabla local conserva un solo evento y Resend recibe una referencia estable.
+- Si está en `evidence_recorded` o `resend_error`, una reclamación compare-and-set la pasa a `resend_dispatching`; solo quien obtiene esa reclamación puede llamar a Resend.
+- Si está en `resend_dispatching`, el proceso concurrente recibe `202 provider_processing` sin afirmar entrega.
+- Si está en `resend_uncertain`, no se reintenta automáticamente: el proceso devuelve error hasta una reconciliación interna documentada.
 - La protección local persiste más allá de la ventana de idempotencia de Resend de 24 horas.
 
 El Worker distingue:
 
 - `resend_accepted`: Resend aceptó la solicitud HTTP; no significa entrega confirmada al buzón.
 - `resend_error`: Resend respondió con error HTTP.
-- `resend_uncertain`: la llamada falló sin permitir conocer si Resend la aceptó, o el estado posterior no pudo persistirse.
+- `resend_uncertain`: la llamada falló sin permitir conocer si Resend la aceptó.
+- `resend_dispatching`: un proceso tiene el derecho exclusivo de despacho; también protege el caso en que no pudo guardarse el resultado final.
 
 En `resend_error` y `resend_uncertain` no se devuelve éxito al navegador.
+
+Un `request_id` generado por el servidor se incluye únicamente en la notificación interna enviada a `info@sokatechnologies.com`. No se devuelve al navegador ni se expone mediante una ruta pública. La consulta se realiza internamente en D1 con ese identificador.
+
+La única recuperación de `resend_uncertain` o `resend_dispatching` atascado es una reconciliación interna autenticada que confirme `resend_error` o `resend_accepted`. Solo el primer resultado permite un nuevo despacho explícito; nunca se reabre automáticamente un estado incierto.
 
 ## 6. Modos de ejecución
 
@@ -120,14 +132,15 @@ En `resend_error` y `resend_uncertain` no se devuelve éxito al navegador.
 CONSENT_EVIDENCE_MODE = "off"
 ```
 
-El Worker trata cualquier valor distinto de `required` como `off`. Para un futuro entorno obligatorio se necesitarán, como mínimo:
+El Worker acepta `off` o `required`; un valor desconocido, como `requierd`, devuelve `503 consent_mode_invalid` y nunca degrada a `off`. Para un futuro entorno obligatorio se necesitarán, como mínimo:
 
 ```text
 CONSENT_EVIDENCE_MODE=required
 CONSENT_DB=<binding D1 aprobado para ese entorno>
+CONSENT_EVIDENCE_HMAC_KEY=<secreto estable aprobado para ese entorno>
 ```
 
-Si el modo es `required` y el binding o la escritura no están disponibles, el Worker devuelve error antes de llamar a Resend. En modo `off` no escribe evidencia y conserva el comportamiento existente. El formulario demo corta antes de `fetch`, por lo que no escribe ni envía.
+Si el modo es `required` y el binding, la clave HMAC o la escritura no están disponibles, el Worker devuelve error antes de llamar a Resend. En modo `off` no escribe evidencia y conserva el comportamiento existente. El formulario demo corta antes de `fetch`, por lo que no escribe ni envía.
 
 ## 7. Consulta, supresión y revocación
 
@@ -162,9 +175,14 @@ Las pruebas de `worker/test/consent-evidence.test.mjs` cubren:
 - Versión desconocida y hash alterado.
 - Turnstile inválido.
 - D1 ausente y error de escritura.
-- Evento único ante concurrencia.
-- Reintento después de error de Resend.
+- Migración y restricciones en SQLite local en memoria.
+- Evento único ante concurrencia y una sola reclamación de despacho.
+- Conflicto por cambio de contenido y conflicto entre formularios.
+- Reintento explícito después de error de Resend.
+- Bloqueo ante resultado incierto y recuperación por reconciliación interna.
+- Modo desconocido rechazado de forma segura.
 - Consulta interna por `request_id`.
+- `request_id` presente en la notificación interna.
 - Ausencia de datos del lead en la evidencia.
 - Modo demo sin invocar el endpoint.
 
@@ -186,7 +204,8 @@ Estado de esta tarea: **NO-GO para tratamiento real**.
 [ ] Contratos y transferencias/transmisiones de proveedores revisados.
 [ ] Turnstile, rate limiting, honeypot, validación e Idempotency-Key probados en el entorno objetivo.
 [ ] Resend probado sin afirmar entrega al buzón.
-[ ] Evidencia persistida antes del envío y estados de error verificados.
+[ ] Evidencia persistida antes del envío, reclamación exclusiva y estados de error verificados.
+[ ] Clave HMAC estable y gestionada como secreto del entorno.
 [ ] Rollback probado y modo demo disponible.
 [ ] Aprobación explícita para habilitar el tratamiento real.
 ```
