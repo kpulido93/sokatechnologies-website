@@ -24,6 +24,28 @@ class EmailProviderRejectedError extends Error {}
 
 class EmailProviderUncertainError extends Error {}
 
+const readProviderErrorCode = async (response) => {
+  try {
+    const body = await response.clone().json();
+    return [body?.code, body?.name, body?.error?.code, body?.error?.name]
+      .find((value) => typeof value === "string")
+      ?.trim()
+      .toLowerCase() || "";
+  } catch {
+    return "";
+  }
+};
+
+export const classifyResendResponse = async (response) => {
+  if (response.ok) return "accepted";
+
+  const code = await readProviderErrorCode(response);
+  if (response.status >= 500) return "uncertain";
+  if (response.status === 409) return code === "invalid_idempotent_request" ? "rejected" : "uncertain";
+  if (response.status === 400 || response.status === 422) return "rejected";
+  return "uncertain";
+};
+
 const jsonResponse = (body, status, origin, allowedOrigins) => {
   const headers = new Headers({
     "Content-Type": "application/json; charset=utf-8",
@@ -163,7 +185,9 @@ const sendLead = async (env, lead, idempotencyKey, fetchImpl, requestId = "") =>
     throw new EmailProviderUncertainError("email_provider_uncertain");
   }
 
-  if (!response.ok) throw new EmailProviderRejectedError("email_provider_rejected");
+  const result = await classifyResendResponse(response);
+  if (result === "uncertain") throw new EmailProviderUncertainError("email_provider_uncertain");
+  if (result === "rejected") throw new EmailProviderRejectedError("email_provider_rejected");
 };
 
 export async function handleRequest(request, env = {}, dependencies = {}) {

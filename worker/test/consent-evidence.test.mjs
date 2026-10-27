@@ -155,7 +155,7 @@ const request = (payload = validLead(), headers = {}) => new Request("https://le
   body: JSON.stringify(payload)
 });
 
-const provider = ({ resendStatuses = [200], turnstileSuccess = true, resendError = false, resendGate = null, calls = [] } = {}) => {
+const provider = ({ resendStatuses = [200], resendErrorCodes = [], turnstileSuccess = true, resendError = false, resendGate = null, calls = [] } = {}) => {
   let resendCall = 0;
   return async (url, init) => {
     calls.push({ url: String(url), init });
@@ -168,8 +168,15 @@ const provider = ({ resendStatuses = [200], turnstileSuccess = true, resendError
     }
     if (resendError) throw new Error("synthetic_network_failure");
     if (resendGate) await resendGate.promise;
-    const status = resendStatuses[Math.min(resendCall++, resendStatuses.length - 1)];
-    return new Response(status === 200 ? JSON.stringify({ id: "synthetic-email" }) : "rejected", { status });
+    const callIndex = resendCall++;
+    const status = resendStatuses[Math.min(callIndex, resendStatuses.length - 1)];
+    const code = resendErrorCodes[callIndex];
+    const body = status >= 200 && status < 300
+      ? JSON.stringify({ id: "synthetic-email" })
+      : code
+        ? JSON.stringify({ name: code, code })
+        : "rejected";
+    return new Response(body, { status });
   };
 };
 
@@ -375,7 +382,7 @@ test("retries a Resend error with the same evidence and idempotency reference", 
   const database = new MockD1Database();
   const calls = [];
   const first = await handleRequest(request(), baseEnv(database), {
-    fetchImpl: provider({ calls, resendStatuses: [500, 200] })
+    fetchImpl: provider({ calls, resendStatuses: [422, 200] })
   });
   const eventId = database.rows[0].event_id;
   const retry = await handleRequest(
@@ -389,6 +396,73 @@ test("retries a Resend error with the same evidence and idempotency reference", 
   assert.equal(database.rows.length, 1);
   assert.equal(database.rows[0].event_id, eventId);
   assert.equal(database.rows[0].technical_status, "resend_accepted");
+});
+
+test("keeps ambiguous Resend responses uncertain and blocks automatic retries", async (t) => {
+  for (const [name, status, code] of [
+    ["HTTP 500", 500, ""],
+    ["HTTP 502", 502, ""],
+    ["HTTP 503", 503, ""],
+    ["concurrent idempotency conflict", 409, "concurrent_idempotent_requests"],
+    ["unknown conflict", 409, ""]
+  ]) {
+    await t.test(name, async () => {
+      const database = new MockD1Database();
+      const calls = [];
+      const first = await handleRequest(request(), baseEnv(database), {
+        fetchImpl: provider({ calls, resendStatuses: [status], resendErrorCodes: [code] })
+      });
+      const retry = await handleRequest(request(), baseEnv(database), {
+        fetchImpl: provider({ calls, resendStatuses: [200] })
+      });
+
+      assert.equal(first.status, 502);
+      assert.equal((await first.json()).error, "provider_result_uncertain");
+      assert.equal(database.rows[0].technical_status, "resend_uncertain");
+      assert.equal(retry.status, 503);
+      assert.equal((await retry.json()).error, "provider_result_uncertain");
+      assert.equal(resendCalls(calls).length, 1);
+    });
+  }
+});
+
+test("keeps definitive Resend rejections retryable only after an explicit request", async (t) => {
+  for (const [name, status, code] of [
+    ["HTTP 400", 400, ""],
+    ["HTTP 422", 422, ""],
+    ["invalid idempotency request", 409, "invalid_idempotent_request"]
+  ]) {
+    await t.test(name, async () => {
+      const database = new MockD1Database();
+      const calls = [];
+      const first = await handleRequest(request(), baseEnv(database), {
+        fetchImpl: provider({ calls, resendStatuses: [status], resendErrorCodes: [code] })
+      });
+      assert.equal(first.status, 502);
+      assert.equal((await first.json()).error, "provider_error");
+      assert.equal(database.rows[0].technical_status, "resend_error");
+      const retry = await handleRequest(request(), baseEnv(database), {
+        fetchImpl: provider({ calls, resendStatuses: [200] })
+      });
+
+      assert.equal(retry.status, 200);
+      assert.equal(database.rows[0].technical_status, "resend_accepted");
+      assert.equal(resendCalls(calls).length, 2);
+    });
+  }
+});
+
+test("accepts successful 200 and 201 Resend responses", async (t) => {
+  for (const status of [200, 201]) {
+    await t.test(String(status), async () => {
+      const database = new MockD1Database();
+      const response = await handleRequest(request(), baseEnv(database), {
+        fetchImpl: provider({ resendStatuses: [status] })
+      });
+      assert.equal(response.status, 200);
+      assert.equal(database.rows[0].technical_status, "resend_accepted");
+    });
+  }
 });
 
 test("blocks automatic retries after uncertainty and allows only explicit reconciliation", async () => {

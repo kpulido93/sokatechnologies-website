@@ -106,7 +106,7 @@ No se añadió un binding D1 al `wrangler.toml` ni un `database_id`. La suite us
 La clave recibida en `Idempotency-Key` se transforma en SHA-256 antes de persistirse. La solicitud normalizada se transforma en un HMAC-SHA-256 con `CONSENT_EVIDENCE_HMAC_KEY`; Turnstile, la clave original y valores temporales quedan fuera de la huella. La restricción única evita crear dos eventos para la misma referencia y la huella impide reutilizarla con contenido diferente.
 
 - Si la evidencia ya está en `resend_accepted`, un reintento válido no vuelve a llamar a Resend.
-- Si está en `evidence_recorded` o `resend_error`, una reclamación compare-and-set la pasa a `resend_dispatching`; solo quien obtiene esa reclamación puede llamar a Resend.
+- Si está en `evidence_recorded` o `resend_error`, una reclamación compare-and-set la pasa a `resend_dispatching`; solo quien obtiene esa reclamación puede llamar a Resend. `resend_error` se reserva para rechazos definitivos y un nuevo intento siempre requiere una solicitud explícita.
 - Si está en `resend_dispatching`, el proceso concurrente recibe `202 provider_processing` sin afirmar entrega.
 - Si está en `resend_uncertain`, no se reintenta automáticamente: el proceso devuelve error hasta una reconciliación interna documentada.
 - La protección local persiste más allá de la ventana de idempotencia de Resend de 24 horas.
@@ -114,11 +114,11 @@ La clave recibida en `Idempotency-Key` se transforma en SHA-256 antes de persist
 El Worker distingue:
 
 - `resend_accepted`: Resend aceptó la solicitud HTTP; no significa entrega confirmada al buzón.
-- `resend_error`: Resend respondió con error HTTP.
-- `resend_uncertain`: la llamada falló sin permitir conocer si Resend la aceptó.
+- `resend_error`: rechazo definitivo conocido, actualmente HTTP 400/422 o `409 invalid_idempotent_request`; no afirma entrega y solo permite un nuevo intento explícito.
+- `resend_uncertain`: HTTP 5xx, `409 concurrent_idempotent_requests`, 409 sin código reconocido, otro código no clasificable o una falla de red; puede existir un procesamiento en Resend y queda bloqueado hasta reconciliación.
 - `resend_dispatching`: un proceso tiene el derecho exclusivo de despacho; también protege el caso en que no pudo guardarse el resultado final.
 
-En `resend_error` y `resend_uncertain` no se devuelve éxito al navegador.
+En `resend_error` y `resend_uncertain` no se devuelve éxito al navegador. Las respuestas 2xx, incluyendo 200 y 201, pasan a `resend_accepted`; ese estado significa aceptación HTTP de Resend, no entrega confirmada al buzón.
 
 Un `request_id` generado por el servidor se incluye únicamente en la notificación interna enviada a `info@sokatechnologies.com`. No se devuelve al navegador ni se expone mediante una ruta pública. La consulta se realiza internamente en D1 con ese identificador.
 
