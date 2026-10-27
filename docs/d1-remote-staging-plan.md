@@ -266,7 +266,7 @@ npx wrangler d1 execute <STAGING_DB_NAME> --config <STAGING_CONFIG_PATH> --remot
 Controles obligatorios:
 
 - Revisar que el nombre usado sea el de la base de staging y no el binding o recurso actual por accidente.
-- Confirmar `consent_evidence`, clave primaria, `UNIQUE` de `request_id` e `idempotency_key_hash`, `CHECK` de estados e índice de consulta. Antes de aplicar la migración, comprobar que el `migrations_dir` de la configuración exclusiva de staging apunta a `worker/0001_consent_evidence.sql` y que no hay migraciones de otros ambientes.
+- Confirmar `consent_evidence`, clave primaria, `UNIQUE` de `request_id` e `idempotency_key_hash`, `CHECK` de estados e índice de consulta. **Antes** de aplicar: comprobar que `migrations_dir` apunta al **directorio que contiene** `0001_consent_evidence.sql` (por ejemplo `migrations_dir = "."` cuando el archivo de configuración aislado está en `worker/`), **no al archivo SQL**; resolver la ruta respecto de la ubicación efectiva del Wrangler de staging. Revisar con `d1 migrations list ... --config <STAGING_CONFIG_PATH> --remote` que los archivos descubiertos son exclusivamente las migraciones aprobadas y no incluyen las de otros ambientes. Documentación: https://developers.cloudflare.com/d1/reference/migrations/.
 - Insertar solo un registro sintético de prueba y eliminarlo mediante el procedimiento aprobado; no cargar leads reales.
 - Guardar salida sanitizada y el hash de la migración, nunca payloads personales.
 
