@@ -54,6 +54,9 @@ export function normalizeLead(input) {
   const problemType = text(input.problemType, 30);
   const summary = text(input.summary, 1200);
   const formContext = text(input.formContext, 120);
+  const noticeVersion = text(input.noticeVersion, 80);
+  const authorizationVersion = text(input.authorizationVersion, 80);
+  const authorizationHash = text(input.authorizationHash, 128);
   const website = text(input.website, 120);
   const turnstileToken = text(input.turnstileToken || input["cf-turnstile-response"], 2048);
 
@@ -76,6 +79,10 @@ export function normalizeLead(input) {
     service,
     problemType,
     summary,
+    noticeVersion,
+    authorizationVersion,
+    authorizationHash,
+    consent: true,
     turnstileToken
   });
 }

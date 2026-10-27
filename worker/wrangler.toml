@@ -6,6 +6,7 @@ compatibility_date = "2026-10-20"
 ALLOWED_ORIGINS = "https://prueba.sokatechnologies.com"
 TURNSTILE_EXPECTED_HOSTNAME = "prueba.sokatechnologies.com"
 TURNSTILE_EXPECTED_ACTION = "lead"
+CONSENT_EVIDENCE_MODE = "off"
 
 [[ratelimits]]
 name = "RATE_LIMITER"

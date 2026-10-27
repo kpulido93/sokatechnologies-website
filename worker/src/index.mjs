@@ -8,10 +8,21 @@ import {
   parseIdempotencyKey,
   parseRequestBody
 } from "./validation.mjs";
+import {
+  ConsentEvidenceError,
+  buildConsentEvidence,
+  createConsentEvidenceStore,
+  getConsentEvidenceMode,
+  isSameEvidenceScope
+} from "./consentEvidence.mjs";
 
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const RESEND_URL = "https://api.resend.com/emails";
 const APPROVED_RECIPIENT = "info@sokatechnologies.com";
+
+class EmailProviderRejectedError extends Error {}
+
+class EmailProviderUncertainError extends Error {}
 
 const jsonResponse = (body, status, origin, allowedOrigins) => {
   const headers = new Headers({
@@ -123,25 +134,30 @@ const renderText = (lead) => leadRows(lead).map(([label, value]) => `${label}: $
 const sendLead = async (env, lead, idempotencyKey, fetchImpl) => {
   if (!hasEmailConfiguration(env)) throw new Error("email_not_configured");
 
-  const response = await fetchImpl(RESEND_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "Idempotency-Key": idempotencyKey
-    },
-    body: JSON.stringify({
-      from: env.RESEND_FROM_EMAIL,
-      to: [APPROVED_RECIPIENT],
-      reply_to: lead.email,
-      subject: `Nueva solicitud ${lead.formType === "diagnostico" ? "de diagnóstico" : "de contacto"}`,
-      html: renderHtml(lead),
-      text: renderText(lead)
-    })
-  });
+  let response;
+  try {
+    response = await fetchImpl(RESEND_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Idempotency-Key": idempotencyKey
+      },
+      body: JSON.stringify({
+        from: env.RESEND_FROM_EMAIL,
+        to: [APPROVED_RECIPIENT],
+        reply_to: lead.email,
+        subject: `Nueva solicitud ${lead.formType === "diagnostico" ? "de diagnóstico" : "de contacto"}`,
+        html: renderHtml(lead),
+        text: renderText(lead)
+      })
+    });
+  } catch {
+    throw new EmailProviderUncertainError("email_provider_uncertain");
+  }
 
-  if (!response.ok) throw new Error("email_provider_rejected");
+  if (!response.ok) throw new EmailProviderRejectedError("email_provider_rejected");
 };
 
 export async function handleRequest(request, env = {}, dependencies = {}) {
@@ -173,10 +189,58 @@ export async function handleRequest(request, env = {}, dependencies = {}) {
       return jsonResponse({ ok: false, error: "turnstile_invalid" }, 403, origin, allowedOrigins);
     }
 
-    await sendLead(env, lead, idempotencyKey, fetchImpl);
+    let consentState = null;
+    if (getConsentEvidenceMode(env) === "required") {
+      try {
+        const store = createConsentEvidenceStore(env.CONSENT_DB);
+        const candidate = await buildConsentEvidence({ lead, idempotencyKey });
+        const existing = await store.findByIdempotencyKeyHash(candidate.idempotency_key_hash);
+        if (existing && !isSameEvidenceScope(existing, candidate)) {
+          throw new ConsentEvidenceError("idempotency_conflict", 409);
+        }
+
+        const result = existing ? { record: existing } : await store.recordEvidence(candidate);
+        consentState = { store, evidence: result.record };
+        if (result.record.technical_status === "resend_accepted") {
+          return jsonResponse({ ok: true, message: "Solicitud recibida" }, 200, origin, allowedOrigins);
+        }
+      } catch (error) {
+        if (error instanceof ConsentEvidenceError) {
+          return jsonResponse({ ok: false, error: error.code }, error.status, origin, allowedOrigins);
+        }
+        return jsonResponse({ ok: false, error: "consent_storage_error" }, 503, origin, allowedOrigins);
+      }
+    }
+
+    try {
+      await sendLead(env, lead, idempotencyKey, fetchImpl);
+    } catch (error) {
+      if (consentState) {
+        const status = error instanceof EmailProviderUncertainError ? "resend_uncertain" : "resend_error";
+        try {
+          await consentState.store.updateTechnicalStatus(consentState.evidence.request_id, status);
+        } catch {
+          return jsonResponse({ ok: false, error: "consent_status_persist_failed" }, 503, origin, allowedOrigins);
+        }
+        if (error instanceof EmailProviderUncertainError) {
+          return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 502, origin, allowedOrigins);
+        }
+      }
+      throw error;
+    }
+
+    if (consentState) {
+      try {
+        await consentState.store.updateTechnicalStatus(consentState.evidence.request_id, "resend_accepted");
+      } catch {
+        return jsonResponse({ ok: false, error: "provider_result_uncertain" }, 502, origin, allowedOrigins);
+      }
+    }
+
     return jsonResponse({ ok: true, message: "Solicitud recibida" }, 200, origin, allowedOrigins);
   } catch (error) {
     if (error instanceof InputError) return jsonResponse({ ok: false, error: error.code }, error.status, origin, allowedOrigins);
+    if (error instanceof ConsentEvidenceError) return jsonResponse({ ok: false, error: error.code }, error.status, origin, allowedOrigins);
     if (error instanceof Error && error.message === "email_not_configured") {
       return jsonResponse({ ok: false, error: "email_not_configured" }, 503, origin, allowedOrigins);
     }
