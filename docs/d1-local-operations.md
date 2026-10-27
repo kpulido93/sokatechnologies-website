@@ -4,7 +4,7 @@
 
 **Alcance:** preparar y verificar el almacenamiento de `consent_evidence` con Wrangler/D1 local, sin crear una base D1 remota, desplegar el Worker ni enviar correos reales.
 
-Documentación relacionada: [`docs/consent-evidence.md`](./consent-evidence.md), [`05_Gestion_Datos_Personales.md`](https://github.com/kpulido93/sokatechnologies-docs/blob/main/docs/procesos/05_Gestion_Datos_Personales.md) y [`06_Cierre_Privacidad_Leads_Colombia.md`](https://github.com/kpulido93/sokatechnologies-docs/blob/codex/tarea-04b6c-cierre-privacidad/docs/procesos/06_Cierre_Privacidad_Leads_Colombia.md).
+Documentación relacionada: [`docs/consent-evidence.md`](./consent-evidence.md), [`05_Gestion_Datos_Personales.md`](https://github.com/kpulido93/sokatechnologies-docs/blob/main/docs/procesos/05_Gestion_Datos_Personales.md) y [`06_Cierre_Privacidad_Leads_Colombia.md`](https://github.com/kpulido93/sokatechnologies-docs/blob/main/docs/procesos/06_Cierre_Privacidad_Leads_Colombia.md).
 
 ## 1. Arquitectura y aislamiento
 
@@ -14,7 +14,7 @@ worker/wrangler.local.toml
                               └── SQLite persistente en SSD
 
 scripts/d1-local-integration.mjs
-        ├── usa el adaptador D1 real contra ese SQLite local
+        ├── ejecuta la lógica del Worker con un adaptador D1 local compatible
         ├── simula Turnstile y Resend en memoria
         └── consulta por request_id y reabre la base para comprobar persistencia
 ```
@@ -23,7 +23,8 @@ Archivos versionados de esta preparación:
 
 - `worker/wrangler.local.toml`: configuración local aislada. Solo declara el binding `CONSENT_DB`, `database_name` local y `migrations_dir`; no contiene `database_id`.
 - `worker/0001_consent_evidence.sql`: migración existente, aplicada con `--local`.
-- `scripts/d1-local-integration.mjs`: prueba de integración contra el SQLite que Wrangler crea para D1 local. Usa datos sintéticos y proveedores simulados.
+- `scripts/d1-local-integration.mjs`: prueba de integración de la lógica del Worker contra el archivo SQLite persistente que Wrangler crea para D1 local. Usa datos sintéticos y proveedores simulados.
+- `scripts/request-id-validation.test.sh`: prueba de la validación completa de UUID v4, incluidos intentos de inyección SQL.
 - `docs/d1-local-operations.md`: este procedimiento.
 
 El worktree y la persistencia de esta tarea se ubicaron en:
@@ -131,7 +132,7 @@ La migración define:
 - Restricciones `CHECK` para formularios, finalidades, consentimiento y estados.
 - Índice de consulta por `request_id`.
 
-La prueba `scripts/d1-local-integration.mjs` inserta una evidencia sintética mediante el Worker, simula aceptación HTTP 200 de Resend, consulta el evento por el hash de idempotencia, confirma que la notificación contiene el `request_id`, reintenta la misma solicitud sin una segunda llamada a Resend y reabre la base para comprobar persistencia.
+La prueba `scripts/d1-local-integration.mjs` inserta una evidencia sintética mediante la lógica del Worker, simula aceptación HTTP 200 de Resend, consulta el evento por el hash de idempotencia, confirma que la notificación contiene el `request_id`, reintenta la misma solicitud sin una segunda llamada a Resend y reabre la base para comprobar persistencia. Cada ejecución genera claves de idempotencia sintéticas únicas; no borra la tabla global.
 
 Ejecutarla así:
 
@@ -140,9 +141,22 @@ D1_LOCAL_HMAC_KEY="$(node -e 'console.log(require("node:crypto").randomBytes(32)
   D1_LOCAL_PERSIST_PATH="$STATE_ROOT" node scripts/d1-local-integration.mjs
 ```
 
-La prueba también ejercita sobre el D1 persistente las transiciones `evidence_recorded → resend_dispatching → resend_uncertain`, bloquea una reclamación automática, reconcilia a `resend_error` y comprueba que solo después de la reconciliación vuelve a ser reclamable. Todos los valores son sintéticos.
+Ejecutar el mismo comando una segunda vez sin borrar `STATE_ROOT`. La salida debe mostrar un aumento de dos filas por ejecución: una evidencia aceptada y otra usada para probar la reconciliación. Las filas de la ejecución anterior deben permanecer y sus claves de idempotencia no deben reutilizarse.
 
-## 5. Consulta interna por `request_id`
+La prueba también ejercita sobre el SQLite persistente las transiciones `evidence_recorded → resend_dispatching → resend_uncertain`, bloquea una reclamación automática, reconcilia a `resend_error` y comprueba que solo después de la reconciliación vuelve a ser reclamable. Todos los valores son sintéticos.
+
+## 5. Fidelidad y límites del entorno local
+
+Hay dos niveles distintos de validación:
+
+- `wrangler d1 execute --local --persist-to "$STATE_ROOT"` crea y conserva el archivo SQLite local de D1 y aplica la migración real.
+- `scripts/d1-local-integration.mjs` abre ese archivo con `node:sqlite` y le proporciona al Worker un adaptador con la interfaz D1 mínima (`prepare`, `bind`, `first`, `run`). Esto prueba la persistencia SQLite creada por Wrangler, las consultas, restricciones y transiciones del almacenamiento, además de la lógica del Worker con Turnstile/Resend simulados.
+
+Esta integración no ejecuta el Worker dentro del runtime de `wrangler dev` ni prueba el binding nativo `env.CONSENT_DB` en una solicitud HTTP del runtime. El directorio `state/v3/d1/miniflare-D1DatabaseObject/` y el archivo SQLite interno son detalles de implementación de Wrangler `4.153.0`; pueden cambiar al actualizar Wrangler. Si cambia la estructura, la prueba debe fallar de forma visible y el adaptador debe revisarse antes de continuar.
+
+Una prueba futura del binding nativo podría levantar `wrangler dev --local` con interceptores locales para Turnstile y Resend, pero no se incorpora aquí: requeriría mantener un proceso HTTP adicional y un punto de inyección de proveedores aprobado, sin aportar cobertura necesaria para la preparación local actual.
+
+## 6. Consulta interna por `request_id`
 
 La consulta es administrativa, local y de acceso restringido. No existe un endpoint HTTP público para leer, exportar o borrar evidencias.
 
@@ -153,10 +167,10 @@ La consulta es administrativa, local y de acceso restringido. No existe un endpo
 ```bash
 REQUEST_ID='[request-id-uuid]'
 
-case "$REQUEST_ID" in
-  [0-9a-fA-F-][0-9a-fA-F-]*) ;;
-  *) echo "request_id inválido" >&2; exit 1 ;;
-esac
+if [[ ! "$REQUEST_ID" =~ ^[[:xdigit:]]{8}-[[:xdigit:]]{4}-4[[:xdigit:]]{3}-[89aAbB][[:xdigit:]]{3}-[[:xdigit:]]{12}$ ]]; then
+  echo "request_id inválido" >&2
+  exit 1
+fi
 
 NPM_CONFIG_CACHE="$NPM_CACHE" npx --yes wrangler@4.153.0 d1 execute CONSENT_DB \
   --config worker/wrangler.local.toml \
@@ -168,7 +182,15 @@ NPM_CONFIG_CACHE="$NPM_CACHE" npx --yes wrangler@4.153.0 d1 execute CONSENT_DB \
 
 El ejemplo usa un marcador y no una evidencia real. En una operación futura, el fundador debe ejecutar la consulta desde una cuenta de sistema protegida, restringir permisos del directorio local y evitar guardar la salida en Git, HTML o logs compartidos.
 
-## 6. Estados inciertos y recuperación operativa
+Probar la validación antes de usar una consulta:
+
+```bash
+bash scripts/request-id-validation.test.sh
+```
+
+La prueba acepta únicamente un UUID v4 completo y rechaza vacío, formato incorrecto, espacios, otras versiones, variantes no permitidas y el intento sintético `aa' OR 1=1 --`. La validación ocurre antes de interpolar el identificador en el comando SQL; una futura herramienta administrativa deberá preferir parámetros enlazados.
+
+## 7. Estados inciertos y recuperación operativa
 
 No reenviar automáticamente cuando el registro esté en:
 
@@ -186,7 +208,7 @@ Procedimiento interno:
 
 La migración y el adaptador impiden que un `resend_uncertain` sea reclamado automáticamente. La reconciliación real debe contar con autenticación, autorización del fundador y revisión jurídica de retención/supresión antes de existir en una herramienta administrativa.
 
-## 7. HMAC y continuidad de evidencias
+## 8. HMAC y continuidad de evidencias
 
 La prueba local recibe una clave aleatoria sintética mediante `D1_LOCAL_HMAC_KEY` y solo la mantiene en memoria del proceso. No se guarda en Git, HTML, archivos de estado, logs ni resultados de prueba. La suite existente comprueba que la ausencia de `CONSENT_EVIDENCE_HMAC_KEY` bloquea `required` antes de persistir o enviar.
 
@@ -214,7 +236,7 @@ La rotación no debe reemplazar la clave histórica sin un plan. El esquema actu
 
 Nunca recalcular huellas históricas con otra clave ni borrar evidencias para ocultar una incompatibilidad. Una ausencia de clave en `required` debe seguir siendo un **NO-GO**.
 
-## 8. Respaldo y restauración local
+## 9. Respaldo y restauración local
 
 Los respaldos son datos potencialmente sensibles aunque esta validación use únicamente registros sintéticos. Guardarlos solo en SSD con permisos restringidos, fuera del repositorio y sin subirlos a Git.
 
@@ -241,9 +263,9 @@ NPM_CONFIG_CACHE="$NPM_CACHE" npx --yes wrangler@4.153.0 d1 execute CONSENT_DB \
   --json
 ```
 
-La prueba realizada restauró un estado con un registro sintético y obtuvo `row_count: 1` y `last_status: resend_accepted`. Una restauración de datos reales requiere autorización, control de acceso, validación de integridad y revisión jurídica; no se debe usar este procedimiento para sobrescribir producción.
+La prueba realizada restauró un estado con seis registros sintéticos y obtuvo `row_count: 6`, seis claves de idempotencia distintas y `last_status: resend_error`. Una restauración de datos reales requiere autorización, control de acceso, validación de integridad y revisión jurídica; no se debe usar este procedimiento para sobrescribir producción.
 
-## 9. Retención, supresión y revocación
+## 10. Retención, supresión y revocación
 
 Esta tarea no fija periodos ni ejecuta borrado automático. Para una futura solicitud:
 
@@ -256,7 +278,7 @@ Esta tarea no fija periodos ni ejecuta borrado automático. Para una futura soli
 
 No se implementa una ruta pública de eliminación ni se borra el estado local automáticamente. La limpieza de los datos sintéticos de laboratorio sí puede hacerse antes de repetir la prueba, porque el directorio no contiene datos de titulares.
 
-## 10. Validaciones realizadas
+## 11. Validaciones realizadas
 
 Desde el worktree SSD y sin llamadas reales a Turnstile o Resend:
 
@@ -266,7 +288,9 @@ Desde el worktree SSD y sin llamadas reales a Turnstile o Resend:
 | Wrangler `4.153.0 --version` | PASS mediante `npx`; caché en SSD. |
 | Migración `0001_consent_evidence.sql` | PASS con `d1 execute --local`; dos comandos ejecutados. |
 | Tabla e índices D1 local | PASS; tabla creada, `request_id` e idempotencia únicas y índice de consulta presente. |
-| Integración D1 persistente | PASS; evidencia sintética, consulta, aceptación simulada, deduplicación, transición incierta/reconciliación y reapertura. |
+| Integración SQLite persistente de Wrangler | PASS; evidencia sintética, consulta, aceptación simulada, deduplicación, transición incierta/reconciliación y reapertura. Se ejecutó dos veces sin borrado global y se conservaron las filas previas. |
+| Binding D1 nativo del runtime Worker | No ejecutado; la limitación y el plan opcional están documentados arriba. |
+| Validación de `request_id` | PASS; UUID v4 completo aceptado e intentos de inyección SQL y formatos inválidos rechazados. |
 | Respaldo/restauración local | PASS; estado sintético restaurado y consultable. |
 | `npm test` | PASS: 60/60 pruebas existentes. |
 | `npm run check` | PASS: 0 errores, warnings ni hints en 107 archivos. |
@@ -275,7 +299,7 @@ Desde el worktree SSD y sin llamadas reales a Turnstile o Resend:
 
 No se ejecutó ningún comando con `--remote`, no se creó D1 remoto y no se modificaron contenedores, secretos, DNS, Worker desplegado, staging, WordPress o producción.
 
-## 11. Checklist GO/NO-GO
+## 12. Checklist GO/NO-GO
 
 ### GO local de laboratorio
 
@@ -305,7 +329,7 @@ No se ejecutó ningún comando con `--remote`, no se creó D1 remoto y no se mod
 [ ] Rollback probado y autorización explícita de despliegue.
 ```
 
-## 12. Plan para una futura creación autorizada de D1 remoto
+## 13. Plan para una futura creación autorizada de D1 remoto
 
 Esta secuencia es solo de planificación y no fue ejecutada:
 

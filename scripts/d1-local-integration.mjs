@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { randomUUID } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { join } from "node:path";
@@ -67,13 +68,13 @@ const syntheticLead = {
   turnstileToken: "synthetic-turnstile-token"
 };
 
-const makeRequest = () => new Request("https://leads.example.test/api/leads", {
+const makeRequest = (idempotencyKey) => new Request("https://leads.example.test/api/leads", {
   method: "POST",
   headers: {
     Origin: "https://prueba.sokatechnologies.com",
     "Content-Type": "application/json",
     "CF-Connecting-IP": "203.0.113.8",
-    "Idempotency-Key": "d1-local-synthetic-idempotency"
+    "Idempotency-Key": idempotencyKey
   },
   body: JSON.stringify(syntheticLead)
 });
@@ -82,7 +83,10 @@ const main = async () => {
   assert.ok(persistPath, "D1_LOCAL_PERSIST_PATH is required");
   assert.ok(hmacKey, "D1_LOCAL_HMAC_KEY is required");
   const local = openLocalD1(persistPath);
-  local.sqlite.exec("DELETE FROM consent_evidence");
+  const initialCount = Number(local.sqlite.prepare("SELECT COUNT(*) AS count FROM consent_evidence").get().count);
+  const runId = randomUUID();
+  const acceptedKey = `d1-local-${runId}-accepted`;
+  const uncertainKey = `d1-local-${runId}-uncertain`;
   const calls = [];
   const env = {
     ALLOWED_ORIGINS: "https://prueba.sokatechnologies.com",
@@ -109,10 +113,10 @@ const main = async () => {
     return new Response(JSON.stringify({ id: "synthetic-local-email" }), { status: 200 });
   };
 
-  const first = await handleRequest(makeRequest(), env, { fetchImpl });
+  const first = await handleRequest(makeRequest(acceptedKey), env, { fetchImpl });
   assert.equal(first.status, 200);
   const store = createConsentEvidenceStore(local.db);
-  const row = await store.findByIdempotencyKeyHash(await sha256Hex("d1-local-synthetic-idempotency"));
+  const row = await store.findByIdempotencyKeyHash(await sha256Hex(acceptedKey));
   assert.ok(row?.request_id);
   assert.equal(row.technical_status, "resend_accepted");
   assert.equal(row.purpose, "contact_response");
@@ -123,13 +127,13 @@ const main = async () => {
   assert.match(notification.text, new RegExp(row.request_id));
   assert.doesNotMatch(JSON.stringify(row), /Synthetic Contact|Synthetic Company|synthetic@example|synthetic-local/);
 
-  const duplicate = await handleRequest(makeRequest(), env, { fetchImpl });
+  const duplicate = await handleRequest(makeRequest(acceptedKey), env, { fetchImpl });
   assert.equal(duplicate.status, 200);
   assert.equal(calls.filter(({ url }) => url.includes("api.resend.com")).length, 1);
 
   const uncertainCandidate = await buildConsentEvidence({
     lead: { ...syntheticLead, summary: "Segundo registro sintético para probar reconciliación local." },
-    idempotencyKey: "d1-local-uncertain-idempotency",
+    idempotencyKey: uncertainKey,
     contentHmacKey: hmacKey
   });
   const recorded = await store.recordEvidence(uncertainCandidate);
@@ -149,13 +153,15 @@ const main = async () => {
 
   const reopened = openLocalD1(persistPath);
   const persisted = await createConsentEvidenceStore(reopened.db).findByIdempotencyKeyHash(
-    await sha256Hex("d1-local-synthetic-idempotency")
+    await sha256Hex(acceptedKey)
   );
+  const finalCount = Number(reopened.sqlite.prepare("SELECT COUNT(*) AS count FROM consent_evidence").get().count);
+  assert.equal(finalCount, initialCount + 2);
   assert.deepEqual({ ...persisted }, {
     ...row
   });
   reopened.sqlite.close();
-  console.log("d1-local-integration: PASS (synthetic evidence persisted, queried and deduplicated)");
+  console.log(`d1-local-integration: PASS (rows before=${initialCount}, after=${finalCount}; synthetic evidence persisted, queried and deduplicated)`);
 };
 
 await main();
