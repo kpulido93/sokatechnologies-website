@@ -1,0 +1,9 @@
+name = "soka-leads-worker-local"
+main = "src/index.mjs"
+compatibility_date = "2026-10-20"
+send_metrics = false
+
+[[d1_databases]]
+binding = "CONSENT_DB"
+database_name = "soka-consent-evidence-local"
+migrations_dir = "."
