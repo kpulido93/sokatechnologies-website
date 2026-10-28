@@ -5,7 +5,7 @@
 - Rama: `codex/identidad-contacto`.
 - Base: `feature/web-demo-2026-gsap` en `305de3a4cd65fe872c22f9ed33bf1552194f09ca`.
 - Logo fuente: `logo-sokatechnologies.png` adjunto en `soka-imagenes`.
-- Logo servido: `public/brand/sokatechnologies-logo.png`.
+- Logo servido: `src/assets/images/logo-sokatechnologies.png`, procesado por Astro.
 - El PNG original no fue modificado; ambos archivos tienen dimensiones 638×634
   y SHA-256 `d97c1fa7ee072db59683a06ab07c512e20f4f266cc270d7d7bb50e0fd78e5cb4`.
 
@@ -35,6 +35,24 @@ En el build aislado de staging, `/`, `/contacto/` y `/diagnostico/` generaron
 canonical y `og:url` bajo `https://prueba.sokatechnologies.com`, sitemap con el
 mismo origen, `noindex,nofollow`, `robots.txt` con `Disallow: /`, favicon PNG y
 formularios con `data-form-mode="demo"`.
+
+## Revalidación del recurso importado por Astro
+
+La ejecución controlada de `npm run test:local-ui` terminó con código de salida
+`0`. Recorrió 22 rutas en desktop `1440×900`, tablet `768×1024` y móvil
+`375×812`; verificó 21 FAQ, `overflowFailures: 0`, `focusFailures: 0`,
+`mobileHeaderFailures: 0`, cuatro menús móviles correctos y
+`identityFailures: 0`. En los cuatro contextos de Inicio/Contacto confirmó logo
+cargado, dimensiones explícitas, proporción circular, nombre accesible, favicon
+servido y ausencia de enlace oficial de WhatsApp.
+
+El build produjo `/_astro/logo-sokatechnologies.DQ1wbc8Y.png` para la cabecera y
+el favicon. Su SHA-256 coincide con el original:
+`d97c1fa7ee072db59683a06ab07c512e20f4f266cc270d7d7bb50e0fd78e5cb4`.
+
+La primera ejecución no devolvió estado porque el recorrido completo tarda cerca
+de 90 segundos y la sesión de terminal se perdió antes de recibir el JSON final;
+no se consideró aprobada hasta repetirla con el código `0` confirmado.
 
 ## Capturas
 

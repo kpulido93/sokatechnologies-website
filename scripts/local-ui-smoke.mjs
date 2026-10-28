@@ -509,7 +509,7 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
         logoDimensions: logo instanceof HTMLImageElement && logo.getAttribute("width") === "40" && logo.getAttribute("height") === "40",
         logoAccessibleName: brand?.getAttribute("aria-label") === "SokaTechnologies",
         logoCircular: logo instanceof HTMLElement && getComputedStyle(logo).borderRadius === "50%",
-        favicon: favicon?.getAttribute("href") === "/brand/sokatechnologies-logo.png" && favicon?.getAttribute("type") === "image/png",
+        favicon: favicon?.getAttribute("href")?.includes("logo-sokatechnologies") && favicon?.getAttribute("type") === "image/png",
         contactData: ${JSON.stringify(route)} !== "/contacto/" || Boolean(
           document.body.textContent?.includes("Colombia") &&
           phone?.textContent?.includes("+57 321 2554930") &&
