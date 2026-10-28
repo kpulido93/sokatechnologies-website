@@ -1280,6 +1280,7 @@ form,
   display: grid;
   gap: 1.25rem;
   margin-top: 1.25rem;
+  scroll-margin-top: 7rem;
   border-color: rgba(144, 217, 255, 0.18);
   background:
     radial-gradient(circle at top right, rgba(85, 176, 255, 0.12), transparent 22%),
@@ -1292,6 +1293,15 @@ form,
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.audit-form[data-report-visible="true"] {
+  grid-column: 1 / -1;
+}
+
+.audit-report-preview > *,
+.audit-report-columns > * {
+  min-width: 0;
 }
 
 .audit-report-header h3 {
@@ -1384,6 +1394,7 @@ form,
   display: grid;
   gap: 1rem;
   padding: 1rem;
+  min-width: 0;
 }
 
 .audit-result-list {
@@ -1392,12 +1403,14 @@ form,
   margin: 0;
   padding: 0;
   list-style: none;
+  min-width: 0;
 }
 
 .audit-result-item {
   display: grid;
   gap: 0.7rem;
   padding: 1rem;
+  min-width: 0;
 }
 
 .audit-recommendation-card {
@@ -1410,21 +1423,30 @@ form,
   color: #eef6ff;
   font-family: var(--font-display);
   line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .audit-recommendation-copy,
 .audit-recommendation-footer {
   display: grid;
   gap: 0.7rem;
+  min-width: 0;
+}
+
+.audit-recommendation-summary,
+.audit-recommendation-rationale {
+  overflow-wrap: anywhere;
 }
 
 .audit-pill-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .audit-pill {
+  min-width: 0;
   padding: 0.42rem 0.72rem;
   border: 1px solid rgba(144, 217, 255, 0.14);
   border-radius: var(--radius-pill);
@@ -1432,6 +1454,7 @@ form,
   font-size: 0.76rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .audit-inline-link {

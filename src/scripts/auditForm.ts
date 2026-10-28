@@ -55,6 +55,39 @@ const PAGESPEED_CATEGORY_LABELS: Record<PageSpeedCategoryKey, string> = {
   seo: "SEO técnico"
 };
 
+const DEMO_FINDING_TOPICS: Record<string, string> = {
+  "clarity-value-proposition": "claridad del mensaje y la propuesta de valor",
+  "conversion-contact-friction": "recorrido hacia contacto y conversión",
+  "seo-structure-basics": "visibilidad y estructura pública",
+  "performance-first-impression": "carga percibida y primer recorrido",
+  "automation-manual-follow-up": "seguimiento y handoff operativo",
+  "dashboard-visibility-gap": "visibilidad operativa y reportes",
+  "trust-signals-weak": "señales públicas de confianza",
+  "infrastructure-continuity-risk": "continuidad técnica y soporte",
+  "residential-operational-context": "operación residencial y control operativo",
+  "windows-asset-visibility": "visibilidad de activos Windows",
+  "consented-operational-messaging": "mensajería operativa consentida",
+  "manual-review-needed": "claridad del contexto y siguiente paso"
+};
+
+const toDemoFinding = (finding: AuditFinding): AuditFinding => {
+  const topic = DEMO_FINDING_TOPICS[finding.id] ?? "el contexto compartido y el siguiente paso";
+
+  return {
+    ...finding,
+    title: `Tema por explorar: ${topic}.`,
+    summary:
+      `Tus respuestas apuntan a explorar ${topic}. Es una hipótesis para conversar y validar; la simulación no observa ni confirma un problema en la web.`,
+    evidence: ["Respuestas del formulario", "Hipótesis por validar"]
+  };
+};
+
+const toDemoRecommendation = (recommendation: SokaRecommendation): SokaRecommendation => ({
+  ...recommendation,
+  summary: `Tema para conversar: ${recommendation.summary}`,
+  rationale: `Hipótesis derivada de tus respuestas: ${recommendation.rationale}`
+});
+
 const buildDemoReportSummary = (report: Pick<AuditReport, "findings" | "scoreCard" | "recommendations">) => {
   const dominantArea = report.scoreCard.dominantAreas[0] ?? "clarity";
   const highestPriorityRecommendation = report.recommendations[0];
@@ -72,14 +105,14 @@ const buildDemoReportSummary = (report: Pick<AuditReport, "findings" | "scoreCar
 };
 
 const buildLocalAuditReport = (request: SanitizedAuditRequest): AuditReport => {
-  const findings = buildInitialAuditFindings(request);
+  const findings = buildInitialAuditFindings(request).map(toDemoFinding);
   const scoreCard = buildAuditScoreCard(findings, request);
   const recommendations = buildSokaRecommendations({
     request,
     findings,
     areaScores: scoreCard.areaScores,
     leadFitScore: scoreCard.leadFitScore
-  });
+  }).map(toDemoRecommendation);
 
   return {
     request,
@@ -331,10 +364,10 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
     areasCountNode.textContent = `${renderedAreaCount} área${renderedAreaCount === 1 ? "" : "s"}`;
   }
   if (findingsCountNode) {
-    findingsCountNode.textContent = `${shownFindings.length} observación${shownFindings.length === 1 ? "" : "es"}`;
+    findingsCountNode.textContent = `${shownFindings.length} ${shownFindings.length === 1 ? "observación" : "observaciones"}`;
   }
   if (recommendationsCountNode) {
-    recommendationsCountNode.textContent = `${shownRecommendations.length} recomendación${shownRecommendations.length === 1 ? "" : "es"}`;
+    recommendationsCountNode.textContent = `${shownRecommendations.length} ${shownRecommendations.length === 1 ? "recomendación" : "recomendaciones"}`;
   }
 
   clearElement(findingsNode);
@@ -345,6 +378,8 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
     recommendationsNode?.append(createRecommendationItem(recommendation, recommendationTemplate, isDemo))
   );
 
+  container.dataset.reportVisible = "true";
+  container.closest("form")?.setAttribute("data-report-visible", "true");
   setVisibility(container, true);
 };
 
@@ -403,6 +438,8 @@ const handleAuditForm = (form: HTMLFormElement) => {
     setVisibility(loadingNode, false);
     setVisibility(issuesNode, false);
     setVisibility(previewNode, false);
+    if (previewNode) delete previewNode.dataset.reportVisible;
+    delete form.dataset.reportVisible;
     clearElement(issuesNode);
     if (clearErrors) clearFieldErrors(form);
   };
@@ -513,7 +550,8 @@ const handleAuditForm = (form: HTMLFormElement) => {
           renderReport(
             previewNode,
             fallbackReport,
-            "Vista previa generada en el navegador porque este build estático no ejecuta POST server-side."
+            "Vista previa generada en el navegador porque este build estático no ejecuta POST server-side.",
+            true
           );
         }
         setVisibility(successNode, true);
@@ -525,7 +563,8 @@ const handleAuditForm = (form: HTMLFormElement) => {
         renderReport(
           previewNode,
           fallbackReport,
-          "Vista previa local generada porque el endpoint no está disponible en este build."
+          "Vista previa local generada porque el endpoint no está disponible en este build.",
+          true
         );
       }
       setVisibility(successNode, true);
@@ -535,7 +574,8 @@ const handleAuditForm = (form: HTMLFormElement) => {
         renderReport(
           previewNode,
           fallbackReport,
-          "Vista previa local generada porque no fue posible consultar el endpoint."
+          "Vista previa local generada porque no fue posible consultar el endpoint.",
+          true
         );
       }
       setVisibility(successNode, true);

@@ -303,19 +303,44 @@ const checkFormFlow = async (client, sessionId, selector) =>
     sessionId
   );
 
-const checkAuditDemoFlow = async (client, sessionId) =>
+const checkAuditDemoFlow = async (client, sessionId, scenario = "generic") =>
   evaluate(
     client,
     `(async () => {
       const form = document.querySelector(".audit-form");
       if (!(form instanceof HTMLFormElement)) return { found: false };
+      const scenario = ${JSON.stringify(scenario)};
+      const scenarios = {
+        generic: {
+          companyType: "Servicios B2B",
+          mainProblem: "Descripción de prueba suficientemente larga para validar la simulación local.",
+          expectedTopic: "claridad del contexto"
+        },
+        web: {
+          companyType: "Servicios B2B",
+          mainProblem: "La web no explica bien nuestra oferta y el formulario genera pocos contactos.",
+          expectedTopic: "claridad del mensaje"
+        },
+        data: {
+          companyType: "Tecnología o SaaS",
+          mainProblem: "Necesitamos dashboards y reportes para ordenar datos e indicadores del negocio.",
+          expectedTopic: "visibilidad operativa y reportes"
+        },
+        infrastructure: {
+          companyType: "Tecnología o SaaS",
+          mainProblem: "La infraestructura tiene caídas, soporte lento y dudas sobre backups y continuidad.",
+          expectedTopic: "continuidad técnica y soporte"
+        }
+      };
+      const selectedScenario = scenarios[scenario] || scenarios.generic;
       const values = {
         websiteUrl: "https://example.invalid",
         name: "Persona de prueba",
         company: "Empresa de prueba",
         email: "demo@example.invalid",
         country: "Colombia",
-        mainProblem: "Descripción de prueba suficientemente larga para validar la simulación local."
+        companyType: selectedScenario.companyType,
+        mainProblem: selectedScenario.mainProblem
       };
       Array.from(form.querySelectorAll("input[name], select[name], textarea[name]")).forEach((control) => {
         if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) return;
@@ -369,8 +394,37 @@ const checkAuditDemoFlow = async (client, sessionId) =>
 
       const successNode = document.getElementById(form.dataset.successId || "");
       const previewNode = document.getElementById(form.dataset.previewId || "");
+      previewNode?.scrollIntoView({ block: "start", inline: "nearest" });
+      await new Promise((resolve) => setTimeout(resolve, 0));
       const previewText = previewNode?.textContent || "";
+      const reportHeader = previewNode?.querySelector(".audit-report-header");
+      const findingsList = previewNode?.querySelector("[data-audit-findings]");
+      const recommendationsList = previewNode?.querySelector("[data-audit-recommendations]");
+      const reportColumns = previewNode?.querySelector(".audit-report-columns");
+      const siteHeader = document.querySelector(".site-header");
+      const previewRect = previewNode?.getBoundingClientRect();
+      const headerRect = reportHeader?.getBoundingClientRect();
+      const siteHeaderRect = siteHeader?.getBoundingClientRect();
+      const internalOverflow = previewNode
+        ? [previewNode, ...Array.from(previewNode.querySelectorAll("*"))].filter((node) => node.scrollWidth > node.clientWidth + 1)
+        : [];
+      const internalOverflowDetails = internalOverflow.map((node) => ({
+        element: node.tagName.toLowerCase() + (node.id ? "#" + node.id : "") + (typeof node.className === "string" && node.className ? "." + node.className.split(" ").join(".") : ""),
+        scrollWidth: node.scrollWidth,
+        clientWidth: node.clientWidth,
+        text: node.textContent?.trim().slice(0, 120) || ""
+      }));
+      const contentBlocks = [reportHeader, findingsList, recommendationsList].filter(Boolean);
+      const legible = contentBlocks.every((node) => {
+        const rect = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        return rect.width > 0 && rect.height > 0 && Number.parseFloat(style.fontSize) > 0;
+      });
+      const reportColumnCount = reportColumns
+        ? getComputedStyle(reportColumns).gridTemplateColumns.split(" ").filter(Boolean).length
+        : 0;
       return {
+        scenario,
         found: true,
         fetchCalls,
         xhrCalls,
@@ -382,7 +436,20 @@ const checkAuditDemoFlow = async (client, sessionId) =>
         simulationLabel: previewText.includes("Simulación local basada en tus respuestas"),
         noScanClaim: previewText.includes("No se evaluó ni escaneó la URL"),
         noUnavailableMessage: !previewText.toLowerCase().includes("indisponibilidad temporal"),
-        noNumericMeasurement: !/\\b\\d{1,3}\\/100\\b|(?:score|puntuación)\\s*:\\s*\\d+/i.test(previewText)
+        noNumericMeasurement: !/\\b\\d{1,3}\\/100\\b|(?:score|puntuación)\\s*:\\s*\\d+/i.test(previewText),
+        hypothesisLanguage: previewText.includes("Tema por explorar:") && !/\\b(?:se detectó|se observó|se encontró|problema confirmado|sitio evaluado)\\b/i.test(previewText),
+        recommendationsHypothesisLanguage: previewText.includes("Hipótesis derivada de tus respuestas:"),
+        expectedTopicVisible: previewText.includes(selectedScenario.expectedTopic),
+        observationsVisible: Boolean(findingsList?.children.length && findingsList.getBoundingClientRect().height > 0),
+        recommendationsVisible: Boolean(recommendationsList?.children.length && recommendationsList.getBoundingClientRect().height > 0),
+        completeContent: Boolean(reportHeader && findingsList?.children.length && recommendationsList?.children.length),
+        legible,
+        noInternalOverflow: internalOverflow.length === 0,
+        internalOverflowDetails,
+        noHeaderOverlap: Boolean(!siteHeaderRect || !headerRect || headerRect.top >= siteHeaderRect.bottom - 1),
+        reportFitsViewport: Boolean(previewRect && previewRect.left >= -1 && previewRect.right <= document.documentElement.clientWidth + 1),
+        reportColumnCount,
+        reportWidth: previewRect?.width || 0
       };
     })()` ,
     sessionId
@@ -423,6 +490,31 @@ const checkMobileMenu = async (client, sessionId) =>
     })()` ,
     sessionId
   );
+
+const auditDemoPasses = (result) => Boolean(
+  result?.found &&
+  result.demoMode &&
+  result.success &&
+  result.previewVisible &&
+  result.simulationLabel &&
+  result.noScanClaim &&
+  result.noUnavailableMessage &&
+  result.noNumericMeasurement &&
+  result.hypothesisLanguage &&
+  result.recommendationsHypothesisLanguage &&
+  result.expectedTopicVisible &&
+  result.observationsVisible &&
+  result.recommendationsVisible &&
+  result.completeContent &&
+  result.legible &&
+  result.noInternalOverflow &&
+  result.noHeaderOverlap &&
+  result.reportFitsViewport &&
+  result.fetchCalls === 0 &&
+  result.xhrCalls === 0 &&
+  result.beaconCalls === 0 &&
+  result.nativeSubmitCalls === 0
+);
 
 const checkProjects = async (client, sessionId) =>
   evaluate(
@@ -561,12 +653,43 @@ const capture = async (client, sessionId, route, viewport) => {
     writeFileSync(join(screenshotDir, `${name}-form-desktop.png`), Buffer.from(formScreenshot.data, "base64"));
     await evaluate(client, "window.scrollTo({ top: 0, behavior: \"instant\" });", sessionId);
   }
-  if (route === "/auditoria/" && viewport.name === "desktop") {
+  if (route === "/auditoria/" && ["desktop", "mobile"].includes(viewport.name)) {
     await checkAuditDemoFlow(client, sessionId);
-    await evaluate(client, 'document.querySelector(".audit-report-preview")?.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });', sessionId);
+    await evaluate(client, 'document.querySelector(".audit-report-preview")?.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });', sessionId);
     await sleep(800);
-    const resultScreenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
-    writeFileSync(join(screenshotDir, "auditoria-demo-result-desktop.png"), Buffer.from(resultScreenshot.data, "base64"));
+    const reportBox = await evaluate(
+      client,
+      `(() => {
+        const report = document.querySelector(".audit-report-preview");
+        if (!(report instanceof HTMLElement)) return null;
+        const rect = report.getBoundingClientRect();
+        return {
+          x: Math.max(0, rect.x),
+          y: Math.max(0, rect.y + window.scrollY),
+          width: rect.width,
+          height: rect.height
+        };
+      })()`,
+      sessionId
+    );
+    const resultScreenshot = reportBox
+      ? await client.send(
+          "Page.captureScreenshot",
+          {
+            format: "png",
+            captureBeyondViewport: true,
+            clip: {
+              x: reportBox.x,
+              y: reportBox.y,
+              width: reportBox.width,
+              height: reportBox.height,
+              scale: 1
+            }
+          },
+          sessionId
+        )
+      : await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
+    writeFileSync(join(screenshotDir, `auditoria-demo-result-${viewport.name}.png`), Buffer.from(resultScreenshot.data, "base64"));
   }
   if (route === "/proyectos/" && viewport.name === "desktop") {
     await evaluate(client, `(async () => {
@@ -647,6 +770,7 @@ const main = async () => {
 
     const formFlowResults = [];
     let auditDemoFlowResult = null;
+    const auditDemoFlowResults = [];
     for (const [route, selector] of [["/contacto/", ".contact-form"], ["/diagnostico/", ".contact-form"], ["/auditoria/", ".audit-form"]]) {
       await client.send("Page.navigate", { url: new URL(route, baseUrl).toString() }, sessionId);
       await sleep(350);
@@ -657,10 +781,14 @@ const main = async () => {
         throw new Error(`Form error association failed for ${route}: ${JSON.stringify(formResult)}`);
       }
       if (route === "/auditoria/") {
-        auditDemoFlowResult = await checkAuditDemoFlow(client, sessionId);
-        if (strict && (!auditDemoFlowResult.found || !auditDemoFlowResult.demoMode || !auditDemoFlowResult.success || !auditDemoFlowResult.previewVisible || !auditDemoFlowResult.simulationLabel || !auditDemoFlowResult.noScanClaim || !auditDemoFlowResult.noUnavailableMessage || !auditDemoFlowResult.noNumericMeasurement || auditDemoFlowResult.fetchCalls !== 0 || auditDemoFlowResult.xhrCalls !== 0 || auditDemoFlowResult.beaconCalls !== 0 || auditDemoFlowResult.nativeSubmitCalls !== 0)) {
-          throw new Error(`Audit demo network/content check failed: ${JSON.stringify(auditDemoFlowResult)}`);
+        for (const scenario of ["generic", "web", "data", "infrastructure"]) {
+          const result = await checkAuditDemoFlow(client, sessionId, scenario);
+          auditDemoFlowResults.push(result);
+          if (strict && (!auditDemoPasses(result) || result.reportColumnCount !== 1)) {
+            throw new Error(`Audit demo network/content check failed: ${JSON.stringify(result)}`);
+          }
         }
+        auditDemoFlowResult = auditDemoFlowResults[0];
       } else if (demoRequired) {
         const flowResult = await checkFormFlow(client, sessionId, selector);
         formFlowResults.push({ route, ...flowResult });
@@ -695,6 +823,20 @@ const main = async () => {
       await sleep(350);
       await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
       mobileMenuResults.push({ viewport: viewport.name, ...(await checkMobileMenu(client, sessionId)) });
+    }
+
+    await client.send("Emulation.setDeviceMetricsOverride", {
+      width: 1440,
+      height: 900,
+      deviceScaleFactor: 1,
+      mobile: false
+    }, sessionId);
+    await client.send("Page.navigate", { url: new URL("/auditoria/", baseUrl).toString() }, sessionId);
+    await sleep(350);
+    await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
+    const desktopAuditDemoFlowResult = await checkAuditDemoFlow(client, sessionId, "generic");
+    if (strict && (!auditDemoPasses(desktopAuditDemoFlowResult) || desktopAuditDemoFlowResult.reportColumnCount < 2)) {
+      throw new Error(`Desktop audit demo layout check failed: ${JSON.stringify(desktopAuditDemoFlowResult)}`);
     }
 
     await client.send("Page.navigate", { url: new URL("/proyectos/", baseUrl).toString() }, sessionId);
@@ -749,6 +891,8 @@ const main = async () => {
       mobileHeaderFailures: mobileHeaderFailures.length,
       formFlowResults,
       auditDemoFlowResult,
+      auditDemoFlowResults,
+      desktopAuditDemoFlowResult,
       founderPortraitResult,
       mobileMenuResults,
       projectsResult,
