@@ -25,7 +25,7 @@ export const products: ProductContent[] = [
     title: "Portik",
     headline: "Control operativo para portería y administración residencial.",
     summary:
-      "Producto prioritario para validar un piloto comercial en conjuntos residenciales, con foco en visitantes, vehículos, reservas, novedades y bitácora.",
+      "Producto en validación para un piloto operativo en conjuntos residenciales, con foco en visitantes, vehículos, reservas, novedades y bitácora.",
     problem:
       "Muchas porterías todavía operan entre llamadas, WhatsApp, cuadernos y hojas de cálculo, con trazabilidad mínima y demasiada dependencia de memoria.",
     solution:
@@ -41,7 +41,7 @@ export const products: ProductContent[] = [
     ctaHref: "/productos/portik/",
     visibility: "public",
     confidentialityNote:
-      "La demo solo muestra un alcance MVP: no promete hardware, OCR, pagos ni app móvil nativa.",
+      "La demo solo muestra un alcance inicial: no promete hardware, OCR, pagos ni app móvil nativa.",
     metaTitle: "Portik | SokaTechnologies",
     metaDescription:
       "Portik es una plataforma web para control de acceso, portería y administración básica en conjuntos residenciales.",
@@ -49,7 +49,7 @@ export const products: ProductContent[] = [
     heroTitle: "Un producto serio para controlar visitantes, vehículos y bitácora operativa.",
     heroBody:
       "Portik está orientado a conjuntos residenciales y administradores que necesitan ordenar operación de portería, novedades, reservas y trazabilidad desde una plataforma web.",
-    status: "MVP más cercano a piloto comercial.",
+    status: "Etapa inicial orientada a un piloto operativo.",
     detailRoute: "static",
     primaryCtaLabel: "Solicitar demo de Portik",
     primaryCtaHref: "/contacto/",
@@ -71,7 +71,7 @@ export const products: ProductContent[] = [
       "no promete OCR, hardware ni pagos",
       "no crea una app móvil nativa en esta etapa",
       "no sustituye reglas operativas del conjunto",
-      "no debe venderse como suite cerrada sin piloto"
+      "su alcance se valida primero mediante un piloto controlado"
     ],
     pilotProposal: [
       "piloto controlado de 30 a 60 días",
@@ -105,7 +105,7 @@ export const products: ProductContent[] = [
     ctaHref: "/productos/autoinventario/",
     visibility: "controlled",
     confidentialityNote:
-      "No debe venderse masivamente sin remediación técnica, validación de seguridad y revisión de alcance.",
+      "La adopción amplia requiere remediación técnica, validación de seguridad y revisión de alcance.",
     metaTitle: "AutoInventario | SokaTechnologies",
     metaDescription:
       "AutoInventario es una solución técnica en validación para inventario de activos Windows, soporte IT, auditoría, infraestructura e ITSM.",
@@ -113,7 +113,7 @@ export const products: ProductContent[] = [
     heroTitle: "Inventario automático de activos Windows para equipos de TI.",
     heroBody:
       "AutoInventario está orientado a empresas que necesitan mejorar visibilidad de sus equipos Windows, reducir auditorías manuales y mantener información de activos más actualizada.",
-    status: "Solución técnica en validación; requiere remediación y validación antes de venta masiva.",
+    status: "Solución técnica en validación; requiere revisión técnica y de seguridad antes de ampliar su uso.",
     detailRoute: "static",
     primaryCtaLabel: "Solicitar evaluación técnica",
     primaryCtaHref: "/diagnostico/",
@@ -134,14 +134,14 @@ export const products: ProductContent[] = [
     constraints: [
       "no es inventario comercial de productos",
       "no es POS ni sistema de almacén",
-      "no debe venderse sin remediación técnica y de seguridad",
+      "requiere remediación técnica y de seguridad antes de ampliar su uso",
       "no debe recolectar datos sensibles innecesarios"
     ],
     usageLimits: [
       "requiere validación técnica previa a cualquier despliegue amplio",
       "debe revisarse seguridad, build y alcance de recolección",
       "conviene probarse primero en entorno controlado",
-      "no debe presentarse como producto listo para rollout masivo"
+      "se encuentra en validación y no está listo para un rollout masivo"
     ],
     finalCtaTitle: "Antes de hablar de piloto, conviene validar build, seguridad y alcance real.",
     finalCtaBody:

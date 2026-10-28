@@ -33,42 +33,42 @@ type AuditApiError = {
 type AuditApiResponse = AuditApiSuccess | AuditApiError;
 
 const AREA_LABELS: Record<AuditAreaKey, string> = {
-  seo: "SEO basico",
+  seo: "SEO básico",
   performance: "Performance",
   clarity: "Claridad comercial",
-  conversion: "Conversion",
+  conversion: "Conversión",
   trust: "Confianza",
-  automation: "Automatizacion",
+  automation: "Automatización",
   infrastructure: "Infraestructura"
 };
 
 const SEVERITY_LABELS: Record<AuditSeverity, string> = {
-  low: "Prioridad baja",
-  medium: "Prioridad media",
-  high: "Prioridad alta"
+  low: "Atención baja",
+  medium: "Atención media",
+  high: "Atención alta"
 };
 
 const PAGESPEED_CATEGORY_LABELS: Record<PageSpeedCategoryKey, string> = {
   performance: "Performance",
   accessibility: "Accesibilidad",
-  "best-practices": "Buenas practicas",
-  seo: "SEO tecnico"
+  "best-practices": "Buenas prácticas",
+  seo: "SEO técnico"
 };
 
-const buildReportSummary = (report: Pick<AuditReport, "findings" | "scoreCard" | "recommendations">) => {
+const buildDemoReportSummary = (report: Pick<AuditReport, "findings" | "scoreCard" | "recommendations">) => {
   const dominantArea = report.scoreCard.dominantAreas[0] ?? "clarity";
   const highestPriorityRecommendation = report.recommendations[0];
 
   const firstSentence =
     report.findings.length > 0
       ? report.findings[0]?.summary
-      : "La solicitud sugiere oportunidad de mejora, pero requiere revision manual del sitio para precisar prioridades.";
+      : "Tus respuestas sugieren una oportunidad de mejora que conviene conversar con más contexto.";
 
   const secondSentence = highestPriorityRecommendation
-    ? `La ruta sugerida en esta simulacion apunta primero a ${highestPriorityRecommendation.title.toLowerCase()}.`
-    : "La siguiente recomendacion razonable es avanzar a diagnostico consultivo.";
+    ? `Como orientación, la ruta sugerida apunta primero a ${highestPriorityRecommendation.title.toLowerCase()}.`
+    : "El siguiente paso posible es un diagnóstico consultivo.";
 
-  return `Area dominante detectada: ${AREA_LABELS[dominantArea]}. ${firstSentence} ${secondSentence}`;
+  return `Simulación local basada en tus respuestas. El tema principal considerado es ${AREA_LABELS[dominantArea]}. ${firstSentence} ${secondSentence}`;
 };
 
 const buildLocalAuditReport = (request: SanitizedAuditRequest): AuditReport => {
@@ -84,7 +84,7 @@ const buildLocalAuditReport = (request: SanitizedAuditRequest): AuditReport => {
   return {
     request,
     createdAt: new Date().toISOString(),
-    summary: buildReportSummary({ findings, scoreCard, recommendations }),
+    summary: buildDemoReportSummary({ findings, scoreCard, recommendations }),
     findings,
     scoreCard,
     recommendations
@@ -204,7 +204,11 @@ const createFindingItem = (finding: AuditFinding) => {
   return item;
 };
 
-const createRecommendationItem = (recommendation: SokaRecommendation, template?: HTMLTemplateElement | null) => {
+const createRecommendationItem = (
+  recommendation: SokaRecommendation,
+  template?: HTMLTemplateElement | null,
+  isDemo = false
+) => {
   const item =
     template?.content.firstElementChild instanceof HTMLLIElement
       ? (template.content.firstElementChild.cloneNode(true) as HTMLLIElement)
@@ -226,7 +230,7 @@ const createRecommendationItem = (recommendation: SokaRecommendation, template?:
   if (tagsNode) {
     clearElement(tagsNode);
     const labels = createTagRow([
-      `Prioridad ${recommendation.priority}`,
+      isDemo ? "Orientación" : `Nivel de atención ${recommendation.priority}`,
       ...recommendation.relatedAreas.map((area) => AREA_LABELS[area])
     ]);
     Array.from(labels.children).forEach((child) => tagsNode.append(child));
@@ -239,7 +243,7 @@ const createRecommendationItem = (recommendation: SokaRecommendation, template?:
   return item;
 };
 
-const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: string) => {
+const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: string, isDemo = false) => {
   const summaryNode = container.querySelector<HTMLElement>("[data-audit-summary]");
   const metaNode = container.querySelector<HTMLElement>("[data-audit-meta]");
   const overallScoreNode = container.querySelector<HTMLElement>("[data-audit-overall-score]");
@@ -255,7 +259,7 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
   const recommendationsNode = container.querySelector<HTMLElement>("[data-audit-recommendations]");
   const recommendationsCountNode = container.querySelector<HTMLElement>("[data-audit-recommendations-count]");
   const recommendationTemplate = container.querySelector<HTMLTemplateElement>("[data-audit-recommendation-template]");
-  const measuredCategories = report.pagespeed
+  const measuredCategories = !isDemo && report.pagespeed
     ? (Object.entries(report.pagespeed.categories).filter(([, score]) => score != null) as Array<
         [PageSpeedCategoryKey, number]
       >)
@@ -265,27 +269,35 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
 
   if (summaryNode) summaryNode.textContent = report.summary;
   if (metaNode) {
-    metaNode.textContent = `${metaMessage} Sitio evaluado: ${report.request.normalizedWebsiteUrl}.`;
+    metaNode.textContent = isDemo
+      ? "Simulación local basada en tus respuestas. No se evaluó ni escaneó la URL."
+      : `${metaMessage} Sitio evaluado: ${report.request.normalizedWebsiteUrl}.`;
   }
-  if (overallScoreNode) overallScoreNode.textContent = `${report.scoreCard.overallScore}/100`;
+  if (overallScoreNode) overallScoreNode.textContent = isDemo ? "Orientativa" : `${report.scoreCard.overallScore}/100`;
   if (overallNoteNode) {
     overallNoteNode.textContent =
-      "Lectura consultiva basada en señales visibles y en el contexto compartido. No reemplaza una auditoria tecnica completa.";
+      isDemo
+        ? "No es una medición técnica ni una puntuación del sitio."
+        : "Lectura consultiva basada en señales visibles y en el contexto compartido. No reemplaza una auditoría técnica completa.";
   }
   if (leadFitNode) {
-    leadFitNode.textContent = `${report.scoreCard.leadFitScore}/100 · ${report.scoreCard.leadFitLabel}`;
+    leadFitNode.textContent = isDemo ? "Orientativo" : `${report.scoreCard.leadFitScore}/100 · ${report.scoreCard.leadFitLabel}`;
   }
   if (leadNoteNode) {
     leadNoteNode.textContent =
-      "Ayuda a orientar la siguiente conversacion con Soka y a decidir si conviene abrir diagnostico.";
+      isDemo
+        ? "Ayuda a orientar la conversación; no califica tu empresa ni tu sitio."
+        : "Ayuda a orientar la siguiente conversación con Soka y a decidir si conviene abrir diagnóstico.";
   }
   if (coverageNode) {
-    coverageNode.textContent = report.pagespeed ? "Señales visibles + PageSpeed" : "Señales visibles";
+    coverageNode.textContent = isDemo ? "Contexto compartido" : report.pagespeed ? "Señales visibles + PageSpeed" : "Señales visibles";
   }
   if (coverageNoteNode) {
-    coverageNoteNode.textContent = report.pagespeed
-      ? "Incluye categorias tecnicas medidas sobre la URL publica cuando Google PageSpeed pudo responder."
-      : "En este preview no hubo medicion tecnica externa disponible; el analisis se apoya en reglas locales y señales publicas.";
+    coverageNoteNode.textContent = isDemo
+      ? "No incluye medición automática ni consulta externa de la URL."
+      : report.pagespeed
+        ? "Incluye categorías técnicas medidas sobre la URL pública cuando Google PageSpeed pudo responder."
+        : "En esta vista previa no hubo medición técnica externa disponible; el análisis se apoya en reglas locales y señales públicas.";
   }
 
   if (areasNode) {
@@ -294,15 +306,17 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
     const consultiveAreas = report.scoreCard.dominantAreas.slice(0, 3).map((area) =>
       createAreaItem({
         title: AREA_LABELS[area],
-        detail: "Area priorizada segun señales visibles, copy, recorrido y contexto declarado en el formulario.",
-        sourceLabel: "Lectura consultiva"
+        detail: isDemo
+          ? "Orientación derivada de tus respuestas, no de una medición automática del sitio."
+          : "Área priorizada según señales visibles, copy, recorrido y contexto declarado en el formulario.",
+        sourceLabel: isDemo ? "Contexto compartido" : "Lectura consultiva"
       })
     );
 
     const measuredAreaItems = measuredCategories.map(([category, score]) =>
       createAreaItem({
         title: PAGESPEED_CATEGORY_LABELS[category],
-        detail: "Categoria tecnica medida por Google PageSpeed sobre la URL publica evaluada.",
+        detail: "Categoría técnica medida por Google PageSpeed sobre la URL pública evaluada.",
         value: `${score}/100`,
         sourceLabel: "PageSpeed"
       })
@@ -314,13 +328,13 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
   const renderedAreaCount = report.scoreCard.dominantAreas.slice(0, 3).length + measuredCategories.length;
 
   if (areasCountNode) {
-    areasCountNode.textContent = `${renderedAreaCount} area${renderedAreaCount === 1 ? "" : "s"}`;
+    areasCountNode.textContent = `${renderedAreaCount} área${renderedAreaCount === 1 ? "" : "s"}`;
   }
   if (findingsCountNode) {
-    findingsCountNode.textContent = `${shownFindings.length} hallazgo${shownFindings.length === 1 ? "" : "s"}`;
+    findingsCountNode.textContent = `${shownFindings.length} observación${shownFindings.length === 1 ? "" : "es"}`;
   }
   if (recommendationsCountNode) {
-    recommendationsCountNode.textContent = `${shownRecommendations.length} recomendacion${shownRecommendations.length === 1 ? "" : "es"}`;
+    recommendationsCountNode.textContent = `${shownRecommendations.length} recomendación${shownRecommendations.length === 1 ? "" : "es"}`;
   }
 
   clearElement(findingsNode);
@@ -328,7 +342,7 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
 
   clearElement(recommendationsNode);
   shownRecommendations.forEach((recommendation) =>
-    recommendationsNode?.append(createRecommendationItem(recommendation, recommendationTemplate))
+    recommendationsNode?.append(createRecommendationItem(recommendation, recommendationTemplate, isDemo))
   );
 
   setVisibility(container, true);
@@ -373,6 +387,7 @@ const buildRuntimeFallbackIssue = (message: string): AuditValidationIssue[] => [
 ];
 
 const handleAuditForm = (form: HTMLFormElement) => {
+  const mode = form.dataset.mode ?? "demo";
   const endpoint = form.dataset.endpoint ?? "/api/audit";
   const successNode = form.dataset.successId ? (document.getElementById(form.dataset.successId) as HTMLElement | null) : null;
   const errorNode = form.dataset.errorId ? (document.getElementById(form.dataset.errorId) as HTMLElement | null) : null;
@@ -380,7 +395,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
   const issuesNode = form.dataset.issuesId ? (document.getElementById(form.dataset.issuesId) as HTMLElement | null) : null;
   const previewNode = form.dataset.previewId ? (document.getElementById(form.dataset.previewId) as HTMLElement | null) : null;
   const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-  const defaultSubmitText = submitButton?.textContent ?? "Solicitar auditoria gratuita";
+  const defaultSubmitText = submitButton?.textContent ?? "Ver simulación de prueba";
 
   const resetStatus = (clearErrors = true) => {
     setVisibility(successNode, false);
@@ -442,6 +457,19 @@ const handleAuditForm = (form: HTMLFormElement) => {
       return;
     }
 
+    if (mode === "demo") {
+      if (previewNode) {
+        renderReport(
+          previewNode,
+          buildLocalAuditReport(validation.data),
+          "Simulación local basada en tus respuestas.",
+          true
+        );
+      }
+      setVisibility(successNode, true);
+      return;
+    }
+
     form.setAttribute("aria-busy", "true");
 
     if (submitButton) {
@@ -485,7 +513,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
           renderReport(
             previewNode,
             fallbackReport,
-            "Vista previa generada en el navegador porque este build estatico no ejecuta POST server-side."
+            "Vista previa generada en el navegador porque este build estático no ejecuta POST server-side."
           );
         }
         setVisibility(successNode, true);
@@ -497,7 +525,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
         renderReport(
           previewNode,
           fallbackReport,
-          "Vista previa local generada por indisponibilidad temporal del endpoint."
+          "Vista previa local generada porque el endpoint no está disponible en este build."
         );
       }
       setVisibility(successNode, true);
@@ -507,7 +535,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
         renderReport(
           previewNode,
           fallbackReport,
-          "Vista previa local generada porque no fue posible consultar el endpoint en este momento."
+          "Vista previa local generada porque no fue posible consultar el endpoint."
         );
       }
       setVisibility(successNode, true);

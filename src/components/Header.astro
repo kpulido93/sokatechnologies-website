@@ -25,7 +25,18 @@ const isActive = (href: string) => {
     </span>
   </a>
 
-  <nav class="site-nav" aria-label="Navegación principal">
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="site-navigation"
+    aria-label="Abrir menú de navegación"
+  >
+    <span aria-hidden="true">☰</span>
+    <span>Menú</span>
+  </button>
+
+  <nav id="site-navigation" class="site-nav" aria-label="Navegación principal">
     {
       navItems.map((item) => (
         <a
@@ -44,3 +55,42 @@ const isActive = (href: string) => {
     Solicitar diagnóstico
   </a>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const navigation = header?.querySelector<HTMLElement>(".site-nav");
+
+  if (header && toggle && navigation) {
+    const firstLink = () => navigation.querySelector<HTMLAnchorElement>("a");
+
+    const setMenuOpen = (open: boolean, returnFocus = false) => {
+      header.dataset.menuOpen = String(open);
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Cerrar menú de navegación" : "Abrir menú de navegación");
+
+      if (open) {
+        firstLink()?.focus();
+      } else if (returnFocus) {
+        toggle.focus();
+      }
+    };
+
+    toggle.addEventListener("click", () => {
+      setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    navigation.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) {
+        setMenuOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        event.preventDefault();
+        setMenuOpen(false, true);
+      }
+    });
+  }
+</script>
