@@ -541,6 +541,13 @@ form,
   margin: 0;
 }
 
+.card-integrations .card-label {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+}
+
 .hero-node-index {
   display: grid;
   place-items: center;

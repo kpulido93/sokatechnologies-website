@@ -12,7 +12,13 @@ const visibilityLabel =
     : caseStudy.visibility === "public"
       ? "proyecto directo"
       : "caso controlado";
-const caseTags = [...new Set([...caseStudy.servicesApplied, ...caseStudy.tags])];
+const caseTags = [
+  ...new Set(
+    [...caseStudy.servicesApplied, ...caseStudy.tags].map((tag) =>
+      tag.trim().toLocaleLowerCase() === "base de datos" ? "bases de datos" : tag
+    )
+  )
+];
 const metaLabels =
   caseStudy.region.toLocaleLowerCase() === visibilityLabel
     ? [caseStudy.region]

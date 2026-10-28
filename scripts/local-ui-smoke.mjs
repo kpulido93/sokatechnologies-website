@@ -146,6 +146,17 @@ const pageChecks = async (client, sessionId, route, viewport) =>
       const supportLabel = supportCard?.querySelector("strong");
       const supportCardRect = supportCard?.getBoundingClientRect();
       const supportLabelRect = supportLabel?.getBoundingClientRect();
+      const automationCard = document.querySelector(".card-integrations");
+      const automationLabel = automationCard?.querySelector(".card-label");
+      const automationCardRect = automationCard?.getBoundingClientRect();
+      const automationLabelRect = automationLabel?.getBoundingClientRect();
+      const automationLabelLines = automationLabel
+        ? (() => {
+            const range = document.createRange();
+            range.selectNodeContents(automationLabel);
+            return range.getClientRects().length;
+          })()
+        : 0;
       const homeMap = currentRoute !== "/" || Boolean(
         supportLabel && supportCardRect && supportLabelRect &&
         supportLabel.textContent.includes("Infraestructura preparada") &&
@@ -153,7 +164,12 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         supportLabelRect.right <= supportCardRect.right + 1 &&
         supportLabelRect.top >= supportCardRect.top - 1 &&
         supportLabelRect.bottom <= supportCardRect.bottom + 1 &&
-        supportCard.scrollWidth <= supportCard.clientWidth + 1
+        supportCard.scrollWidth <= supportCard.clientWidth + 1 &&
+        automationLabel && automationCardRect && automationLabelRect &&
+        automationLabel.textContent.trim() === "Automatización" &&
+        automationLabelLines === 1 &&
+        automationLabelRect.left >= automationCardRect.left - 1 &&
+        automationLabelRect.right <= automationCardRect.right + 1
       );
       let mobileHeader = { checked: false, failures: [] };
       if (currentViewport === "mobile" && ["/contacto/", "/diagnostico/"].includes(currentRoute)) {
@@ -186,6 +202,7 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         nestedOverflow,
         focusVisible,
         homeMap,
+        homeMapAutomationLines: automationLabelLines,
         mobileHeader,
         formMode,
         title: document.title
