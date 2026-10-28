@@ -1,70 +1,27 @@
-<div
-  class="hero-panel js-hero-panel"
-  role="group"
-  aria-label="Mapa conceptual: fuentes, integración, decisiones, automatización y continuidad"
->
+---
+import { Picture } from "astro:assets";
+import orchestrationImage from "../assets/images/hero-orquestacion-datos-procesos.png";
+---
+
+<div class="hero-panel js-hero-panel" role="group" aria-label="Ilustración conceptual de datos, procesos e infraestructura conectados">
   <div class="hero-panel-head">
-    <span class="panel-chip">mapa de operación</span>
-    <span class="panel-chip">sin datos sensibles</span>
+    <span class="panel-chip">orquestación de datos</span>
+    <span class="panel-chip">visualización conceptual</span>
   </div>
 
-  <div class="hero-visual-grid">
-    <article class="hero-panel-card card-main js-hero-panel-card" data-card-interaction>
-      <div class="hero-node-head">
-        <span class="hero-node-index">01</span>
-        <p class="card-label">Fuentes</p>
-      </div>
-      <strong>Información conectada</strong>
-      <p class="card-note">Archivos, APIs y herramientas que necesitan hablar entre sí.</p>
-      <div class="module-pill-group">
-        <span>APIs</span>
-        <span>CRM</span>
-        <span>datos</span>
-      </div>
-    </article>
-
-    <article class="hero-panel-card card-side js-hero-panel-card" data-card-interaction>
-      <div class="hero-node-head">
-        <span class="hero-node-index">02</span>
-        <p class="card-label">Integración</p>
-      </div>
-      <strong>Procesos coordinados</strong>
-      <div class="signal-row" aria-hidden="true">
-        <span class="hero-signal js-hero-signal"></span>
-        <span class="hero-signal js-hero-signal is-cyan"></span>
-        <span class="hero-signal js-hero-signal is-mint"></span>
-      </div>
-      <p class="card-note">Reglas, validaciones y seguimiento con una lógica común.</p>
-    </article>
-
-    <article class="hero-panel-card card-report js-hero-panel-card" data-card-interaction>
-      <div class="hero-node-head">
-        <span class="hero-node-index">03</span>
-        <p class="card-label">Decisiones</p>
-      </div>
-      <strong>Datos con contexto</strong>
-      <ul class="panel-list">
-        <li>Indicadores claros</li>
-        <li>Acceso segmentado</li>
-      </ul>
-    </article>
-
-    <article class="hero-panel-card card-integrations js-hero-panel-card" data-card-interaction>
-      <div class="hero-node-head">
-        <span class="hero-node-index">04</span>
-        <p class="card-label">Automatización</p>
-      </div>
-      <strong>Tareas más claras</strong>
-      <p class="card-note">Menos pasos manuales y más trazabilidad para el equipo.</p>
-    </article>
-
-    <article class="hero-panel-card card-support js-hero-panel-card" data-card-interaction>
-      <div class="hero-node-head">
-        <span class="hero-node-index">05</span>
-        <p class="card-label">Continuidad</p>
-      </div>
-      <strong>Infraestructura preparada</strong>
-      <p class="card-note">Operación, soporte y documentación para sostener la solución.</p>
-    </article>
-  </div>
+  <figure class="hero-image-figure">
+    <Picture
+      src={orchestrationImage}
+      widths={[480, 720, 960, 1200, 1448]}
+      sizes="(min-width: 1081px) 46vw, 100vw"
+      formats={["avif", "webp"]}
+      fallbackFormat="webp"
+      width={1448}
+      height={1086}
+      alt="Ilustración conceptual de fuentes de datos conectadas con procesos, decisiones e infraestructura"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption>Orquestación de datos y procesos · Visualización conceptual</figcaption>
+  </figure>
 </div>
