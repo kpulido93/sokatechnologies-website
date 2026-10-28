@@ -32,7 +32,7 @@ const SEGMENT_LABELS: Record<string, string> = {
 
 export const getSiteUrl = () => new URL(SITE_URL);
 
-export const shouldIndexSite = import.meta.env.PUBLIC_SITE_INDEXING?.trim().toLowerCase() !== "false";
+export const shouldIndexSite = import.meta.env.PUBLIC_SITE_INDEXING?.trim().toLowerCase() === "true";
 
 export const absoluteUrl = (pathname: string, siteUrl: string = SITE_URL) =>
   new URL(pathname, siteUrl).toString();

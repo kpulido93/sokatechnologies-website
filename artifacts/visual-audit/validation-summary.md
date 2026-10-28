@@ -19,6 +19,14 @@ Rutas cubiertas: `/`, `/servicios/`, las siete páginas de servicios,
 También se verificaron 21 FAQ, overflow global e interno, foco visible,
 cabecera móvil, honeypot y modo demo.
 
+## SEO-01
+
+La indexación se habilita únicamente cuando `PUBLIC_SITE_INDEXING`, después de
+recortar espacios y normalizar mayúsculas, es exactamente `true`. Las
+compilaciones locales confirmaron `noindex,nofollow` para la variable ausente,
+vacía, `false` y un valor inválido; solo el valor normalizado `true` produjo la
+directiva `index,follow` en el HTML generado.
+
 ## Formularios
 
 Contacto y Diagnóstico pasaron el flujo completo en modo demo:
