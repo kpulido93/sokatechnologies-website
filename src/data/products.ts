@@ -79,7 +79,7 @@ export const products: ProductContent[] = [
       "carga inicial de datos y reglas operativas definidas",
       "revisión de adopción antes de ampliar módulos"
     ],
-    finalCtaTitle: "La recomendación comercial es validar primero un piloto operativo controlado.",
+    finalCtaTitle: "Portik puede evaluarse primero en un piloto operativo controlado.",
     finalCtaBody:
       "Un piloto de 30 a 60 días ayuda a probar adopción, reglas operativas, carga inicial de datos y próximos módulos antes de ampliar el alcance.",
     modules: portikModules

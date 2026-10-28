@@ -17,7 +17,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     primaryCtaHref="/contacto/"
     secondaryCtaLabel="Ver política de privacidad"
     secondaryCtaHref="/politica-privacidad/"
-    signals={["borrador", "uso informativo", "pendiente de revisión legal"]}
+    signals={["modo demo", "uso informativo", "sin transacciones"]}
   />
 
   <section class="section js-section">
@@ -39,10 +39,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </ul>
       </article>
       <article class="legal-card js-reveal-card" data-card-interaction>
-        <h2>Estado del documento</h2>
+        <h2>Formularios y demos</h2>
         <p>
-          Este texto es un borrador informativo. No constituye contrato final ni asesoría legal y
-          debe validarse antes de cualquier publicación definitiva.
+          Contacto y Diagnóstico muestran una validación local en modo demo. Auditoría presenta una
+          simulación basada en respuestas y no visita ni escanea URLs. La experiencia actual no
+          ofrece transacciones ni servicios contratados desde estas páginas.
+        </p>
+      </article>
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>Alcance de esta información</h2>
+        <p>
+          Estas notas describen el uso informativo del sitio y sus límites actuales. El contenido
+          definitivo del sitio se publicará después de completar la revisión correspondiente.
         </p>
       </article>
     </div>
