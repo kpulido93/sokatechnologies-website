@@ -9,20 +9,20 @@ export type AuditCardContent = {
 
 export const auditHeroSignals = [
   "Sin accesos privados",
-  "Hallazgos priorizados",
+  "Observaciones orientativas",
   "Ruta sugerida con Soka"
 ];
 
 export const auditHeroFocus = [
-  "mensaje principal y primer scroll",
-  "CTA, formularios y puntos de contacto",
-  "señales visibles de SEO y confianza",
-  "fricción técnica básica y mobile"
+  "tus respuestas sobre mensaje y primer scroll",
+  "tus respuestas sobre CTA y puntos de contacto",
+  "preguntas sobre SEO básico y confianza",
+  "contexto técnico básico y experiencia mobile"
 ];
 
 export const auditHeroGuardrails = [
   "no pedimos contraseñas, tokens ni paneles",
-  "no auditamos código privado ni entornos internos",
+  "no visitamos código privado ni entornos internos",
   "no prometemos rankings, ventas ni resultados garantizados",
   "si el caso requiere profundidad, el siguiente paso es diagnóstico"
 ];
@@ -32,49 +32,49 @@ export const auditAreas: AuditCardContent[] = [
     eyebrow: "SEO básico",
     title: "Cómo se presenta tu sitio a buscadores.",
     body:
-      "Revisamos señales visibles que afectan entendimiento básico de la página y descubrimiento orgánico inicial.",
+      "La simulación ordena preguntas sobre el entendimiento básico de la página y su descubrimiento orgánico inicial.",
     items: ["title, description y h1", "indexabilidad visible", "enlaces clave y estructura pública"]
   },
   {
     eyebrow: "Velocidad",
     title: "Carga aparente y peso visual del primer recorrido.",
     body:
-      "Buscamos fricción visible por recursos pesados, jerarquía desordenada o experiencia poco fluida en mobile.",
+      "Tus respuestas ayudan a conversar sobre recursos pesados, jerarquía de contenido y experiencia mobile.",
     items: ["primer scroll", "peso visual del hero", "fricción aparente en navegación"]
   },
   {
     eyebrow: "Claridad comercial",
     title: "Qué entiende un visitante en pocos segundos.",
     body:
-      "Analizamos si el sitio comunica la oferta, el perfil ideal de cliente y el siguiente paso con claridad suficiente.",
+      "La simulación considera cómo describes la oferta, el perfil ideal de cliente y el siguiente paso.",
     items: ["propuesta de valor", "jerarquía de contenido", "mensaje orientado a negocio"]
   },
   {
     eyebrow: "Conversión",
     title: "Qué tan fácil es abrir una conversación comercial.",
     body:
-      "Revisamos llamadas a la acción, formularios y puntos de contacto visibles para detectar fricción o ambigüedad.",
+      "Las respuestas ayudan a ordenar preguntas sobre llamadas a la acción, formularios y puntos de contacto.",
     items: ["CTA principales", "formularios visibles", "recorrido hacia contacto o diagnóstico"]
   },
   {
     eyebrow: "Confianza",
     title: "Señales visibles de seriedad y continuidad.",
     body:
-      "Revisamos si el sitio transmite credibilidad mediante estructura, contacto, consistencia y mensajes que reduzcan duda.",
+      "La simulación orienta una conversación sobre credibilidad, contacto, consistencia y mensajes que reduzcan dudas.",
     items: ["HTTPS y contacto", "consistencia visual", "legales y soporte visibles si aplican"]
   },
   {
     eyebrow: "Automatización",
     title: "Oportunidades alrededor del proceso digital.",
     body:
-      "Identificamos si el sitio revela tareas manuales, handoff repetitivo o seguimiento comercial que podría automatizarse.",
+      "Tus respuestas pueden señalar tareas manuales, handoff repetitivo o seguimiento comercial que convenga ordenar.",
     items: ["seguimiento manual", "formularios aislados", "flujo entre web y operación"]
   },
   {
     eyebrow: "Infraestructura básica",
     title: "Señales públicas de continuidad técnica.",
     body:
-      "No hacemos pentesting, pero sí observamos errores visibles, rutas frágiles y síntomas de mantenimiento débil.",
+      "La simulación no hace pentesting; sirve para conversar sobre errores visibles, rutas frágiles y mantenimiento.",
     items: ["errores públicos", "enlaces obvios rotos", "sensación general de estabilidad"]
   }
 ];
@@ -82,10 +82,10 @@ export const auditAreas: AuditCardContent[] = [
 export const auditDeliverables: AuditCardContent[] = [
   {
     eyebrow: "Qué recibirás",
-    title: "Hallazgos priorizados y útiles para decidir.",
+    title: "Observaciones orientativas y útiles para decidir.",
     body:
-      "No entregamos una lista genérica. La salida del MVP se concentra en lo más visible y accionable.",
-    items: ["3 a 5 hallazgos priorizados", "fricciones visibles del primer recorrido", "señales de riesgo o debilidad pública"]
+      "No entregamos una lista genérica. La simulación se concentra en lo que describiste y en próximos pasos posibles.",
+    items: ["observaciones a partir de tus respuestas", "preguntas para el primer recorrido", "temas para conversar con más contexto"]
   },
   {
     eyebrow: "Siguiente paso",
@@ -117,7 +117,7 @@ export const auditRecommendations: AuditCardContent[] = [
     eyebrow: "Ruta posible",
     title: "Automatización del seguimiento o handoff comercial.",
     body:
-      "Si el sitio revela seguimiento manual, fricción entre formulario y operación o tareas repetitivas, puede convenir automatizar.",
+      "Si tus respuestas describen seguimiento manual, fricción entre formulario y operación o tareas repetitivas, puede convenir automatizar.",
     items: ["confirmaciones", "handoff entre áreas", "menos pasos manuales"],
     ctaLabel: "Ver automatizaciones",
     ctaHref: "/servicios/automatizaciones/"

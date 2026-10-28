@@ -17,6 +17,8 @@ const previewId = `${formId}-preview`;
   id={formId}
   class="contact-form audit-form js-reveal"
   method="post"
+  data-mode="demo"
+  data-form-mode="demo"
   data-endpoint="/api/audit"
   data-success-id={successId}
   data-error-id={errorId}
@@ -28,8 +30,8 @@ const previewId = `${formId}-preview`;
   <input type="hidden" name="formContext" value="Auditoría web y operación digital" />
 
   <p id={noteId} class="form-note form-demo-notice">
-    Modo demo: esta validación de prueba usa reglas locales, no envía solicitudes comerciales ni
-    correos y no almacena datos.
+    Modo demo: esta simulación local se basa en tus respuestas. No evalúa ni escanea la URL, no
+    envía solicitudes ni correos y no almacena datos.
   </p>
 
   <label class="form-trap" aria-hidden="true" inert>
@@ -51,7 +53,7 @@ const previewId = `${formId}-preview`;
         maxlength="200"
         required
       />
-      <p id={`${formId}-website-url-hint`} class="field-hint">Solo revisamos sitios públicos. No envíes accesos ni ambientes internos.</p>
+      <p id={`${formId}-website-url-hint`} class="field-hint">La URL sirve como contexto para la simulación. En modo demo no se visita ni se escanea.</p>
       <span id={`${formId}-website-url-error`} class="field-error" role="alert" hidden></span>
     </label>
 
@@ -187,7 +189,7 @@ const previewId = `${formId}-preview`;
   </label>
 
   <div class="form-actions">
-    <button class="button button-primary" type="submit">Validar auditoría de prueba</button>
+    <button class="button button-primary" type="submit">Ver simulación de prueba</button>
     <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
       Escribir por correo
     </a>
@@ -198,8 +200,8 @@ const previewId = `${formId}-preview`;
   </p>
 
   <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
-    La solicitud fue procesada. Revisa el reporte inicial y, si tiene sentido, continúa hacia
-    diagnóstico o contacto.
+    Simulación local generada a partir de tus respuestas. No se evaluó ni escaneó la URL y no se
+    enviaron ni almacenaron datos.
   </p>
 
   <p id={errorId} class="form-status form-status-error" role="alert" hidden>

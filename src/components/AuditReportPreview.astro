@@ -14,21 +14,21 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
 <section id={id} class="audit-report-preview catalog-card" aria-labelledby={titleId} hidden>
   <div class="audit-report-header">
     <div>
-      <p class="eyebrow">Reporte inicial</p>
-      <h3 id={titleId}>Lectura preliminar de la auditoria</h3>
+      <p class="eyebrow">Simulación local</p>
+      <h3 id={titleId}>Simulación basada en tus respuestas</h3>
     </div>
     <p class="catalog-status" data-audit-meta>
-      Envia el formulario para generar una vista previa basada en reglas locales de Soka.
+      Completa el formulario para generar una orientación local. La URL no se evalúa ni se escanea.
     </p>
   </div>
 
   <p class="catalog-status audit-report-summary" data-audit-summary>
-    Aqui apareceran los hallazgos visibles, las areas revisadas y la ruta sugerida.
+    Aquí aparecerán observaciones orientativas y una ruta sugerida a partir de tus respuestas.
   </p>
 
   <div class="audit-score-grid">
     <AuditScoreCard
-      label="Score general"
+      label="Lectura general"
       valueAttr="data-audit-overall-score"
       noteAttr="data-audit-overall-note"
       initialNote="Priorización inicial basada en señales visibles y contexto declarado."
@@ -40,19 +40,19 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
       initialNote="Sirve para decidir si conviene abrir diagnóstico, no como medición técnica cerrada."
     />
     <AuditScoreCard
-      label="Cobertura actual"
+      label="Alcance de la simulación"
       valueAttr="data-audit-coverage"
       noteAttr="data-audit-coverage-note"
-      initialValue="Señales visibles"
-      initialNote="El reporte puede sumar PageSpeed si la URL pública responde y la cuota lo permite."
+      initialValue="Respuestas"
+      initialNote="La simulación usa el contexto compartido; no mide la URL ni consulta servicios externos."
       valueClass="audit-score-text"
     />
   </div>
 
   <section class="audit-list-stack audit-areas-stack" aria-labelledby={`${id}-areas-title`}>
     <div class="audit-list-head">
-      <p id={`${id}-areas-title`} class="card-label">Areas evaluadas</p>
-      <span class="catalog-status" data-audit-areas-count>0 areas</span>
+      <p id={`${id}-areas-title`} class="card-label">Áreas consideradas</p>
+      <span class="catalog-status" data-audit-areas-count>0 áreas</span>
     </div>
     <ul class="audit-area-grid" data-audit-areas></ul>
   </section>
@@ -60,8 +60,8 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
   <div class="audit-report-columns">
     <section class="audit-list-stack" aria-labelledby={`${id}-findings-title`}>
       <div class="audit-list-head">
-        <p id={`${id}-findings-title`} class="card-label">Hallazgos principales</p>
-        <span class="catalog-status" data-audit-findings-count>0 hallazgos</span>
+        <p id={`${id}-findings-title`} class="card-label">Observaciones principales</p>
+        <span class="catalog-status" data-audit-findings-count>0 observaciones</span>
       </div>
       <ul class="audit-result-list" data-audit-findings></ul>
     </section>
@@ -80,7 +80,7 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
 
   <div class="audit-report-actions">
     <a class="button button-primary" href="/diagnostico/" data-link-shift>
-      Solicitar diagnostico
+      Solicitar diagnóstico
     </a>
     <a class="button button-secondary" href="/contacto/" data-link-shift>
       Agendar llamada
@@ -93,7 +93,7 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
   </div>
 
   <p class="audit-report-note">
-    Este es un análisis inicial. Para una revisión completa necesitamos validar contexto, objetivos
-    y operación.
+    Esta simulación es orientativa. Un diagnóstico real requiere validar contexto, objetivos,
+    operación y acceso autorizado cuando corresponda.
   </p>
 </section>

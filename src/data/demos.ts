@@ -4,15 +4,15 @@ export const demos: DemoContent[] = [
   {
     slug: "ecommerce",
     title: "EcomDemo",
-    headline: "Una demo e-commerce útil para mostrar criterio de producto, no para fingir un cliente.",
+    headline: "Una demo e-commerce para mostrar criterio de producto con datos ficticios.",
     summary:
       "Demo conceptual de e-commerce para mostrar estructura, catálogo, conversión y back-office sin usar datos reales de clientes.",
     problem:
-      "Se necesitaba una pieza demostrativa que mostrara criterio visual y estructura de producto sin depender de una marca real ni un backend activo.",
+      "Esta demostración muestra criterio visual y estructura de producto sin depender de una marca real ni un backend activo.",
     solution:
       "Una demo controlada de experiencia de catálogo, fichas, checkout conceptual y operación visual, sin integraciones reales.",
     outcomes: [
-      "material comercial reutilizable",
+      "estructura reutilizable para presentar el concepto",
       "base visual para conversaciones B2B",
       "sin uso de datos ni catálogos de terceros"
     ],
@@ -25,7 +25,7 @@ export const demos: DemoContent[] = [
     metaDescription:
       "Demo conceptual de e-commerce para mostrar estructura, catálogo, conversión y back-office sin usar datos reales de clientes.",
     eyebrow: "Demo propia",
-    heroTitle: "Una demo e-commerce útil para mostrar criterio de producto, no para fingir un cliente.",
+    heroTitle: "Una demo e-commerce para mostrar criterio de producto con datos ficticios.",
     heroBody:
       "EcomDemo se presenta como demostración controlada de experiencia de catálogo, fichas, checkout conceptual y operación visual, sin backend real ni datos de terceros.",
     primaryCtaLabel: "Solicitar diagnóstico",
@@ -54,24 +54,24 @@ export const demos: DemoContent[] = [
     title: "Portik demo",
     headline: "Panel demostrativo para portería, novedades y trazabilidad residencial.",
     summary:
-      "Demo conceptual del producto Portik para explicar módulos MVP y narrativa comercial antes de un piloto.",
+      "Demo conceptual del producto Portik para explicar sus módulos iniciales y el alcance de un piloto.",
     problem:
       "Era necesario mostrar el producto sin depender de capturas reales, datos sensibles ni una instalación en vivo.",
     solution:
       "Se construyó un panel visual propio con módulos ficticios y alcance comercial acotado.",
     outcomes: [
       "mejor soporte visual para pilotos",
-      "narrativa comercial más clara",
+      "explicación más clara para evaluar el concepto",
       "sin exponer datos de residentes ni accesos"
     ],
-    tags: ["portik", "demo", "residencial", "mvp"],
+    tags: ["portik", "demo", "residencial", "piloto"],
     ctaLabel: "Solicitar demo de Portik",
     ctaHref: "/contacto/",
     visibility: "controlled",
     confidentialityNote: "Demo visual sin residentes, placas, reservas ni eventos reales.",
     metaTitle: "Portik demo | SokaTechnologies",
     metaDescription:
-      "Demo conceptual de Portik para explicar módulos MVP, panel operativo y propuesta comercial sin datos reales.",
+      "Demo conceptual de Portik para explicar módulos iniciales, panel operativo y alcance de piloto sin datos reales.",
     eyebrow: "Demo controlada",
     heroTitle: "Portik demo para explicar el producto antes de un piloto.",
     heroBody:
@@ -81,7 +81,7 @@ export const demos: DemoContent[] = [
     secondaryCtaLabel: "Proponer piloto",
     secondaryCtaHref: "/diagnostico/",
     includes: [
-      "módulos MVP simulados",
+      "módulos iniciales simulados",
       "panel operativo ficticio",
       "mensajes aptos para piloto controlado"
     ],

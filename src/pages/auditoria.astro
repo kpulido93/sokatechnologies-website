@@ -23,9 +23,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <p class="eyebrow js-hero-eyebrow">Auditoría consultiva</p>
       <h1 class="js-hero-title">Auditoría gratuita de tu web y operación digital</h1>
       <p class="hero-body js-hero-subtitle">
-        Revisamos señales visibles de claridad comercial, conversión, SEO técnico básico y
-        continuidad digital para detectar si tu sitio necesita rediseño, automatización, reporting
-        o una base técnica más sólida.
+        Simulamos una lectura orientativa de claridad comercial, conversión, SEO técnico básico y
+        continuidad digital a partir de tus respuestas. En este modo demo no visitamos ni escaneamos
+        la URL introducida.
       </p>
 
       <div class="hero-actions">
@@ -44,8 +44,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     <div class="hero-panel audit-hero-panel js-hero-visual">
       <div class="hero-panel-head">
-        <span class="panel-chip">revisión visible</span>
-        <span class="panel-chip">sin backend ni accesos</span>
+        <span class="panel-chip">simulación local</span>
+        <span class="panel-chip">sin solicitudes externas</span>
       </div>
 
       <div class="audit-hero-grid">
@@ -54,7 +54,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           data-card-interaction
         >
           <p class="card-label">Qué vemos rápido</p>
-          <strong>Señales visibles del sitio</strong>
+          <strong>Contexto que compartes</strong>
           <ul class="audit-hero-list">
             {auditHeroFocus.map((item) => <li>{item}</li>)}
           </ul>
@@ -65,7 +65,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           data-card-interaction
         >
           <p class="card-label">Guardrails</p>
-          <strong>Sin accesos privados</strong>
+          <strong>Sin visitas ni escaneos</strong>
           <ul class="audit-hero-list">
             {auditHeroGuardrails.map((item) => <li>{item}</li>)}
           </ul>
@@ -73,7 +73,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
 
       <p class="audit-hero-footnote">
-        La auditoría gratuita entrega hallazgos priorizados y una ruta sugerida. No sustituye un
+        La simulación entrega observaciones orientativas y una ruta sugerida. No sustituye un
         proyecto completo, un pentest ni una auditoría de código privado.
       </p>
     </div>
@@ -81,9 +81,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <section class="section js-section">
     <SectionHeading
-      eyebrow="Qué analizamos"
-      title="Una lectura inicial de tu sitio y de la fricción digital más visible."
-      body="La revisión parte de lo que un visitante, comprador o gerente puede percibir públicamente. No pedimos accesos, paneles internos ni credenciales."
+      eyebrow="Qué orienta la simulación"
+      title="Una lectura inicial basada en tus respuestas y en el contexto que compartes."
+      body="La simulación organiza preguntas sobre claridad, conversión, SEO básico y continuidad. No visita la URL ni solicita accesos, paneles internos o credenciales."
     />
 
     <div class="catalog-grid audit-card-grid">
@@ -99,16 +99,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="contact-panel audit-intake-panel">
       <div class="contact-copy audit-intake-copy js-reveal">
         <p class="eyebrow">Formulario</p>
-        <h2>Solicita la revisión inicial de tu sitio.</h2>
+        <h2>Completa la simulación inicial.</h2>
         <p>
-          Comparte la URL pública, el contexto de la empresa y el principal problema que te está
-          frenando. La auditoría busca abrir una conversación útil, no pedir datos sensibles ni
+          Comparte la URL como contexto, el tipo de empresa y el principal problema que estás
+          enfrentando. La simulación busca abrir una conversación útil, no pedir datos sensibles ni
           accesos.
         </p>
         <ul class="contact-guidelines">
-          <li>Solo revisamos sitios públicos con acceso abierto.</li>
+          <li>La URL se usa como referencia escrita; el modo demo no la visita ni la escanea.</li>
           <li>No envíes contraseñas, tokens, capturas internas ni paneles.</li>
-          <li>Si el caso requiere profundidad, el siguiente paso será diagnóstico o revisión técnica.</li>
+          <li>Si necesitas profundidad, el siguiente paso puede ser diagnóstico o revisión técnica.</li>
         </ul>
       </div>
 
@@ -119,8 +119,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="section js-section">
     <SectionHeading
       eyebrow="Qué recibirás"
-      title="Una respuesta útil para decidir el siguiente paso con más criterio."
-      body="La salida del MVP debe ser breve, accionable y coherente con el nivel de información pública disponible."
+      title="Una orientación útil para decidir el siguiente paso con más criterio."
+      body="La salida de la simulación es breve, orientativa y coherente con la información que compartes."
     />
 
     <div class="catalog-grid audit-card-grid">
@@ -159,7 +159,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="final-shell">
       <p class="eyebrow">Siguiente paso</p>
       <h2>
-        Si tu sitio revela un problema mayor de operación, la auditoría puede convertirse en una
+        Si tus respuestas apuntan a un problema mayor de operación, la simulación puede abrir una
         conversación de diagnóstico mucho más útil.
       </h2>
       <p>
