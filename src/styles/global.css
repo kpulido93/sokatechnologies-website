@@ -7,11 +7,14 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 8rem;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   color: var(--color-text);
   color-scheme: dark;
   font-family: var(--font-body);
@@ -78,7 +81,32 @@ textarea {
 
 .page-shell {
   width: min(calc(100% - 2rem), var(--container));
+  min-width: 0;
   margin: 0 auto;
+}
+
+main,
+section,
+article,
+form,
+.site-header,
+.footer-shell,
+.hero-copy,
+.hero-visual,
+.contact-panel > * {
+  min-width: 0;
+}
+
+.hero h1,
+.page-hero h1,
+.section-heading h2,
+.contact-copy h2,
+.cta-shell h2,
+.final-shell h2,
+.faq-item summary,
+.form-note,
+.field-error {
+  overflow-wrap: anywhere;
 }
 
 .section,
@@ -503,10 +531,13 @@ textarea {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  min-width: 0;
   margin-bottom: 0.8rem;
 }
 
 .hero-node-head .card-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
   margin: 0;
 }
 
@@ -539,6 +570,16 @@ textarea {
   font-size: clamp(1.18rem, 2vw, 1.6rem);
   line-height: 1.16;
   letter-spacing: -0.03em;
+}
+
+.hero-panel-card strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.card-support strong {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  overflow-wrap: normal;
 }
 
 .hero-panel-card p,
@@ -797,11 +838,31 @@ textarea {
 }
 
 .faq-item summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   cursor: pointer;
   list-style: none;
   font-family: var(--font-display);
   font-size: clamp(1.12rem, 1.9vw, 1.4rem);
   line-height: 1.2;
+}
+
+.faq-item summary::after {
+  flex: 0 0 auto;
+  color: var(--color-accent-soft);
+  content: "+";
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-item summary:focus-visible {
+  border-radius: 0.45rem;
 }
 
 .faq-item summary::-webkit-details-marker {
@@ -867,6 +928,7 @@ textarea {
 
 .process-shell {
   position: relative;
+  overflow-x: clip;
   grid-template-columns: 60px minmax(0, 1fr);
   align-items: start;
 }
@@ -903,7 +965,6 @@ textarea {
 .process-step.is-active {
   border-color: rgba(85, 176, 255, 0.3);
   background: rgba(11, 24, 40, 0.96);
-  transform: translateX(0.2rem);
 }
 
 .process-index {
@@ -1047,6 +1108,13 @@ textarea {
   box-shadow: 0 0 0 1px rgba(255, 140, 140, 0.18);
 }
 
+.contact-form .field-error {
+  margin: 0;
+  color: #ffd6d6;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
 .contact-form textarea {
   resize: vertical;
 }
@@ -1065,6 +1133,12 @@ textarea {
 
 .checkbox-line a {
   color: var(--color-accent-soft);
+}
+
+.checkbox-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.45rem;
 }
 
 .form-actions {
@@ -1106,6 +1180,15 @@ textarea {
 
 .form-note {
   margin-bottom: 0;
+}
+
+.form-demo-notice {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(85, 176, 255, 0.24);
+  border-radius: 1rem;
+  color: #d8f0ff;
+  background: rgba(30, 74, 124, 0.18);
 }
 
 .audit-report-preview {
@@ -1851,7 +1934,24 @@ textarea {
   }
 
   .header-cta {
+    width: auto;
+    min-width: 0;
+    padding-inline: 0.65rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .site-nav {
     width: 100%;
+    gap: 0;
+  }
+
+  .site-nav .nav-link {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-inline: 0.38rem;
+    text-align: center;
+    font-size: 0.76rem;
   }
 
   .brand,
@@ -1859,6 +1959,20 @@ textarea {
   .hero-copy,
   .hero-visual {
     min-width: 0;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+  }
+
+  .brand-copy strong {
+    font-size: 0.88rem;
+  }
+
+  .brand-copy small {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
   }
 
   .hero {
@@ -1917,6 +2031,10 @@ textarea {
 
   .field-grid {
     grid-template-columns: 1fr;
+  }
+
+  .form-actions .button {
+    width: 100%;
   }
 
   .audit-report-header,

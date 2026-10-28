@@ -33,7 +33,7 @@ export const demos: DemoContent[] = [
     secondaryCtaLabel: "Ver servicios",
     secondaryCtaHref: "/servicios/",
     includes: [
-      "arquitectura editorial de catálogo y ficha",
+      "estructura de catálogo y ficha",
       "señales de checkout conceptual sin backend",
       "mockups controlados para explicar conversión",
       "base apta para demos y presentaciones comerciales"
@@ -58,7 +58,7 @@ export const demos: DemoContent[] = [
     problem:
       "Era necesario mostrar el producto sin depender de capturas reales, datos sensibles ni una instalación en vivo.",
     solution:
-      "Se construyó un panel visual editorial con módulos ficticios y alcance comercial acotado.",
+      "Se construyó un panel visual propio con módulos ficticios y alcance comercial acotado.",
     outcomes: [
       "mejor soporte visual para pilotos",
       "narrativa comercial más clara",
@@ -75,7 +75,7 @@ export const demos: DemoContent[] = [
     eyebrow: "Demo controlada",
     heroTitle: "Portik demo para explicar el producto antes de un piloto.",
     heroBody:
-      "La demo muestra la lógica general del producto con módulos ficticios, paneles HTML/CSS y narrativa editorial apta para conversación comercial.",
+      "La demo muestra la lógica general del producto con módulos ficticios, paneles HTML/CSS y una explicación apta para conversaciones comerciales.",
     primaryCtaLabel: "Solicitar demo de Portik",
     primaryCtaHref: "/contacto/",
     secondaryCtaLabel: "Proponer piloto",
@@ -100,7 +100,7 @@ export const demos: DemoContent[] = [
     problem:
       "No era viable mostrar dashboards reales por confidencialidad y porque la calidad del dato cambia en cada cliente.",
     solution:
-      "Se preparó una demo con señales visuales genéricas y jerarquía editorial enfocada en la toma de decisiones.",
+      "Se preparó una demo con señales visuales genéricas y jerarquía de indicadores enfocada en la toma de decisiones.",
     outcomes: [
       "mejor conversación sobre KPIs",
       "demostración segura sin datos reales",
@@ -160,7 +160,7 @@ export const demos: DemoContent[] = [
     primaryCtaHref: "/diagnostico/",
     secondaryCtaLabel: "Ver servicios",
     secondaryCtaHref: "/servicios/",
-    includes: ["flujo editorial", "estados simulados", "validaciones de ejemplo"],
+    includes: ["flujo de ejemplo", "estados simulados", "validaciones de ejemplo"],
     exclusions: ["integraciones reales", "credenciales", "accesos productivos", "datos sensibles"],
     finalCtaTitle: "Primero se define el flujo y luego se elige la automatización correcta.",
     finalCtaBody:

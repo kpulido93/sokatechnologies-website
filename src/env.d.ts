@@ -1,6 +1,9 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
+  readonly PUBLIC_SITE_URL?: string;
+  readonly PUBLIC_SITE_INDEXING?: "true" | "false";
+  readonly PUBLIC_SOCIAL_IMAGE_FORMAT?: "png" | "svg";
   readonly SITE_URL?: string;
   readonly CONTACT_EMAIL?: string;
   readonly ANALYTICS_PROVIDER?: string;

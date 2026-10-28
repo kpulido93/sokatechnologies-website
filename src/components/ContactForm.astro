@@ -34,6 +34,7 @@ const successId = `${formId}-success`;
 const errorId = `${formId}-error`;
 const noteId = `${formId}-note`;
 const fallbackAction = `mailto:${fallbackEmail}`;
+const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
 ---
 
 <section class="contact-panel js-reveal">
@@ -66,68 +67,149 @@ const fallbackAction = `mailto:${fallbackEmail}`;
     <input type="hidden" name="authorizationVersion" value={authorization.version} />
     <input type="hidden" name="authorizationHash" value={authorization.hash} />
 
-    <label class="form-trap" aria-hidden="true">
+    <p id={noteId} class="form-note form-demo-notice">
+      {isLiveMode
+        ? "Envío seguro: la solicitud se valida en un Worker y se entrega por correo sin exponer credenciales."
+        : "Modo demo: esta validación de prueba revisa los campos, pero no envía solicitudes ni almacena datos."}
+    </p>
+
+    <label class="form-trap" aria-hidden="true" inert>
       <span>Website</span>
       <input type="text" name="website" tabindex="-1" autocomplete="off" />
     </label>
 
     <div class="field-grid">
-      <label>
+      <label for={`${formId}-name`}>
         <span>Nombre</span>
-        <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" required />
+        <input
+          id={`${formId}-name`}
+          name="name"
+          data-error-id={`${formId}-name-error`}
+          aria-describedby={`${formId}-name-error`}
+          type="text"
+          autocomplete="name"
+          minlength="2"
+          maxlength="80"
+          required
+        />
+        <span id={`${formId}-name-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-company`}>
         <span>Empresa</span>
         <input
+          id={`${formId}-company`}
           type="text"
           name="company"
+          data-error-id={`${formId}-company-error`}
+          aria-describedby={`${formId}-company-error`}
           autocomplete="organization"
           minlength="2"
           maxlength="120"
           required
         />
+        <span id={`${formId}-company-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-email`}>
         <span>Correo electrónico</span>
-        <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="254" required />
+        <input
+          id={`${formId}-email`}
+          type="email"
+          name="email"
+          data-error-id={`${formId}-email-error`}
+          aria-describedby={`${formId}-email-error`}
+          autocomplete="email"
+          inputmode="email"
+          maxlength="254"
+          required
+        />
+        <span id={`${formId}-email-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-phone`}>
         <span>Teléfono <small>(opcional)</small></span>
-        <input type="tel" name="phone" autocomplete="tel" maxlength="40" />
+        <input
+          id={`${formId}-phone`}
+          type="tel"
+          name="phone"
+          data-error-id={`${formId}-phone-error`}
+          aria-describedby={`${formId}-phone-error`}
+          autocomplete="tel"
+          maxlength="40"
+        />
+        <span id={`${formId}-phone-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-country`}>
         <span>País <small>(opcional)</small></span>
-        <input type="text" name="country" autocomplete="country-name" maxlength="80" />
+        <input
+          id={`${formId}-country`}
+          type="text"
+          name="country"
+          data-error-id={`${formId}-country-error`}
+          aria-describedby={`${formId}-country-error`}
+          autocomplete="country-name"
+          maxlength="80"
+        />
+        <span id={`${formId}-country-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-service`}>
         <span>Servicio de interés <small>(opcional)</small></span>
-        <select name="service">
+        <select
+          id={`${formId}-service`}
+          name="service"
+          data-error-id={`${formId}-service-error`}
+          aria-describedby={`${formId}-service-error`}
+        >
           <option value="">Selecciona una opción</option>
           {contactServiceOptions.map((option) => <option value={option}>{option}</option>)}
         </select>
+        <span id={`${formId}-service-error`} class="field-error" role="alert" hidden></span>
       </label>
-      <label>
+      <label for={`${formId}-problem-type`}>
         <span>Tipo de problema <small>(opcional)</small></span>
-        <select name="problemType">
+        <select
+          id={`${formId}-problem-type`}
+          name="problemType"
+          data-error-id={`${formId}-problem-type-error`}
+          aria-describedby={`${formId}-problem-type-error`}
+        >
           <option value="">Selecciona una opción</option>
           <option value="manual">Proceso manual o disperso</option>
           <option value="reporting">Reportes o indicadores</option>
           <option value="infra">Infraestructura o continuidad</option>
           <option value="web">Sitio web o presencia digital</option>
         </select>
+        <span id={`${formId}-problem-type-error`} class="field-error" role="alert" hidden></span>
       </label>
     </div>
 
-    <label class="field-block">
+    <label class="field-block" for={`${formId}-summary`}>
       <span>Descripción del problema</span>
-      <textarea name="summary" rows="5" minlength="30" maxlength="1200" required></textarea>
+      <textarea
+        id={`${formId}-summary`}
+        name="summary"
+        data-error-id={`${formId}-summary-error`}
+        aria-describedby={`${formId}-summary-error`}
+        rows="5"
+        minlength="30"
+        maxlength="1200"
+        required
+      ></textarea>
+      <span id={`${formId}-summary-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label class="checkbox-line">
-      <input type="checkbox" name="consent" value="true" required />
-      <span>
+    <label class="checkbox-line" for={`${formId}-consent`}>
+      <input
+        id={`${formId}-consent`}
+        type="checkbox"
+        name="consent"
+        value="true"
+        data-error-id={`${formId}-consent-error`}
+        aria-describedby={`${formId}-consent-error`}
+        required
+      />
+      <span class="checkbox-copy">
         {authorization.text} No incluiré contraseñas, tokens, llaves privadas ni datos sensibles.
         Consulta la <a href="/politica-privacidad/">política de privacidad</a>.
+        <span id={`${formId}-consent-error`} class="field-error" role="alert" hidden></span>
       </span>
     </label>
 
@@ -141,7 +223,7 @@ const fallbackAction = `mailto:${fallbackEmail}`;
     }
 
     <div class="form-actions">
-      <button class="button button-primary" type="submit">{buttonLabel}</button>
+      <button class="button button-primary" type="submit">{submitLabel}</button>
       <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
         Escribir por correo
       </a>
@@ -157,12 +239,6 @@ const fallbackAction = `mailto:${fallbackEmail}`;
       No se pudo enviar la solicitud. Revisa los campos o usa el correo corporativo como alternativa.
     </p>
 
-    <p id={noteId} class="form-note">
-      {isLiveMode
-        ? "Envío seguro: la solicitud se valida en un Worker y se entrega por correo sin exponer credenciales."
-        : "Modo demo: el formulario valida los campos, pero no envía ni almacena datos. Usa el correo corporativo para iniciar la conversación."}
-    </p>
-
     <noscript>
       <p class="form-note">
         JavaScript está desactivado. Usa el botón de correo para enviar la solicitud desde tu cliente de email.
@@ -171,7 +247,14 @@ const fallbackAction = `mailto:${fallbackEmail}`;
   </form>
 </section>
 
-<script is:inline>
+<script>
+  import {
+    clearFieldError,
+    clearFormFieldErrors,
+    isFormControl,
+    setFieldError
+  } from "../scripts/formFieldErrors";
+
   document.querySelectorAll(".contact-form").forEach((form) => {
     if (!(form instanceof HTMLFormElement)) return;
 
@@ -191,33 +274,35 @@ const fallbackAction = `mailto:${fallbackEmail}`;
       return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     };
     let idempotencyKey = createIdempotencyKey();
-    let previousPayloadFingerprint = null;
+    let previousPayloadFingerprint: string | null = null;
     let waitingForTurnstile = false;
-    let turnstilePoll = null;
+    let turnstilePoll: number | null = null;
 
     const hasTurnstileToken = () =>
-      mode !== "live" || Boolean(form.querySelector('[name="cf-turnstile-response"]')?.value.trim());
+      mode !== "live" ||
+      Boolean(form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value.trim());
 
     // A Turnstile token is single-use; reset it after any completed submission attempt.
     // The same idempotency key is retained for retries with identical lead details.
     const resetTurnstile = () => {
       try {
-        if (window.turnstile && typeof window.turnstile.reset === "function") {
-          window.turnstile.reset();
+        const turnstile = (window as Window & { turnstile?: { reset?: () => void } }).turnstile;
+        if (turnstile && typeof turnstile.reset === "function") {
+          turnstile.reset();
         }
       } catch {
         // If the widget cannot refresh, the next request must still pass server validation.
       }
     };
 
-    const setStatus = (target) => {
+    const setStatus = (target: HTMLElement | null) => {
       [successNode, errorNode].forEach((node) => {
         if (!(node instanceof HTMLElement)) return;
         node.hidden = node !== target;
       });
     };
 
-    const setBusy = (busy) => {
+    const setBusy = (busy: boolean) => {
       const disabled = busy || waitingForTurnstile;
       form.setAttribute("aria-busy", String(disabled));
       if (!(submitButton instanceof HTMLButtonElement)) return;
@@ -239,7 +324,7 @@ const fallbackAction = `mailto:${fallbackEmail}`;
       turnstilePoll = window.setInterval(() => {
         if (!hasTurnstileToken()) return;
         waitingForTurnstile = false;
-        window.clearInterval(turnstilePoll);
+        if (turnstilePoll !== null) window.clearInterval(turnstilePoll);
         turnstilePoll = null;
         setBusy(false);
       }, 100);
@@ -249,13 +334,17 @@ const fallbackAction = `mailto:${fallbackEmail}`;
 
     form.addEventListener(
       "invalid",
-      () => {
+      (event) => {
+        if (isFormControl(event.target)) setFieldError(event.target);
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
       },
       true,
     );
 
-    form.addEventListener("input", () => setStatus(null));
+    form.addEventListener("input", (event) => {
+      if (isFormControl(event.target)) clearFieldError(event.target);
+      setStatus(null);
+    });
 
     form.addEventListener("submit", async (event) => {
       const trap = form.elements.namedItem("website");
@@ -328,6 +417,7 @@ const fallbackAction = `mailto:${fallbackEmail}`;
         if (!response.ok || result?.ok !== true) throw new Error("lead_submission_failed");
 
         form.reset();
+        clearFormFieldErrors(form);
         idempotencyKey = createIdempotencyKey();
         previousPayloadFingerprint = null;
         const tokenInput = form.querySelector('[name="cf-turnstile-response"]');

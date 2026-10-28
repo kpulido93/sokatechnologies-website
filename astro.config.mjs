@@ -9,7 +9,7 @@ export default defineConfig({
     })
   ],
   output: "static",
-  site: "https://sokatechnologies.com",
+  site: process.env.PUBLIC_SITE_URL?.trim() || "https://sokatechnologies.com",
   server: {
     host: true
   }

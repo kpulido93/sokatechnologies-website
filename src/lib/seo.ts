@@ -2,7 +2,7 @@ import type { FaqItem, ProductContent, ServiceContent } from "../data/types";
 
 export type StructuredData = Record<string, unknown>;
 
-const SITE_URL = "https://sokatechnologies.com";
+const SITE_URL = import.meta.env.PUBLIC_SITE_URL?.trim() || "https://sokatechnologies.com";
 const SITE_NAME = "SokaTechnologies";
 const SITE_DESCRIPTION =
   "Software, automatización, Power BI e infraestructura para empresas que necesitan operar con más control.";
@@ -31,6 +31,8 @@ const SEGMENT_LABELS: Record<string, string> = {
 };
 
 export const getSiteUrl = () => new URL(SITE_URL);
+
+export const shouldIndexSite = import.meta.env.PUBLIC_SITE_INDEXING?.trim().toLowerCase() !== "false";
 
 export const absoluteUrl = (pathname: string, siteUrl: string = SITE_URL) =>
   new URL(pathname, siteUrl).toString();

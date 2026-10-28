@@ -4,11 +4,11 @@ export const legalPages: Record<"privacy" | "terms", LegalPageContent> = {
   privacy: {
     title: "Política de privacidad | SokaTechnologies",
     description:
-      "Borrador de política de privacidad para Colombia sobre tratamiento de datos, formularios y proveedores tecnológicos, pendiente de revisión legal.",
+      "Borrador de política de privacidad para Colombia sobre tratamiento de datos, formularios y proveedores tecnológicos, pendiente de aprobación del responsable y revisión legal.",
     eyebrow: "Borrador legal",
-    heroTitle: "Política de privacidad — borrador pendiente de revisión legal.",
+    heroTitle: "Política de privacidad — borrador pendiente de aprobación y revisión legal.",
     heroBody:
-      "Este borrador adapta el tratamiento previsto de datos personales al marco colombiano. No es una política legal definitiva ni debe publicarse como tal sin completar sus datos pendientes y obtener revisión jurídica."
+      "Este borrador adapta el tratamiento previsto de datos personales al marco colombiano. No es una política legal definitiva ni debe publicarse como tal sin completar sus datos pendientes, obtener aprobación del responsable y recibir revisión jurídica."
   },
   terms: {
     title: "Términos | SokaTechnologies",
