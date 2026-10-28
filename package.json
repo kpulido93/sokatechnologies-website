@@ -15,6 +15,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test worker/test/*.test.mjs",
+    "test:local-ui": "node scripts/local-ui-smoke.mjs",
     "test:native-runtime": "vitest run --config vitest.native.config.mjs"
   },
   "dependencies": {

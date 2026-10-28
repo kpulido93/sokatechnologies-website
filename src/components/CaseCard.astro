@@ -12,12 +12,22 @@ const visibilityLabel =
     : caseStudy.visibility === "public"
       ? "proyecto directo"
       : "caso controlado";
+const caseTags = [
+  ...new Set(
+    [...caseStudy.servicesApplied, ...caseStudy.tags].map((tag) =>
+      tag.trim().toLocaleLowerCase() === "base de datos" ? "bases de datos" : tag
+    )
+  )
+];
+const metaLabels =
+  caseStudy.region.toLocaleLowerCase() === visibilityLabel
+    ? [caseStudy.region]
+    : [caseStudy.region, visibilityLabel];
 ---
 
 <article class="case-card js-case-card js-reveal-card" data-card-interaction>
   <div class="case-meta">
-    <span>{caseStudy.region}</span>
-    <span>{visibilityLabel}</span>
+    {metaLabels.map((label) => <span>{label}</span>)}
   </div>
   <h3>{caseStudy.title}</h3>
   <p>{caseStudy.summary}</p>
@@ -36,13 +46,10 @@ const visibilityLabel =
     </div>
   </dl>
   <div>
-    <p class="eyebrow">Servicios aplicados</p>
+    <p class="eyebrow">Servicios y temas</p>
     <div class="case-tags">
-      {caseStudy.servicesApplied.map((service) => <span>{service}</span>)}
+      {caseTags.map((tag) => <span>{tag}</span>)}
     </div>
-  </div>
-  <div class="case-tags">
-    {caseStudy.tags.map((tag) => <span>{tag}</span>)}
   </div>
   <p class="case-note">{caseStudy.confidentialityNote}</p>
   <a class="button button-ghost" href={caseStudy.ctaHref} data-link-shift>{caseStudy.ctaLabel}</a>

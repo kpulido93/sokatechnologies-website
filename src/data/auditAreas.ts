@@ -47,7 +47,7 @@ export const auditAreas: AuditCardContent[] = [
     title: "Qué entiende un visitante en pocos segundos.",
     body:
       "Analizamos si el sitio comunica la oferta, el perfil ideal de cliente y el siguiente paso con claridad suficiente.",
-    items: ["propuesta de valor", "jerarquía editorial", "mensaje orientado a negocio"]
+    items: ["propuesta de valor", "jerarquía de contenido", "mensaje orientado a negocio"]
   },
   {
     eyebrow: "Conversión",
@@ -108,7 +108,7 @@ export const auditRecommendations: AuditCardContent[] = [
     eyebrow: "Ruta posible",
     title: "Sitio web corporativo más claro y confiable.",
     body:
-      "Si el principal problema es mensaje, estructura o conversión, la recomendación puede ir hacia rediseño editorial y mejora técnica del sitio.",
+      "Si el principal problema es mensaje, estructura o conversión, la recomendación puede ir hacia rediseño de contenido y mejora técnica del sitio.",
     items: ["arquitectura de páginas", "CTA más claros", "base técnica más sólida"],
     ctaLabel: "Ver servicio",
     ctaHref: "/servicios/sitios-web-corporativos/"

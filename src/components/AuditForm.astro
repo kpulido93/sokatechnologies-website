@@ -27,93 +27,167 @@ const previewId = `${formId}-preview`;
 >
   <input type="hidden" name="formContext" value="Auditoría web y operación digital" />
 
-  <label class="form-trap" aria-hidden="true">
+  <p id={noteId} class="form-note form-demo-notice">
+    Modo demo: esta validación de prueba usa reglas locales, no envía solicitudes comerciales ni
+    correos y no almacena datos.
+  </p>
+
+  <label class="form-trap" aria-hidden="true" inert>
     <span>Website</span>
     <input type="text" name="website" tabindex="-1" autocomplete="off" />
   </label>
 
   <div class="field-grid">
-    <label>
+    <label for={`${formId}-website-url`}>
       <span>URL del sitio web</span>
       <input
+        id={`${formId}-website-url`}
         type="url"
         name="websiteUrl"
+        data-error-id={`${formId}-website-url-error`}
+        aria-describedby={`${formId}-website-url-hint ${formId}-website-url-error`}
         placeholder="https://tuempresa.com"
         inputmode="url"
         maxlength="200"
         required
       />
-      <p class="field-hint">Solo revisamos sitios públicos. No envíes accesos ni ambientes internos.</p>
+      <p id={`${formId}-website-url-hint`} class="field-hint">Solo revisamos sitios públicos. No envíes accesos ni ambientes internos.</p>
+      <span id={`${formId}-website-url-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-name`}>
       <span>Nombre</span>
-      <input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" required />
+      <input
+        id={`${formId}-name`}
+        type="text"
+        name="name"
+        data-error-id={`${formId}-name-error`}
+        aria-describedby={`${formId}-name-error`}
+        autocomplete="name"
+        minlength="2"
+        maxlength="80"
+        required
+      />
+      <span id={`${formId}-name-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-company`}>
       <span>Empresa</span>
       <input
+        id={`${formId}-company`}
         type="text"
         name="company"
+        data-error-id={`${formId}-company-error`}
+        aria-describedby={`${formId}-company-error`}
         autocomplete="organization"
         minlength="2"
         maxlength="120"
         required
       />
+      <span id={`${formId}-company-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-email`}>
       <span>Email</span>
-      <input type="email" name="email" autocomplete="email" inputmode="email" maxlength="120" required />
+      <input
+        id={`${formId}-email`}
+        type="email"
+        name="email"
+        data-error-id={`${formId}-email-error`}
+        aria-describedby={`${formId}-email-error`}
+        autocomplete="email"
+        inputmode="email"
+        maxlength="120"
+        required
+      />
+      <span id={`${formId}-email-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-whatsapp`}>
       <span>WhatsApp opcional</span>
-      <input type="tel" name="whatsapp" inputmode="tel" autocomplete="tel" maxlength="30" />
-      <p class="field-hint">Opcional. Solo si prefieres seguimiento por ese canal.</p>
+      <input
+        id={`${formId}-whatsapp`}
+        type="tel"
+        name="whatsapp"
+        data-error-id={`${formId}-whatsapp-error`}
+        aria-describedby={`${formId}-whatsapp-hint ${formId}-whatsapp-error`}
+        inputmode="tel"
+        autocomplete="tel"
+        maxlength="30"
+      />
+      <p id={`${formId}-whatsapp-hint`} class="field-hint">Opcional. Solo si prefieres seguimiento por ese canal.</p>
+      <span id={`${formId}-whatsapp-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-country`}>
       <span>País</span>
-      <input type="text" name="country" autocomplete="country-name" maxlength="80" required />
+      <input
+        id={`${formId}-country`}
+        type="text"
+        name="country"
+        data-error-id={`${formId}-country-error`}
+        aria-describedby={`${formId}-country-error`}
+        autocomplete="country-name"
+        maxlength="80"
+        required
+      />
+      <span id={`${formId}-country-error`} class="field-error" role="alert" hidden></span>
     </label>
 
-    <label>
+    <label for={`${formId}-company-type`}>
       <span>Tipo de empresa</span>
-      <select name="companyType" required>
+      <select
+        id={`${formId}-company-type`}
+        name="companyType"
+        data-error-id={`${formId}-company-type-error`}
+        aria-describedby={`${formId}-company-type-error`}
+        required
+      >
         <option value="">Selecciona una opción</option>
         {auditCompanyTypes.map((option) => <option value={option}>{option}</option>)}
       </select>
+      <span id={`${formId}-company-type-error`} class="field-error" role="alert" hidden></span>
     </label>
   </div>
 
-  <label class="field-block">
+  <label class="field-block" for={`${formId}-main-problem`}>
     <span>Principal problema</span>
     <textarea
+      id={`${formId}-main-problem`}
       name="mainProblem"
+      data-error-id={`${formId}-main-problem-error`}
+      aria-describedby={`${formId}-main-problem-hint ${formId}-main-problem-error`}
       rows="6"
       minlength="30"
       maxlength="1200"
       placeholder="Describe qué te preocupa más: claridad comercial, conversión, seguimiento manual, velocidad, confianza o continuidad técnica."
       required
     ></textarea>
-    <p class="field-hint">
+    <p id={`${formId}-main-problem-hint`} class="field-hint">
       No compartas contraseñas, tokens, paneles, capturas internas ni información sensible.
     </p>
+    <span id={`${formId}-main-problem-error`} class="field-error" role="alert" hidden></span>
   </label>
 
-  <label class="checkbox-line">
-    <input type="checkbox" name="consent" required />
-    <span>
+  <label class="checkbox-line" for={`${formId}-consent`}>
+    <input
+      id={`${formId}-consent`}
+      type="checkbox"
+      name="consent"
+      data-error-id={`${formId}-consent-error`}
+      aria-describedby={`${formId}-consent-error`}
+      required
+    />
+    <span class="checkbox-copy">
       Acepto que SokaTechnologies me contacte sobre esta auditoría y confirmo que no enviaré
       contraseñas, tokens, llaves privadas ni accesos. Consulta la
       <a href="/politica-privacidad/">política de privacidad</a>.
+      <span id={`${formId}-consent-error`} class="field-error" role="alert" hidden></span>
     </span>
   </label>
 
   <div class="form-actions">
-    <button class="button button-primary" type="submit">Solicitar auditoría gratuita</button>
+    <button class="button button-primary" type="submit">Validar auditoría de prueba</button>
     <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
       Escribir por correo
     </a>
@@ -133,11 +207,6 @@ const previewId = `${formId}-preview`;
   </p>
 
   <ul id={issuesId} class="form-issues" hidden></ul>
-
-  <p id={noteId} class="form-note">
-    El formulario consulta `/api/audit` y nunca debe incluir contraseñas, tokens ni accesos. En
-    previews estáticos, la vista previa puede resolverse con reglas locales del navegador.
-  </p>
 
   <AuditReportPreview id={previewId} />
 </form>

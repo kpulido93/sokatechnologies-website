@@ -29,7 +29,12 @@ const { service, index } = Astro.props;
   <ul class="service-deliverables">
     {service.deliverables.map((deliverable) => <li>{deliverable}</li>)}
   </ul>
-  <a class="button button-ghost" href={service.ctaHref} data-link-shift>
+  <a
+    class="button button-ghost"
+    href={service.ctaHref}
+    aria-label={`Ver detalle del servicio: ${service.title}`}
+    data-link-shift
+  >
     {service.ctaLabel}
   </a>
 </article>

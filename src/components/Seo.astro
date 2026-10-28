@@ -5,6 +5,7 @@ import {
   createOrganizationSchema,
   createWebsiteSchema,
   getSiteUrl,
+  shouldIndexSite,
   type StructuredData
 } from "../lib/seo";
 
@@ -21,7 +22,9 @@ const { title, description, canonicalPath, pathname, pageName, schemas = [] } = 
 const siteUrl = Astro.site ?? getSiteUrl();
 const currentPath = pathname ?? Astro.url.pathname;
 const canonical = new URL(canonicalPath ?? currentPath, siteUrl).toString();
-const socialImage = new URL("/og/soka-demo-2026.svg", siteUrl).toString();
+const socialImageFormat = import.meta.env.PUBLIC_SOCIAL_IMAGE_FORMAT?.trim().toLowerCase() === "svg" ? "svg" : "png";
+const socialImage = new URL(`/og/soka-demo-2026.${socialImageFormat}`, siteUrl).toString();
+const socialImageType = socialImageFormat === "svg" ? "image/svg+xml" : "image/png";
 const structuredData = [
   createOrganizationSchema(),
   createWebsiteSchema(),
@@ -32,7 +35,10 @@ const structuredData = [
 
 <title>{title}</title>
 <meta name="description" content={description} />
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+<meta
+  name="robots"
+  content={shouldIndexSite ? "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" : "noindex,nofollow"}
+/>
 <link rel="canonical" href={canonical} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <meta property="og:type" content="website" />
@@ -42,6 +48,9 @@ const structuredData = [
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={socialImage} />
+<meta property="og:image:type" content={socialImageType} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={title} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />

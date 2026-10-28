@@ -11,6 +11,7 @@ import type {
   SokaRecommendation
 } from "../lib/audit/types";
 import { validateAuditInput } from "../lib/audit/validateAuditInput";
+import { clearFieldError, clearFormFieldErrors, isFormControl, setFieldError } from "./formFieldErrors";
 
 type AuditApiSuccess = {
   ok: true;
@@ -89,9 +90,6 @@ const buildLocalAuditReport = (request: SanitizedAuditRequest): AuditReport => {
     recommendations
   };
 };
-
-const isTextControl = (control: Element | RadioNodeList | null): control is HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement =>
-  control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement;
 
 const setVisibility = (element: HTMLElement | null, visible: boolean) => {
   if (!element) return;
@@ -337,19 +335,13 @@ const renderReport = (container: HTMLElement, report: AuditReport, metaMessage: 
 };
 
 const clearFieldErrors = (form: HTMLFormElement) => {
-  Array.from(form.elements).forEach((element) => {
-    if (isTextControl(element)) {
-      element.removeAttribute("aria-invalid");
-    }
-  });
+  clearFormFieldErrors(form);
 };
 
 const markInvalidFields = (form: HTMLFormElement, issues: AuditValidationIssue[]) => {
   issues.forEach((issue) => {
     const field = form.elements.namedItem(issue.field);
-    if (isTextControl(field)) {
-      field.setAttribute("aria-invalid", "true");
-    }
+    if (isFormControl(field)) setFieldError(field, issue.message);
   });
 };
 
@@ -390,26 +382,28 @@ const handleAuditForm = (form: HTMLFormElement) => {
   const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
   const defaultSubmitText = submitButton?.textContent ?? "Solicitar auditoria gratuita";
 
-  const resetStatus = () => {
+  const resetStatus = (clearErrors = true) => {
     setVisibility(successNode, false);
     setVisibility(errorNode, false);
     setVisibility(loadingNode, false);
     setVisibility(issuesNode, false);
     setVisibility(previewNode, false);
     clearElement(issuesNode);
-    clearFieldErrors(form);
+    if (clearErrors) clearFieldErrors(form);
   };
 
   form.addEventListener(
     "invalid",
-    () => {
+    (event) => {
+      if (isFormControl(event.target)) setFieldError(event.target);
       setVisibility(errorNode, true);
     },
     true
   );
 
-  form.addEventListener("input", () => {
-    resetStatus();
+  form.addEventListener("input", (event) => {
+    resetStatus(false);
+    if (isFormControl(event.target)) clearFieldError(event.target);
   });
 
   form.addEventListener("submit", async (event) => {

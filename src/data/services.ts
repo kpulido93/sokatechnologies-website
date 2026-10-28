@@ -177,7 +177,7 @@ export const services: ServiceContent[] = [
     ctaLabel: "Ver detalle del servicio",
     ctaHref: "/servicios/dashboards/",
     visibility: "public",
-    confidentialityNote: "Los indicadores mostrados en la demo son ficticios y de uso editorial.",
+    confidentialityNote: "Los indicadores mostrados en la demo son ficticios y no representan métricas de clientes.",
     metaTitle: "Power BI y Business Intelligence | SokaTechnologies",
     metaDescription:
       "Power BI, dashboards y reportes para consolidar datos y convertirlos en indicadores útiles para gerencia y operación.",
@@ -319,7 +319,7 @@ export const services: ServiceContent[] = [
     problem:
       "Sitios confusos, desactualizados o incapaces de explicar claramente qué hace la empresa.",
     solution:
-      "Una base editorial más clara para ventas consultivas, SEO y futuros materiales comerciales.",
+      "Una base de contenido más clara para ventas consultivas, SEO y futuros materiales comerciales.",
     outcomes: [
       "presencia digital más profesional",
       "mejor explicación de la oferta",
@@ -330,7 +330,7 @@ export const services: ServiceContent[] = [
     ctaLabel: "Ver detalle del servicio",
     ctaHref: "/servicios/sitios-web-corporativos/",
     visibility: "public",
-    confidentialityNote: "La estructura editorial evita claims exagerados y no usa activos de terceros.",
+    confidentialityNote: "La estructura del contenido evita afirmaciones exageradas y no usa activos de terceros.",
     metaTitle: "Sitios web corporativos | SokaTechnologies",
     metaDescription:
       "Sitios web corporativos para explicar servicios B2B con claridad, credibilidad y mejores puntos de contacto.",
@@ -371,7 +371,7 @@ export const services: ServiceContent[] = [
       {
         question: "¿La página incluye SEO?",
         answer:
-          "Incluye base técnica y estructura semántica inicial. La captación por búsqueda requiere además contenido, mantenimiento y evolución editorial."
+          "Incluye base técnica y estructura semántica inicial. La captación por búsqueda requiere además contenido, mantenimiento y evolución del sitio."
       },
       {
         question: "¿Puede convivir con una web o CMS existente?",

@@ -112,7 +112,12 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
             <p class="eyebrow">{service.title}</p>
             <h3>{service.headline}</h3>
             <p>{service.summary}</p>
-            <a class="button button-ghost" href={service.ctaHref} data-link-shift>{service.ctaLabel}</a>
+            <a
+              class="button button-ghost"
+              href={service.ctaHref}
+              aria-label={`Ver detalle del servicio: ${service.title}`}
+              data-link-shift
+            >{service.ctaLabel}</a>
           </article>
         ))
       }
