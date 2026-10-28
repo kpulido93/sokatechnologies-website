@@ -27,6 +27,27 @@ compilaciones locales confirmaron `noindex,nofollow` para la variable ausente,
 vacía, `false` y un valor inválido; solo el valor normalizado `true` produjo la
 directiva `index,follow` en el HTML generado.
 
+## Cierre P2 de `PUBLIC_SITE_URL`
+
+Con Astro `7.4.0` y Vite `8.3.4`, `astro.config.mjs` usa la API soportada
+`loadEnv(process.env.NODE_ENV, process.cwd(), "PUBLIC_")`. Vite conserva la
+precedencia de variables del proceso sobre los archivos `.env`; el valor se
+recorta y, si queda vacío o no existe, se usa `https://sokatechnologies.com`.
+`src/lib/seo.ts` aplica la misma normalización, por lo que `Astro.site` y las
+URLs SEO comparten el origen efectivo.
+
+Se verificaron en copias aisladas los valores definidos solo en `.env`, solo en
+`.env.production`, sobrescritos por el proceso y ausentes. En cada caso
+`canonical`, `og:url`, las URLs de JSON-LD y el sitemap usaron el mismo origen.
+
+| Caso aislado | Origen efectivo | Robots | URLs contrastadas |
+| --- | --- | --- | ---: |
+| `.env` | `https://env-only.example.test` | `noindex,nofollow` | 27 |
+| `.env.production` | `https://mode-file.example.test` | `noindex,nofollow` | 27 |
+| Proceso sobre archivo | `https://process-override.example.test` | `index,follow,...` | 27 |
+| Sin variable | `https://sokatechnologies.com` | `noindex,nofollow` | 27 |
+| `PUBLIC_SITE_INDEXING="  TrUe  "` | `https://sokatechnologies.com` | `index,follow,...` | 27 |
+
 ## Formularios
 
 Contacto y Diagnóstico pasaron el flujo completo en modo demo:

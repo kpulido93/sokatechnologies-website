@@ -1,5 +1,10 @@
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
+import { loadEnv } from "vite";
+
+const mode = process.env.NODE_ENV ?? "development";
+const env = loadEnv(mode, process.cwd(), "PUBLIC_");
+const siteUrl = env.PUBLIC_SITE_URL?.trim() || "https://sokatechnologies.com";
 
 export default defineConfig({
   integrations: [
@@ -9,7 +14,7 @@ export default defineConfig({
     })
   ],
   output: "static",
-  site: process.env.PUBLIC_SITE_URL?.trim() || "https://sokatechnologies.com",
+  site: siteUrl,
   server: {
     host: true
   }
