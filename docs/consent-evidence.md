@@ -156,6 +156,15 @@ Para una revocación o solicitud de supresión, la futura operación deberá:
 
 No se implementó borrado remoto ni retención automática. Los periodos deben aprobarse conforme al procedimiento documental y revisión jurídica.
 
+### Propuesta operativa pendiente para consultas no convertidas
+
+Como referencia interna para la futura operación, se propone conservar un lead que no se convierta
+en cliente por un máximo de 12 meses desde la última interacción comercial significativa y aplicar
+supresión anticipada cuando deje de ser necesario para la finalidad informada. Las excepciones
+legales, contractuales o probatorias, así como la aprobación del responsable y la automatización de
+la retención, siguen pendientes de revisión jurídica y decisión operativa. Esta propuesta no cambia
+el modo demo ni autoriza tratamiento real.
+
 ## 8. Validación local
 
 Desde la raíz del repositorio:

@@ -161,17 +161,15 @@ form,
 }
 
 .brand-mark {
-  display: grid;
-  place-items: center;
+  display: block;
+  flex: 0 0 2.7rem;
   width: 2.7rem;
-  aspect-ratio: 1;
+  height: 2.7rem;
   border: 1px solid rgba(102, 198, 255, 0.38);
-  border-radius: 0.85rem;
-  color: var(--color-white);
-  font-family: var(--font-display);
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-blue-bright), var(--color-blue) 58%, var(--color-turquoise));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  overflow: hidden;
 }
 
 .brand-copy {
@@ -1597,6 +1595,26 @@ form,
   margin-bottom: 0;
 }
 
+.footer-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-bottom: 0;
+}
+
+.contact-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.contact-channel-grid h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
 /* Interior pages use the T03-A system with a tighter scan path for B2B readers. */
 .interior-page > .page-hero {
   max-width: none;
@@ -1893,6 +1911,7 @@ form,
   .sector-grid,
   .catalog-grid,
   .detail-grid,
+  .contact-channel-grid,
   .audit-area-grid,
   .audit-report-columns,
   .trust-grid,
@@ -2208,6 +2227,8 @@ form,
 
   .brand-mark {
     width: 2.35rem;
+    height: 2.35rem;
+    flex-basis: 2.35rem;
   }
 
   .brand-copy small {

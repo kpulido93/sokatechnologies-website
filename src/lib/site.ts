@@ -27,7 +27,9 @@ export const siteMeta = {
   shortName: "Soka",
   tagline: "Conectamos sistemas, optimizamos procesos y convertimos datos en decisiones.",
   email: "info@sokatechnologies.com",
-  regions: "Panamá, República Dominicana y Latinoamérica",
+  phone: "+57 321 2554930",
+  phoneHref: "tel:+573212554930",
+  regions: "Colombia",
   diagnosisHref: "/diagnostico/"
 } as const;
 

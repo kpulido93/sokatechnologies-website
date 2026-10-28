@@ -1,6 +1,7 @@
 ---
 import ContactForm from "../components/ContactForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteMeta } from "../lib/site";
 ---
 
 <BaseLayout
@@ -15,6 +16,28 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       La primera conversación busca entender el problema, revisar el contexto operativo y definir
       si tiene sentido avanzar a diagnóstico, propuesta, piloto o revisión técnica.
     </p>
+  </section>
+
+  <section class="section contact-channels" aria-labelledby="contact-channels-title">
+    <div class="section-heading">
+      <p class="eyebrow">Canales institucionales</p>
+      <h2 id="contact-channels-title">Encuéntranos en Colombia.</h2>
+      <p>Usa estos datos para continuar una conversación comercial o solicitar orientación inicial.</p>
+    </div>
+    <div class="contact-channel-grid">
+      <article class="trust-card">
+        <p class="eyebrow">Ubicación</p>
+        <h3>{siteMeta.regions}</h3>
+      </article>
+      <article class="trust-card">
+        <p class="eyebrow">Teléfono</p>
+        <h3><a href={siteMeta.phoneHref}>{siteMeta.phone}</a></h3>
+      </article>
+      <article class="trust-card">
+        <p class="eyebrow">Correo</p>
+        <h3><a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a></h3>
+      </article>
+    </div>
   </section>
 
   <ContactForm
