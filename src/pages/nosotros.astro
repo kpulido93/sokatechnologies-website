@@ -1,6 +1,8 @@
 ---
 import SectionHeading from "../components/SectionHeading.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { Picture } from "astro:assets";
+import founderPortrait from "../assets/images/retrato-corporativo.png";
 
 const founderSchema = {
   "@context": "https://schema.org",
@@ -80,17 +82,35 @@ const founderSchema = {
 
   <section class="section js-section">
     <article class="detail-card founder-card js-reveal-card" data-card-interaction>
-      <p class="eyebrow">Kevin Alexander Pulido</p>
-      <h2>Fundador y Director Técnico</h2>
-      <p>
-        Kevin cuenta con 10 años de experiencia profesional en desarrollo de software,
-        administración de bases de datos, infraestructura, integración de sistemas y Business
-        Intelligence.
-      </p>
-      <p>
-        Desde SokaTechnologies lidera un enfoque consultivo: comprender el problema, proponer una
-        solución adecuada y acompañar su evolución.
-      </p>
+      <div class="founder-layout">
+        <div class="founder-copy">
+          <p class="eyebrow">Kevin Alexander Pulido</p>
+          <h2>Fundador y Director Técnico</h2>
+          <p>
+            Kevin cuenta con 10 años de experiencia profesional en desarrollo de software,
+            administración de bases de datos, infraestructura, integración de sistemas y Business
+            Intelligence.
+          </p>
+          <p>
+            Desde SokaTechnologies lidera un enfoque consultivo: comprender el problema, proponer una
+            solución adecuada y acompañar su evolución.
+          </p>
+        </div>
+        <figure class="founder-portrait">
+          <Picture
+            src={founderPortrait}
+            widths={[320, 480, 640, 840]}
+            sizes="(min-width: 901px) 28vw, 100vw"
+            formats={["avif", "webp"]}
+            fallbackFormat="webp"
+            width={1122}
+            height={1402}
+            alt="Retrato corporativo de Kevin Alexander Pulido, fundador y director técnico de SokaTechnologies"
+            loading="lazy"
+          />
+          <figcaption>Kevin Alexander Pulido · Fundador y Director Técnico</figcaption>
+        </figure>
+      </div>
     </article>
   </section>
 

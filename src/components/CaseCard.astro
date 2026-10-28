@@ -1,5 +1,8 @@
 ---
 import type { CaseStudyContent } from "../data/types";
+import { Picture } from "astro:assets";
+import crmImage from "../assets/images/proyecto-registros-sincronizacion-crm.png";
+import rolesImage from "../assets/images/proyecto-solicitudes-roles.png";
 
 interface Props {
   caseStudy: CaseStudyContent;
@@ -23,9 +26,37 @@ const metaLabels =
   caseStudy.region.toLocaleLowerCase() === visibilityLabel
     ? [caseStudy.region]
     : [caseStudy.region, visibilityLabel];
+const projectImage =
+  caseStudy.slug === "integracion-datos-crm"
+    ? {
+        src: crmImage,
+        alt: "Panel conceptual de registros, fuentes y sincronización con CRM"
+      }
+    : caseStudy.slug === "plataforma-empresarial-integral"
+      ? {
+          src: rolesImage,
+          alt: "Panel conceptual de solicitudes, actividad y roles internos"
+        }
+      : null;
 ---
 
 <article class="case-card js-case-card js-reveal-card" data-card-interaction>
+  {projectImage && (
+    <figure class="case-visual">
+      <Picture
+        src={projectImage.src}
+        widths={[640, 960, 1280, 1586]}
+        sizes="(min-width: 1081px) 50vw, 100vw"
+        formats={["avif", "webp"]}
+        fallbackFormat="webp"
+        width={1586}
+        height={992}
+        alt={projectImage.alt}
+        loading="lazy"
+      />
+      <figcaption>Visualización conceptual · Datos ficticios</figcaption>
+    </figure>
+  )}
   <div class="case-meta">
     {metaLabels.map((label) => <span>{label}</span>)}
   </div>

@@ -142,34 +142,30 @@ const pageChecks = async (client, sessionId, route, viewport) =>
       }
       const form = document.querySelector("form");
       const formMode = form?.dataset.formMode || "local";
-      const supportCard = document.querySelector(".card-support");
-      const supportLabel = supportCard?.querySelector("strong");
-      const supportCardRect = supportCard?.getBoundingClientRect();
-      const supportLabelRect = supportLabel?.getBoundingClientRect();
-      const automationCard = document.querySelector(".card-integrations");
-      const automationLabel = automationCard?.querySelector(".card-label");
-      const automationCardRect = automationCard?.getBoundingClientRect();
-      const automationLabelRect = automationLabel?.getBoundingClientRect();
-      const automationLabelLines = automationLabel
-        ? (() => {
-            const range = document.createRange();
-            range.selectNodeContents(automationLabel);
-            return range.getClientRects().length;
-          })()
-        : 0;
+      const heroVisual = document.querySelector(".hero-visual");
+      const heroFigure = document.querySelector(".hero-image-figure");
+      const heroImage = heroFigure?.querySelector("img");
+      const heroVisualRect = heroVisual?.getBoundingClientRect();
+      const heroFigureRect = heroFigure?.getBoundingClientRect();
+      const heroImageRect = heroImage?.getBoundingClientRect();
+      const heroImageLoaded = heroImage instanceof HTMLImageElement && heroImage.complete && heroImage.naturalWidth > 0;
+      const heroImageResponsive = Boolean(heroImage?.getAttribute("srcset") && heroImage?.getAttribute("sizes"));
+      const heroImageLayout = Boolean(
+        heroVisualRect && heroFigureRect && heroImageRect &&
+        heroImageRect.width > 0 && heroImageRect.height > 0 &&
+        heroImageRect.left >= heroVisualRect.left - 1 &&
+        heroImageRect.right <= heroVisualRect.right + 1 &&
+        heroFigureRect.left >= heroVisualRect.left - 1 &&
+        heroFigureRect.right <= heroVisualRect.right + 1
+      );
       const homeMap = currentRoute !== "/" || Boolean(
-        supportLabel && supportCardRect && supportLabelRect &&
-        supportLabel.textContent.includes("Infraestructura preparada") &&
-        supportLabelRect.left >= supportCardRect.left - 1 &&
-        supportLabelRect.right <= supportCardRect.right + 1 &&
-        supportLabelRect.top >= supportCardRect.top - 1 &&
-        supportLabelRect.bottom <= supportCardRect.bottom + 1 &&
-        supportCard.scrollWidth <= supportCard.clientWidth + 1 &&
-        automationLabel && automationCardRect && automationLabelRect &&
-        automationLabel.textContent.trim() === "Automatización" &&
-        automationLabelLines === 1 &&
-        automationLabelRect.left >= automationCardRect.left - 1 &&
-        automationLabelRect.right <= automationCardRect.right + 1
+        heroImageLoaded && heroImageResponsive && heroImageLayout &&
+        heroImage.alt.includes("datos")
+      );
+      const portraitImage = document.querySelector(".founder-portrait img");
+      const founderPortrait = currentRoute !== "/nosotros/" || Boolean(
+        portraitImage instanceof HTMLImageElement && portraitImage.complete &&
+        portraitImage.naturalWidth > 0 && portraitImage.alt.trim()
       );
       let mobileHeader = { checked: false, failures: [] };
       if (currentViewport === "mobile" && ["/contacto/", "/diagnostico/"].includes(currentRoute)) {
@@ -202,7 +198,10 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         nestedOverflow,
         focusVisible,
         homeMap,
-        homeMapAutomationLines: automationLabelLines,
+        heroImageLoaded,
+        heroImageResponsive,
+        heroImageLayout,
+        founderPortrait,
         mobileHeader,
         formMode,
         title: document.title
@@ -321,7 +320,18 @@ const checkProjects = async (client, sessionId) =>
         cards: cards.length,
         duplicateTags,
         directLabelCounts,
-        noDoubleProjectDirect: directLabelCounts.every((count) => count === 1)
+        noDoubleProjectDirect: directLabelCounts.every((count) => count === 1),
+        projectImages: cards.map((card) => {
+          const image = card.querySelector(".case-visual img");
+          const caption = card.querySelector(".case-visual figcaption");
+          const rect = image?.getBoundingClientRect();
+          return {
+            loaded: image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0,
+            responsive: Boolean(image?.getAttribute("srcset") && image?.getAttribute("sizes")),
+            visible: Boolean(rect && rect.width > 0 && rect.height > 0),
+            caption: caption?.textContent.trim() === "Visualización conceptual · Datos ficticios"
+          };
+        })
       };
     })()` ,
     sessionId
@@ -363,14 +373,16 @@ const checkKeyboard = async (client, sessionId) => {
 };
 
 const capture = async (client, sessionId, route, viewport) => {
-  if (!(["/", "/contacto/", "/diagnostico/", "/proyectos/"].includes(route) && ["desktop", "mobile"].includes(viewport.name))) return;
+  const capturePrimary = ["/", "/proyectos/", "/nosotros/"].includes(route) && ["desktop", "tablet", "mobile"].includes(viewport.name);
+  const captureForm = ["/contacto/", "/diagnostico/"].includes(route) && viewport.name === "desktop";
+  if (!capturePrimary && !captureForm) return;
   mkdirSync(screenshotDir, { recursive: true });
   const name = route === "/" ? "home" : route.slice(1, -1).replaceAll("/", "-");
   const fileName = `${name}-${viewport.name}.png`;
   const screenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
   writeFileSync(join(screenshotDir, fileName), Buffer.from(screenshot.data, "base64"));
   if (route === "/" && viewport.name === "desktop") {
-    await evaluate(client, 'document.querySelector(".card-support")?.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });', sessionId);
+    await evaluate(client, 'document.querySelector(".hero-image-figure")?.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });', sessionId);
     await sleep(800);
     const mapScreenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
     writeFileSync(join(screenshotDir, "home-map-desktop.png"), Buffer.from(mapScreenshot.data, "base64"));
@@ -474,7 +486,7 @@ const main = async () => {
     await sleep(350);
     await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
     const projectsResult = await checkProjects(client, sessionId);
-    if (strict && (projectsResult.cards !== 2 || projectsResult.duplicateTags.length > 0 || !projectsResult.noDoubleProjectDirect)) {
+    if (strict && (projectsResult.cards !== 2 || projectsResult.duplicateTags.length > 0 || !projectsResult.noDoubleProjectDirect || projectsResult.projectImages.length !== 2 || projectsResult.projectImages.some((image) => !image.loaded || !image.responsive || !image.visible || !image.caption))) {
       throw new Error(`Projects content check failed: ${JSON.stringify(projectsResult)}`);
     }
 
@@ -486,12 +498,13 @@ const main = async () => {
     );
     const focusFailures = results.filter((result) => !result.focusVisible);
     const homeMapFailures = results.filter((result) => result.route === "/" && !result.homeMap);
+    const founderPortraitFailures = results.filter((result) => !result.founderPortrait);
     const mobileHeaderFailures = results.filter((result) => result.mobileHeader?.failures?.length > 0);
     const demoModeFailures = results.filter(({ route, formMode }) =>
       ["/contacto/", "/diagnostico/"].includes(route) && formMode !== "demo"
     );
-    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || mobileHeaderFailures.length > 0 || keyboardFocus === "BODY")) {
-      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, mobileHeaderFailures, keyboardFocus })}`);
+    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || keyboardFocus === "BODY")) {
+      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, keyboardFocus })}`);
     }
 
     console.log(JSON.stringify({
@@ -506,6 +519,7 @@ const main = async () => {
       focusFailures: focusFailures.length,
       demoModeFailures: demoModeFailures.length,
       homeMapFailures: homeMapFailures.length,
+      founderPortraitFailures: founderPortraitFailures.length,
       mobileHeaderFailures: mobileHeaderFailures.length,
       formFlowResults,
       projectsResult,
