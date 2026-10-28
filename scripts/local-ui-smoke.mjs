@@ -491,6 +491,36 @@ const checkMobileMenu = async (client, sessionId) =>
     sessionId
   );
 
+const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
+  evaluate(
+    client,
+    `(() => {
+      const brand = document.querySelector(".brand");
+      const logo = brand?.querySelector(".brand-mark");
+      const favicon = document.querySelector('link[rel="icon"]');
+      const phone = document.querySelector('a[href="tel:+573212554930"]');
+      const email = document.querySelector('a[href="mailto:info@sokatechnologies.com"]');
+      const hasOfficialWhatsapp = Array.from(document.querySelectorAll("a[href]"))
+        .some((link) => /(?:wa\.me|whatsapp)/i.test(link.getAttribute("href") || ""));
+      return {
+        route: ${JSON.stringify(route)},
+        viewport: ${JSON.stringify(viewport)},
+        logoLoaded: logo instanceof HTMLImageElement && logo.complete && logo.naturalWidth > 0,
+        logoDimensions: logo instanceof HTMLImageElement && logo.getAttribute("width") === "40" && logo.getAttribute("height") === "40",
+        logoAccessibleName: brand?.getAttribute("aria-label") === "SokaTechnologies",
+        logoCircular: logo instanceof HTMLElement && getComputedStyle(logo).borderRadius === "50%",
+        favicon: favicon?.getAttribute("href")?.includes("logo-sokatechnologies") && favicon?.getAttribute("type") === "image/png",
+        contactData: ${JSON.stringify(route)} !== "/contacto/" || Boolean(
+          document.body.textContent?.includes("Colombia") &&
+          phone?.textContent?.includes("+57 321 2554930") &&
+          email?.textContent?.includes("info@sokatechnologies.com")
+        ),
+        noOfficialWhatsapp: !hasOfficialWhatsapp
+      };
+    })()` ,
+    sessionId
+  );
+
 const auditDemoPasses = (result) => Boolean(
   result?.found &&
   result.demoMode &&
@@ -628,7 +658,8 @@ const checkKeyboard = async (client, sessionId) => {
 
 const capture = async (client, sessionId, route, viewport) => {
   const capturePrimary = ["/", "/proyectos/", "/nosotros/", "/auditoria/"].includes(route) && ["desktop", "tablet", "mobile"].includes(viewport.name);
-  const captureForm = ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && viewport.name === "desktop";
+  const captureForm = ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) &&
+    (viewport.name === "desktop" || (route === "/contacto/" && viewport.name === "mobile"));
   if (!capturePrimary && !captureForm) return;
   mkdirSync(screenshotDir, { recursive: true });
   const name = route === "/" ? "home" : route.slice(1, -1).replaceAll("/", "-");
@@ -650,7 +681,7 @@ const capture = async (client, sessionId, route, viewport) => {
     await evaluate(client, 'document.querySelector(".form-demo-notice")?.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });', sessionId);
     await sleep(800);
     const formScreenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
-    writeFileSync(join(screenshotDir, `${name}-form-desktop.png`), Buffer.from(formScreenshot.data, "base64"));
+    writeFileSync(join(screenshotDir, `${name}-form-${viewport.name}.png`), Buffer.from(formScreenshot.data, "base64"));
     await evaluate(client, "window.scrollTo({ top: 0, behavior: \"instant\" });", sessionId);
   }
   if (route === "/auditoria/" && ["desktop", "mobile"].includes(viewport.name)) {
@@ -720,7 +751,6 @@ const main = async () => {
     "--disable-dev-shm-usage",
     "--noerrdialogs",
     "--no-first-run",
-    "--ozone-platform=headless",
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profile}`,
     "about:blank"
@@ -858,6 +888,19 @@ const main = async () => {
     await client.send("Page.navigate", { url: new URL("/", baseUrl).toString() }, sessionId);
     await sleep(350);
     const keyboardFocus = await checkKeyboard(client, sessionId);
+    const identityResults = [];
+    for (const [route, viewport] of [["/", "desktop"], ["/", "mobile"], ["/contacto/", "desktop"], ["/contacto/", "mobile"]]) {
+      await client.send("Emulation.setDeviceMetricsOverride", {
+        width: viewport === "mobile" ? 375 : 1440,
+        height: viewport === "mobile" ? 812 : 900,
+        deviceScaleFactor: 1,
+        mobile: viewport === "mobile"
+      }, sessionId);
+      await client.send("Page.navigate", { url: new URL(route, baseUrl).toString() }, sessionId);
+      await sleep(350);
+      await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
+      identityResults.push(await checkIdentityAndContact(client, sessionId, route, viewport));
+    }
     const allResults = [...results, ...responsiveResults];
     const overflowFailures = allResults.filter((result) =>
       result.rootOverflow || result.internalOverflow.length > 0 || result.nestedOverflow.length > 0
@@ -870,8 +913,9 @@ const main = async () => {
       ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && formMode !== "demo"
     );
     const mobileMenuFailures = mobileMenuResults.filter((result) => !result.found || !result.opened || !result.firstLinkFocused || !result.allNavigationLinksVisible || !result.escapeClosed || !result.focusReturned || !result.noOverflow);
-    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || mobileMenuFailures.length > 0 || keyboardFocus === "BODY")) {
-      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, mobileMenuFailures, keyboardFocus })}`);
+    const identityFailures = identityResults.filter((result) => !result.logoLoaded || !result.logoDimensions || !result.logoAccessibleName || !result.logoCircular || !result.favicon || !result.contactData || !result.noOfficialWhatsapp);
+    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || mobileMenuFailures.length > 0 || identityFailures.length > 0 || keyboardFocus === "BODY")) {
+      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, mobileMenuFailures, identityFailures, keyboardFocus })}`);
     }
 
     console.log(JSON.stringify({
@@ -895,6 +939,8 @@ const main = async () => {
       desktopAuditDemoFlowResult,
       founderPortraitResult,
       mobileMenuResults,
+      identityResults,
+      identityFailures: identityFailures.length,
       projectsResult,
       screenshots: screenshotDir
     }, null, 2));

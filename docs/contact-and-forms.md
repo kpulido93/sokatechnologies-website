@@ -24,7 +24,7 @@ Los canales publicos aprobados se centralizan en `docs/contact-channels.md`. Usa
 | Dato | Valor | Estado |
 |---|---|---|
 | Email comercial publico | `info@sokatechnologies.com` | Aprobado |
-| WhatsApp comercial publico | `573107482865` | Aprobado |
+| Telefono comercial publico | `+57 321 2554930` | Aprobado; no se presenta como WhatsApp |
 | Correo destino del formulario | `info@sokatechnologies.com` | Aprobado para la configuracion inicial |
 | Responsable de responder leads | `[Definir responsable comercial]` | Pendiente |
 | Horario de atencion | `9:00 a.m. - 6:00 p.m.` | Aprobado |
@@ -38,7 +38,7 @@ La fuente versionada de la pagina Contacto vive en `content/contacto.html` y man
 
 1. Hero.
 2. Formulario de diagnostico.
-3. Canal rapido por WhatsApp.
+3. Canales institucionales de telefono y correo.
 4. Que enviar para iniciar.
 5. Tipos de diagnostico.
 6. Que ocurre despues.
@@ -70,7 +70,7 @@ Codex no debe instalar plugins en produccion ni modificar configuraciones reales
 Usar estos textos mientras el sitio siga en local:
 
 - Email visible: `info@sokatechnologies.com`
-- WhatsApp visible: `573107482865`
+- Telefono visible: `+57 321 2554930`
 - CTA de contacto: `Solicitar diagnostico`
 - Destinatario del formulario: `info@sokatechnologies.com`
 - Politica de privacidad: `[Definir URL de politica de privacidad]`
@@ -262,3 +262,15 @@ Antes de produccion, este texto debe ser revisado contra la politica de privacid
 - Confirmar si se almacenaran entradas en WordPress o solo se enviaran por email.
 - Definir politica de retencion de leads.
 - Revisar texto de privacidad con criterio legal/comercial.
+
+## Propuesta operativa pendiente: retencion de consultas no convertidas
+
+Esta es una propuesta interna, no una politica aprobada ni un plazo legal definitivo:
+
+- conservar una consulta que no se convierta en cliente por un maximo de 12 meses desde la ultima
+  interaccion comercial significativa;
+- suprimirla antes si deja de ser necesaria para la finalidad informada;
+- revisar con asesoría jurídica las excepciones legales, contractuales o probatorias antes de
+  aplicar el periodo y cualquier supresion;
+- mantener documentada la aprobacion del responsable antes de activar tratamiento real o retencion
+  automatica.

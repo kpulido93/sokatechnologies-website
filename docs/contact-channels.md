@@ -10,7 +10,7 @@ Este documento no contiene credenciales, tokens, llaves privadas, datos de cPane
 
 | Dato | Valor | Uso recomendado |
 | --- | --- | --- |
-| WhatsApp publico | `573107482865` | Enlaces de contacto comercial y CTA de diagnostico. |
+| Telefono publico | `+57 321 2554930` | Enlace telefonico y referencia institucional. No se declara como WhatsApp. |
 | Correo publico | `info@sokatechnologies.com` | Contacto comercial, footer, paginas legales y formularios. |
 | Pais principal | `Colombia` | Contexto comercial y textos generales. |
 | Paises objetivo | `Latinoamerica` | Cobertura comercial general. |
@@ -24,27 +24,15 @@ Correo:
 mailto:info@sokatechnologies.com
 ```
 
-WhatsApp:
+Telefono:
 
 ```text
-https://wa.me/573107482865
-```
-
-WhatsApp con mensaje prellenado:
-
-```text
-https://wa.me/573107482865?text=Hola%2C%20quiero%20solicitar%20un%20diagn%C3%B3stico%20para%20SokaTechnologies.%20Quiero%20revisar%20un%20proceso%2C%20sistema%20o%20infraestructura%20de%20mi%20empresa.
-```
-
-Texto fuente del mensaje:
-
-```text
-Hola, quiero solicitar un diagnóstico para SokaTechnologies. Quiero revisar un proceso, sistema o infraestructura de mi empresa.
+tel:+573212554930
 ```
 
 ## Reglas de seguridad para contacto
 
-- No pedir ni recibir contrasenas en formularios, correos o WhatsApp.
+- No pedir ni recibir contrasenas en formularios o correos.
 - No pedir tokens, API keys, llaves privadas ni codigos de acceso.
 - No pedir accesos a cPanel, hosting, servidores, WordPress Admin o repositorios en el primer contacto.
 - No solicitar backups, dumps SQL, archivos de produccion ni bases de datos.
@@ -56,6 +44,5 @@ Hola, quiero solicitar un diagnóstico para SokaTechnologies. Quiero revisar un 
 ## Uso en futuras tareas
 
 - Usar este archivo como fuente central antes de actualizar Contacto, footer, CTAs, formularios, paginas legales o documentacion comercial.
-- Mantener el formato internacional del WhatsApp sin `+`, espacios ni guiones para enlaces `wa.me`.
 - No duplicar datos de contacto en nuevos documentos sin revisar este archivo.
 - Si cambia un canal publico, actualizar primero este documento y luego propagar el cambio a contenido o tema.

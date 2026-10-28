@@ -12,6 +12,11 @@ import { footerGroups, siteMeta } from "../lib/site";
         enfoque consultivo B2B.
       </p>
       <p class="footer-region">{siteMeta.regions}</p>
+      <p class="footer-contact">
+        <a href={siteMeta.phoneHref}>{siteMeta.phone}</a>
+        <span aria-hidden="true"> · </span>
+        <a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a>
+      </p>
     </div>
 
     <div class="footer-grid">
