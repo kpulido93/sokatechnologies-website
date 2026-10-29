@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-29T02:47:27.585Z",
+  "index": "https://sokatechnologies.com/sitemaps.xml",
+  "children": [
+    {
+      "url": "https://sokatechnologies.com/post-sitemap1.xml",
+      "status": 200,
+      "locCount": 2,
+      "urls": [
+        "https://sokatechnologies.com/",
+        "https://sokatechnologies.com/2026/05/13/hello-world/"
+      ]
+    },
+    {
+      "url": "https://sokatechnologies.com/page-sitemap1.xml",
+      "status": 200,
+      "locCount": 7,
+      "urls": [
+        "https://sokatechnologies.com/",
+        "https://sokatechnologies.com/casos-de-exito/",
+        "https://sokatechnologies.com/contacto/",
+        "https://sokatechnologies.com/sobre-nosotros/",
+        "https://sokatechnologies.com/soluciones/",
+        "https://sokatechnologies.com/servicios/",
+        "https://sokatechnologies.com/sample-page/"
+      ]
+    },
+    {
+      "url": "https://sokatechnologies.com/category-sitemap1.xml",
+      "status": 200,
+      "locCount": 1,
+      "urls": [
+        "https://sokatechnologies.com/category/uncategorized/"
+      ]
+    }
+  ]
+}

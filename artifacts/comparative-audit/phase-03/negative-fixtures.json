@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-29T03:31:53Z",
+  "suite": "npm run test:seo:fixtures",
+  "cases": [
+    {
+      "name": "JSON-LD roto con segundo bloque válido",
+      "expectedFailure": "JSON-LD #1 malformado",
+      "result": "PASS"
+    },
+    {
+      "name": "índice XML vacío",
+      "expectedFailure": "sitemap-index.xml no referencia sitemaps",
+      "result": "PASS"
+    },
+    {
+      "name": "XML inválido en el índice",
+      "expectedFailure": "sitemap-index.xml: XML inválido",
+      "result": "PASS"
+    },
+    {
+      "name": "hijo de sitemap ausente",
+      "expectedFailure": "sitemap-index.xml: hijo ausente",
+      "result": "PASS"
+    },
+    {
+      "name": "URL canónica faltante",
+      "expectedFailure": "sitemap: faltan URLs canónicas",
+      "result": "PASS"
+    },
+    {
+      "name": "origen ajeno en URL de sitemap",
+      "expectedFailure": "URL de origen ajeno",
+      "result": "PASS"
+    },
+    {
+      "name": "robots staging con Disallow específico",
+      "expectedFailure": "robots no coincide con la política completa del artefacto",
+      "result": "PASS"
+    },
+    {
+      "name": "robots staging limitado a un bot",
+      "expectedFailure": "robots no coincide con la política completa del artefacto",
+      "result": "PASS"
+    },
+    {
+      "name": "robots producción con sitemap de origen ajeno",
+      "expectedFailure": "robots no coincide con la política completa del artefacto",
+      "result": "PASS"
+    },
+    {
+      "name": "robots staging exacto",
+      "expectedFailure": null,
+      "result": "PASS"
+    },
+    {
+      "name": "robots producción exacto",
+      "expectedFailure": null,
+      "result": "PASS"
+    }
+  ],
+  "passed": 11,
+  "failed": 0
+}

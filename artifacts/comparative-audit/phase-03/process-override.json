@@ -1,0 +1,304 @@
+{
+  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/process-override/dist",
+  "expectedOrigin": "https://process.example.test",
+  "expectIndexing": false,
+  "routes": 23,
+  "routeInventory": {
+    "generatedRoutes": [
+      "/",
+      "/auditoria/",
+      "/casos/",
+      "/contacto/",
+      "/demos/ecommerce/",
+      "/diagnostico/",
+      "/nosotros/",
+      "/politica-privacidad/",
+      "/productos/",
+      "/productos/autoinventario/",
+      "/productos/autowhatsapp/",
+      "/productos/portik/",
+      "/proyectos/",
+      "/servicios/",
+      "/servicios/automatizaciones/",
+      "/servicios/consultoria-ti-devops/",
+      "/servicios/dashboards/",
+      "/servicios/infraestructura-soporte/",
+      "/servicios/mantenimiento-mejora-continua/",
+      "/servicios/sitios-web-corporativos/",
+      "/servicios/software-a-medida/",
+      "/soluciones/",
+      "/terminos/"
+    ],
+    "expectedRoutes": [
+      "/",
+      "/servicios/",
+      "/soluciones/",
+      "/servicios/software-a-medida/",
+      "/servicios/automatizaciones/",
+      "/servicios/dashboards/",
+      "/servicios/consultoria-ti-devops/",
+      "/servicios/sitios-web-corporativos/",
+      "/servicios/infraestructura-soporte/",
+      "/servicios/mantenimiento-mejora-continua/",
+      "/productos/",
+      "/productos/portik/",
+      "/productos/autoinventario/",
+      "/productos/autowhatsapp/",
+      "/contacto/",
+      "/diagnostico/",
+      "/auditoria/",
+      "/casos/",
+      "/demos/ecommerce/",
+      "/nosotros/",
+      "/politica-privacidad/",
+      "/proyectos/",
+      "/terminos/"
+    ],
+    "missingRoutes": [],
+    "unexpectedRoutes": [],
+    "classifications": {
+      "/": "commercial",
+      "/auditoria/": "demo",
+      "/casos/": "compatibility",
+      "/contacto/": "commercial",
+      "/demos/ecommerce/": "demo",
+      "/diagnostico/": "commercial",
+      "/nosotros/": "commercial",
+      "/politica-privacidad/": "compatibility",
+      "/productos/": "commercial",
+      "/productos/autoinventario/": "commercial",
+      "/productos/autowhatsapp/": "commercial",
+      "/productos/portik/": "commercial",
+      "/proyectos/": "commercial",
+      "/servicios/": "commercial",
+      "/servicios/automatizaciones/": "commercial",
+      "/servicios/consultoria-ti-devops/": "commercial",
+      "/servicios/dashboards/": "commercial",
+      "/servicios/infraestructura-soporte/": "commercial",
+      "/servicios/mantenimiento-mejora-continua/": "commercial",
+      "/servicios/sitios-web-corporativos/": "commercial",
+      "/servicios/software-a-medida/": "commercial",
+      "/soluciones/": "commercial",
+      "/terminos/": "compatibility"
+    }
+  },
+  "routeResults": [
+    {
+      "route": "/",
+      "canonical": "https://process.example.test/",
+      "ogUrl": "https://process.example.test/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/auditoria/",
+      "canonical": "https://process.example.test/auditoria/",
+      "ogUrl": "https://process.example.test/auditoria/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/casos/",
+      "canonical": "https://process.example.test/proyectos/",
+      "ogUrl": "https://process.example.test/proyectos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/contacto/",
+      "canonical": "https://process.example.test/contacto/",
+      "ogUrl": "https://process.example.test/contacto/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/demos/ecommerce/",
+      "canonical": "https://process.example.test/demos/ecommerce/",
+      "ogUrl": "https://process.example.test/demos/ecommerce/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/diagnostico/",
+      "canonical": "https://process.example.test/diagnostico/",
+      "ogUrl": "https://process.example.test/diagnostico/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/nosotros/",
+      "canonical": "https://process.example.test/nosotros/",
+      "ogUrl": "https://process.example.test/nosotros/",
+      "robots": "noindex,nofollow",
+      "identityUrls": [
+        "https://sokatechnologies.com"
+      ]
+    },
+    {
+      "route": "/politica-privacidad/",
+      "canonical": "https://process.example.test/politica-privacidad/",
+      "ogUrl": "https://process.example.test/politica-privacidad/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/",
+      "canonical": "https://process.example.test/productos/",
+      "ogUrl": "https://process.example.test/productos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/autoinventario/",
+      "canonical": "https://process.example.test/productos/autoinventario/",
+      "ogUrl": "https://process.example.test/productos/autoinventario/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/autowhatsapp/",
+      "canonical": "https://process.example.test/productos/autowhatsapp/",
+      "ogUrl": "https://process.example.test/productos/autowhatsapp/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/portik/",
+      "canonical": "https://process.example.test/productos/portik/",
+      "ogUrl": "https://process.example.test/productos/portik/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/proyectos/",
+      "canonical": "https://process.example.test/proyectos/",
+      "ogUrl": "https://process.example.test/proyectos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/",
+      "canonical": "https://process.example.test/servicios/",
+      "ogUrl": "https://process.example.test/servicios/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/automatizaciones/",
+      "canonical": "https://process.example.test/servicios/automatizaciones/",
+      "ogUrl": "https://process.example.test/servicios/automatizaciones/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/consultoria-ti-devops/",
+      "canonical": "https://process.example.test/servicios/consultoria-ti-devops/",
+      "ogUrl": "https://process.example.test/servicios/consultoria-ti-devops/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/dashboards/",
+      "canonical": "https://process.example.test/servicios/dashboards/",
+      "ogUrl": "https://process.example.test/servicios/dashboards/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/infraestructura-soporte/",
+      "canonical": "https://process.example.test/servicios/infraestructura-soporte/",
+      "ogUrl": "https://process.example.test/servicios/infraestructura-soporte/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/mantenimiento-mejora-continua/",
+      "canonical": "https://process.example.test/servicios/mantenimiento-mejora-continua/",
+      "ogUrl": "https://process.example.test/servicios/mantenimiento-mejora-continua/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/sitios-web-corporativos/",
+      "canonical": "https://process.example.test/servicios/sitios-web-corporativos/",
+      "ogUrl": "https://process.example.test/servicios/sitios-web-corporativos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/software-a-medida/",
+      "canonical": "https://process.example.test/servicios/software-a-medida/",
+      "ogUrl": "https://process.example.test/servicios/software-a-medida/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/soluciones/",
+      "canonical": "https://process.example.test/soluciones/",
+      "ogUrl": "https://process.example.test/soluciones/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/terminos/",
+      "canonical": "https://process.example.test/terminos/",
+      "ogUrl": "https://process.example.test/terminos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    }
+  ],
+  "sitemap": {
+    "expectedUrls": [
+      "https://process.example.test/",
+      "https://process.example.test/auditoria/",
+      "https://process.example.test/contacto/",
+      "https://process.example.test/demos/ecommerce/",
+      "https://process.example.test/diagnostico/",
+      "https://process.example.test/nosotros/",
+      "https://process.example.test/politica-privacidad/",
+      "https://process.example.test/productos/",
+      "https://process.example.test/productos/autoinventario/",
+      "https://process.example.test/productos/autowhatsapp/",
+      "https://process.example.test/productos/portik/",
+      "https://process.example.test/proyectos/",
+      "https://process.example.test/servicios/",
+      "https://process.example.test/servicios/automatizaciones/",
+      "https://process.example.test/servicios/consultoria-ti-devops/",
+      "https://process.example.test/servicios/dashboards/",
+      "https://process.example.test/servicios/infraestructura-soporte/",
+      "https://process.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://process.example.test/servicios/sitios-web-corporativos/",
+      "https://process.example.test/servicios/software-a-medida/",
+      "https://process.example.test/soluciones/",
+      "https://process.example.test/terminos/"
+    ],
+    "childLocations": [
+      "https://process.example.test/sitemap-0.xml"
+    ],
+    "publishedUrls": [
+      "https://process.example.test/",
+      "https://process.example.test/auditoria/",
+      "https://process.example.test/contacto/",
+      "https://process.example.test/demos/ecommerce/",
+      "https://process.example.test/diagnostico/",
+      "https://process.example.test/nosotros/",
+      "https://process.example.test/politica-privacidad/",
+      "https://process.example.test/productos/",
+      "https://process.example.test/productos/autoinventario/",
+      "https://process.example.test/productos/autowhatsapp/",
+      "https://process.example.test/productos/portik/",
+      "https://process.example.test/proyectos/",
+      "https://process.example.test/servicios/",
+      "https://process.example.test/servicios/automatizaciones/",
+      "https://process.example.test/servicios/consultoria-ti-devops/",
+      "https://process.example.test/servicios/dashboards/",
+      "https://process.example.test/servicios/infraestructura-soporte/",
+      "https://process.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://process.example.test/servicios/sitios-web-corporativos/",
+      "https://process.example.test/servicios/software-a-medida/",
+      "https://process.example.test/soluciones/",
+      "https://process.example.test/terminos/"
+    ]
+  },
+  "failures": []
+}

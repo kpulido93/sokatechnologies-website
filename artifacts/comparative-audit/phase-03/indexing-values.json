@@ -1,0 +1,51 @@
+[
+  {
+    "label": "absent",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false,
+    "routes": 23,
+    "sitemapUrls": 22,
+    "checkerFailures": 0
+  },
+  {
+    "label": "empty",
+    "input": "",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false,
+    "routes": 23,
+    "sitemapUrls": 22,
+    "checkerFailures": 0
+  },
+  {
+    "label": "false",
+    "input": "false",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false,
+    "routes": 23,
+    "sitemapUrls": 22,
+    "checkerFailures": 0
+  },
+  {
+    "label": "invalid",
+    "input": "yes",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false,
+    "routes": 23,
+    "sitemapUrls": 22,
+    "checkerFailures": 0
+  },
+  {
+    "label": "true",
+    "input": "true",
+    "htmlRobots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "robotsTxt": "User-agent: *\nAllow: /\nSitemap: https://index.example.test/sitemap-index.xml",
+    "indexEnabled": true,
+    "routes": 23,
+    "sitemapUrls": 22,
+    "checkerFailures": 0
+  }
+]

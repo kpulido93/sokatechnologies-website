@@ -1,0 +1,10 @@
+{
+  "testRoot": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/permissions-test-2",
+  "rootBefore": "755 1000:1000",
+  "rootAfter": "755 1000:1000",
+  "rootRestored": "755 1000:1000",
+  "oldAssetPreservedDuringPublication": true,
+  "publicationPreservedRoot": true,
+  "rollbackRemovedUnexpected": true,
+  "restorePreservedRoot": true
+}
