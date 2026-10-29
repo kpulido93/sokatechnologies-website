@@ -30,6 +30,7 @@ export const siteMeta = {
   phone: "+57 321 2554930",
   phoneHref: "tel:+573212554930",
   regions: "Colombia",
+  contactHref: "/contacto/#contacto-directo",
   diagnosisHref: "/diagnostico/"
 } as const;
 

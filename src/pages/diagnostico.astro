@@ -1,7 +1,7 @@
 ---
 import ContactForm from "../components/ContactForm.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { processSteps } from "../lib/site";
+import { processSteps, siteMeta } from "../lib/site";
 ---
 
 <BaseLayout
@@ -16,6 +16,10 @@ import { processSteps } from "../lib/site";
       El diagnóstico sirve para ordenar contexto, objetivos, usuarios, restricciones y riesgos
       antes de plantear una solución o un piloto.
     </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
+      <a class="button button-ghost" href={`mailto:${siteMeta.email}`}>Escribir por correo</a>
+    </div>
   </section>
 
   <section class="section js-section">

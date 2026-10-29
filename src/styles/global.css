@@ -1653,17 +1653,77 @@ form,
   margin-bottom: 0;
 }
 
-.contact-channel-grid {
+.contact-direct-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.contact-channel-grid h3 {
+#contacto-directo {
+  scroll-margin-top: 7rem;
+}
+
+.contact-direct-action {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 1.4rem;
+  border: 1px solid rgba(144, 217, 255, 0.18);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  background: rgba(8, 20, 34, 0.8);
+  text-decoration: none;
+  transition: border-color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
+}
+
+.contact-direct-action:hover,
+.contact-direct-action:focus-visible {
+  border-color: rgba(85, 176, 255, 0.72);
+  transform: translateY(-2px);
+}
+
+.contact-direct-action strong {
+  color: var(--color-accent-soft);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+}
+
+.contact-direct-action > span:last-child {
+  overflow-wrap: anywhere;
+}
+
+.contact-location {
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+}
+
+.contact-location .eyebrow {
+  display: inline;
+  margin-right: 0.45rem;
+}
+
+.contact-share-list {
+  max-width: 48rem;
+  margin: 1.5rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
+.contact-share-list li + li {
+  margin-top: 0.6rem;
+}
+
+.contact-share .form-note {
+  max-width: 48rem;
+  margin-top: 1rem;
+}
+
+.contact-direct-action h3 {
   margin: 0;
   font-size: 1.05rem;
-  overflow-wrap: anywhere;
 }
 
 /* Interior pages use the T03-A system with a tighter scan path for B2B readers. */
@@ -1999,7 +2059,7 @@ form,
   .catalog-grid,
   .solution-grid,
   .detail-grid,
-  .contact-channel-grid,
+  .contact-direct-grid,
   .audit-area-grid,
   .audit-report-columns,
   .trust-grid,
@@ -2306,6 +2366,10 @@ form,
   .contact-form {
     gap: 0.85rem;
     padding: 0.85rem;
+  }
+
+  .contact-direct-grid {
+    grid-template-columns: 1fr;
   }
 
   .field-grid {

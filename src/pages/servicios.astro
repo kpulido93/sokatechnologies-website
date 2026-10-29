@@ -3,7 +3,7 @@ import SectionHeading from "../components/SectionHeading.astro";
 import ServiceCard from "../components/ServiceCard.astro";
 import { services } from "../data/services";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { processSteps } from "../lib/site";
+import { processSteps, siteMeta } from "../lib/site";
 ---
 
 <BaseLayout
@@ -21,7 +21,7 @@ import { processSteps } from "../lib/site";
         continuidad.
       </p>
       <div class="hero-actions">
-        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
         <a class="button button-ghost" href="/soluciones/" data-link-shift>Explorar por necesidad</a>
       </div>
     </section>
@@ -66,7 +66,7 @@ import { processSteps } from "../lib/site";
           El primer paso recomendado es revisar el proceso, los usuarios, las herramientas actuales
           y los riesgos antes de proponer una solución cerrada.
         </p>
-        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
       </div>
     </section>
   </div>
