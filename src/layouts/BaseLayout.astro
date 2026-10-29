@@ -3,6 +3,7 @@ import logo from "../assets/images/logo-sokatechnologies.png";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import Seo from "../components/Seo.astro";
+import WhatsAppLink from "../components/WhatsAppLink.astro";
 import type { StructuredData } from "../lib/seo";
 import "../styles/global.css";
 
@@ -46,6 +47,7 @@ const { title, description, canonicalPath, pageName, schemas = [] } = Astro.prop
       <slot />
     </main>
     <Footer />
+    <WhatsAppLink variant="floating" />
     <script>
       import { destroySiteMotion, initSiteMotion } from "../scripts/animations/init";
 

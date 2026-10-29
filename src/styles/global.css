@@ -1605,7 +1605,74 @@ form,
 }
 
 .site-footer {
-  padding: 0 0 var(--space-xl);
+  padding: 0 0 calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.whatsapp-link svg {
+  flex: 0 0 1.5rem;
+}
+
+.button-whatsapp,
+.whatsapp-float {
+  color: #062f22;
+  background: #25d366;
+  border: 1px solid #25d366;
+}
+
+.button-whatsapp:hover,
+.whatsapp-float:hover {
+  color: #062f22;
+  background: #51df87;
+}
+
+.whatsapp-link:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px #062f22;
+}
+
+.whatsapp-float {
+  position: fixed;
+  right: calc(1rem + env(safe-area-inset-right, 0px));
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  min-height: 3.25rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  box-shadow: 0 0.4rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+/* Keep form controls and the expanded navigation clear, including without JS. */
+body:has(form:focus-within) .whatsapp-float,
+body:has(.menu-toggle[aria-expanded="true"]) .whatsapp-float {
+  visibility: hidden;
+}
+
+/* Direct contact actions stay in the form flow; the floating link must not cover fields or results. */
+body:has(form) .whatsapp-float {
+  visibility: hidden;
+}
+
+.whatsapp-footer {
+  margin-top: 1rem;
+  color: #51df87;
+}
+
+@media print {
+  .whatsapp-float {
+    display: none;
+  }
 }
 
 .footer-shell {
@@ -1655,7 +1722,7 @@ form,
 
 .contact-direct-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }

@@ -579,8 +579,36 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
       const favicon = document.querySelector('link[rel="icon"]');
       const phoneLinks = Array.from(document.querySelectorAll('a[href="tel:+573212554930"]'));
       const emailLinks = Array.from(document.querySelectorAll('a[href="mailto:info@sokatechnologies.com"]'));
-      const hasOfficialWhatsapp = Array.from(document.querySelectorAll("a[href]"))
-        .some((link) => /(?:wa\.me|whatsapp)/i.test(link.getAttribute("href") || ""));
+      const whatsappLinks = Array.from(document.querySelectorAll("a[data-whatsapp-link]"));
+      const float = document.querySelector(".whatsapp-float");
+      const floatRect = float?.getBoundingClientRect();
+      const floatShouldBeVisible = !document.querySelector("form");
+      const officialWhatsapp = whatsappLinks.length >= 2 && whatsappLinks.every((link) => {
+        const url = new URL(link.href);
+        return url.origin === "https://wa.me" && url.pathname === "/573212554930" &&
+          url.searchParams.get("text") === "Hola, quiero conversar con SokaTechnologies sobre un proyecto." &&
+          link.target === "_blank" && link.relList.contains("noopener") && link.relList.contains("noreferrer");
+      });
+      const whatsappVisible = float instanceof HTMLElement && (
+        floatShouldBeVisible
+          ? getComputedStyle(float).visibility === "visible" &&
+            floatRect.width >= 44 && floatRect.height >= 44 && floatRect.left >= 0 &&
+            floatRect.right <= innerWidth && floatRect.top >= 0 && floatRect.bottom <= innerHeight
+          : getComputedStyle(float).visibility === "hidden"
+      );
+      let whatsappFocus = !floatShouldBeVisible;
+      let whatsappFormClear = true;
+      if (float instanceof HTMLElement && floatShouldBeVisible) {
+        float.focus();
+        whatsappFocus = document.activeElement === float && getComputedStyle(float).outlineStyle !== "none";
+        const field = document.querySelector('form input:not([type="hidden"]):not([tabindex="-1"]), form textarea');
+        if (field instanceof HTMLElement) {
+          field.focus();
+          whatsappFormClear = getComputedStyle(float).visibility === "hidden";
+          field.blur();
+        }
+        float.blur();
+      }
       return {
         route: ${JSON.stringify(route)},
         viewport: ${JSON.stringify(viewport)},
@@ -594,7 +622,10 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
           phoneLinks.some((link) => link.textContent?.includes("+57 321 2554930")) &&
           emailLinks.some((link) => link.textContent?.includes("info@sokatechnologies.com"))
         ),
-        noOfficialWhatsapp: !hasOfficialWhatsapp
+        officialWhatsapp,
+        whatsappVisible,
+        whatsappFocus,
+        whatsappFormClear
       };
     })()` ,
     sessionId
@@ -1053,7 +1084,7 @@ const main = async () => {
       ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && formMode !== "demo"
     );
     const mobileMenuFailures = mobileMenuResults.filter((result) => !result.found || !result.opened || !result.firstLinkFocused || !result.allNavigationLinksVisible || !result.escapeClosed || !result.focusReturned || !result.noOverflow);
-    const identityFailures = identityResults.filter((result) => !result.logoLoaded || !result.logoDimensions || !result.logoAccessibleName || !result.logoCircular || !result.favicon || !result.contactData || !result.noOfficialWhatsapp);
+    const identityFailures = identityResults.filter((result) => !result.logoLoaded || !result.logoDimensions || !result.logoAccessibleName || !result.logoCircular || !result.favicon || !result.contactData || !result.officialWhatsapp || !result.whatsappVisible || !result.whatsappFocus || !result.whatsappFormClear);
     if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || mobileFieldCoverageFailures.length > 0 || mobileMenuFailures.length > 0 || identityFailures.length > 0 || keyboardFocus === "BODY")) {
       throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, mobileFieldCoverageFailures, mobileMenuFailures, identityFailures, keyboardFocus })}`);
     }
