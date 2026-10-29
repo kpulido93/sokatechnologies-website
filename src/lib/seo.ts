@@ -1,4 +1,5 @@
 import type { FaqItem, ProductContent, ServiceContent } from "../data/types";
+import { siteMeta } from "./site";
 
 export type StructuredData = Record<string, unknown>;
 
@@ -6,6 +7,7 @@ const SITE_URL = import.meta.env.PUBLIC_SITE_URL?.trim() || "https://sokatechnol
 const SITE_NAME = "SokaTechnologies";
 const SITE_DESCRIPTION =
   "Software, automatización, Power BI e infraestructura para empresas que necesitan operar con más control.";
+const AREA_SERVED = ["Colombia", "Panamá", "República Dominicana", "Latinoamérica"];
 
 const SEGMENT_LABELS: Record<string, string> = {
   casos: "Proyectos",
@@ -75,8 +77,9 @@ export const createOrganizationSchema = (): StructuredData => ({
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  email: "mailto:info@sokatechnologies.com",
-  areaServed: ["Panamá", "República Dominicana", "Latinoamérica"],
+  email: siteMeta.email,
+  telephone: siteMeta.phone,
+  areaServed: AREA_SERVED,
   knowsAbout: [
     "Software a medida",
     "Automatizaciones e integraciones",
@@ -120,7 +123,7 @@ export const createServiceSchema = (
   serviceType: service.title,
   description: service.metaDescription,
   url,
-  areaServed: ["Panamá", "República Dominicana", "Latinoamérica"],
+  areaServed: AREA_SERVED,
   provider: {
     "@type": "Organization",
     name: SITE_NAME,

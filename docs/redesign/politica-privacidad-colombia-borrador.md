@@ -1,0 +1,281 @@
+---
+# Plantilla pública de trabajo — no es una política aprobada ni un documento privado.
+import PageHero from "../components/PageHero.astro";
+import { legalPages } from "../data/legal";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title={legalPages.privacy.title}
+  description={legalPages.privacy.description}
+  canonicalPath="/politica-privacidad/"
+>
+  <PageHero
+    eyebrow={legalPages.privacy.eyebrow}
+    title={legalPages.privacy.heroTitle}
+    body={legalPages.privacy.heroBody}
+    primaryCtaLabel="Contactar a SokaTechnologies"
+    primaryCtaHref="/contacto/"
+    secondaryCtaLabel="Ver términos"
+    secondaryCtaHref="/terminos/"
+    signals={["borrador", "sin revisión legal final", "no publicar sin validar"]}
+  />
+
+  <section class="section js-section" aria-labelledby="privacy-sections-title">
+    <div class="legal-stack">
+      <aside class="legal-card" role="note" aria-labelledby="privacy-draft-title">
+        <h2 id="privacy-draft-title">BORRADOR — Pendiente de aprobación y revisión legal</h2>
+        <p>
+          Esta versión conserva información pendiente de completar y no constituye una política
+          definitiva. No debe presentarse como documento legal final ni utilizarse para activar
+          formularios reales sin revisión y aprobación.
+        </p>
+        <p><strong>Última actualización:</strong> [FECHA DE PUBLICACIÓN]</p>
+      </aside>
+
+      <h2 id="privacy-sections-title">Secciones de la política de privacidad</h2>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>1. Responsable del tratamiento</h2>
+        <p>
+          El responsable del tratamiento, su identificación, domicilio y datos de contacto deben
+          completarse y validarse antes de usar este texto como política definitiva:
+          <strong>[COMPLETAR Y VALIDAR LOS DATOS DEL RESPONSABLE]</strong>.
+        </p>
+        <p>
+          La identificación tributaria, si aplica, debe registrarse únicamente después de su
+          confirmación: <strong>[COMPLETAR Y VALIDAR IDENTIFICACIÓN, SI APLICA]</strong>.
+        </p>
+        <p>
+          La persona encargada de atender consultas y reclamos es
+          <strong>[NOMBRE DE LA PERSONA ENCARGADA]</strong>, en calidad de
+          <strong>[CARGO O FUNCIÓN DE LA PERSONA ENCARGADA]</strong>. Su designación y datos de
+          contacto deben confirmarse antes de iniciar el tratamiento real.
+        </p>
+        <p>
+          Para consultas, reclamos o solicitudes relacionadas con el tratamiento de datos
+          personales, puede escribir a:
+        </p>
+        <p><strong>info@sokatechnologies.com</strong></p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>2. Información que recopilamos</h2>
+        <p>Cuando utiliza nuestros formularios de contacto o diagnóstico, podemos solicitar:</p>
+        <ul class="detail-list">
+          <li>Nombre, empresa y correo electrónico.</li>
+          <li>Teléfono y país, cuando sean proporcionados.</li>
+          <li>Servicio de interés y tipo de problema.</li>
+          <li>Descripción de la necesidad o proyecto.</li>
+          <li>Confirmación de consentimiento para gestionar la solicitud.</li>
+        </ul>
+        <p>
+          Si solicita una auditoría de su sitio web, también podemos tratar la URL pública indicada,
+          nombre, empresa, correo, WhatsApp opcional, país, tipo de empresa, descripción del problema
+          principal y aceptación del formulario.
+        </p>
+        <p>
+          También pueden procesarse datos técnicos necesarios para la seguridad y prevención de
+          abuso, incluyendo información de conexión utilizada por Cloudflare Turnstile.
+        </p>
+        <p>
+          No solicitamos contraseñas, credenciales, llaves privadas ni información sensible
+          innecesaria. El titular debe abstenerse de incluir ese tipo de información en los
+          formularios.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>3. Finalidad del tratamiento</h2>
+        <p>
+          El tratamiento previsto se regirá por la Ley 1581 de 2012, sus normas reglamentarias y,
+          en lo pertinente, el capítulo aplicable del Decreto 1074 de 2015, sin perjuicio de la
+          revisión jurídica que determine el alcance exacto para esta actividad.
+        </p>
+        <p>Utilizamos la información para:</p>
+        <ul class="detail-list">
+          <li>Responder consultas comerciales.</li>
+          <li>Evaluar necesidades tecnológicas.</li>
+          <li>Preparar reuniones, diagnósticos o propuestas solicitadas.</li>
+          <li>Gestionar comunicaciones relacionadas con la solicitud.</li>
+          <li>Proteger los formularios contra envíos automatizados y uso indebido.</li>
+          <li>
+            Generar reportes preliminares sobre URLs públicas en la herramienta de auditoría,
+            mediante reglas locales y, cuando corresponda, análisis externo de rendimiento.
+          </li>
+        </ul>
+        <p>
+          Los datos enviados mediante estos formularios no se utilizarán automáticamente para
+          suscripciones de marketing sin la autorización que corresponda.
+        </p>
+        <p>
+          Cuando el tratamiento lo requiera, SokaTechnologies solicitará una autorización previa,
+          expresa e informada antes o al momento de recolectar los datos, indicando las finalidades
+          y los canales aplicables. El texto, mecanismo de registro y prueba del consentimiento de
+          los formularios se encuentran en revisión y los formularios continúan en modo demo, sin
+          activar recepción real de solicitudes.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>4. Proveedores tecnológicos</h2>
+        <p>
+          Para operar nuestro sitio web y gestionar solicitudes utilizamos servicios de terceros,
+          entre ellos:
+        </p>
+        <p><strong>Cloudflare:</strong> infraestructura, seguridad y validación de solicitudes mediante Turnstile.</p>
+        <p>
+          <strong>Resend:</strong> en el flujo de recepción real autorizado, procesamiento y envío
+          de notificaciones de Contacto y Diagnóstico al correo corporativo.
+        </p>
+        <p>
+          <strong>Google PageSpeed Insights:</strong> si se habilita el procesamiento de auditorías
+          en el servidor, se consulta este servicio utilizando la URL pública proporcionada para
+          obtener métricas técnicas del sitio. El flujo actual no remite a Google PageSpeed los
+          datos de contacto ni la descripción del problema introducidos en el formulario.
+        </p>
+        <p>
+          Cloudflare puede tratar información técnica y de seguridad, incluida información de
+          conexión, para prestar infraestructura y controles antiabuso. Resend trataría los datos
+          de una solicitud únicamente cuando se autorice el flujo real. Google PageSpeed trataría
+          la URL pública enviada para la auditoría cuando el procesamiento server-side esté
+          habilitado. Los formularios demo actuales no activan estos envíos reales.
+        </p>
+        <p>
+          Estos proveedores pueden procesar información técnica o personal necesaria para prestar
+          sus servicios, conforme a sus propias condiciones y acuerdos aplicables.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>5. Almacenamiento y conservación</h2>
+        <p>
+          Las solicitudes de Contacto y Diagnóstico, cuando se habiliten, se entregarán al correo
+          corporativo de SokaTechnologies. En el modo local, la vista previa de Auditoría no envía
+          solicitudes por correo ni las almacena; el endpoint de auditoría previsto para servidor
+          genera reportes sin persistirlos ni enviarlos por correo en su implementación actual.
+        </p>
+        <p>
+          El uso de servicios de correo e infraestructura puede implicar almacenamiento temporal y
+          registros operativos administrados por los proveedores.
+        </p>
+        <p>
+          Los datos se conservarán durante <strong>[PERIODO DE RETENCIÓN POR DEFINIR]</strong>,
+          considerando la finalidad de la solicitud y las obligaciones legales aplicables. Este
+          periodo está pendiente de decisión, documentación y revisión jurídica.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>6. Transferencias internacionales</h2>
+        <p>
+          Debido al uso de proveedores tecnológicos internacionales, determinados datos pueden ser
+          procesados fuera del país de residencia del usuario.
+        </p>
+        <p>
+          Las condiciones y salvaguardas aplicables a estas transferencias se verificarán conforme
+          a la legislación correspondiente.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>7. Seguridad de la información</h2>
+        <p>
+          Aplicamos medidas técnicas y organizativas orientadas a proteger las solicitudes
+          recibidas, incluyendo conexiones HTTPS, validación antiabuso y control de acceso a los
+          servicios utilizados.
+        </p>
+        <p>
+          Solicitamos expresamente que los formularios no se utilicen para transmitir contraseñas,
+          claves privadas, credenciales ni información sensible innecesaria.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>8. Derechos de los titulares</h2>
+        <p>
+          De acuerdo con la Ley 1581 de 2012, los titulares pueden conocer, actualizar y rectificar
+          sus datos; solicitar prueba de la autorización; ser informados sobre el uso dado a la
+          información; presentar quejas ante la Superintendencia de Industria y Comercio cuando
+          corresponda; revocar la autorización o solicitar la supresión cuando sea procedente; y
+          acceder gratuitamente a sus datos personales, en los términos aplicables.
+        </p>
+        <h3>Procedimiento para ejercer estos derechos</h3>
+        <p>
+          Las consultas, reclamos, solicitudes de actualización, rectificación, supresión o
+          revocatoria pueden enviarse a <strong>info@sokatechnologies.com</strong> con el asunto
+          «Consulta o reclamo de datos personales». La solicitud debe incluir nombre del titular,
+          medio para recibir respuesta, descripción clara de la petición y los soportes que resulten
+          pertinentes. Podremos solicitar información razonable para verificar la identidad y la
+          legitimidad de quien presenta la solicitud.
+        </p>
+        <p>
+          Las consultas serán atendidas en un plazo máximo de diez (10) días hábiles contados desde
+          su recepción. Si no es posible responder dentro de ese plazo, se informarán los motivos y
+          la nueva fecha, que no podrá superar cinco (5) días hábiles adicionales.
+        </p>
+        <p>
+          Los reclamos serán atendidos en un plazo máximo de quince (15) días hábiles contados a
+          partir del día siguiente a su recepción. Si el reclamo está incompleto, se solicitará la
+          subsanación dentro de los cinco (5) días hábiles siguientes. El reclamo debe incluir la
+          identificación del titular, la descripción de los hechos, la dirección física o
+          electrónica para recibir respuesta y los documentos que se quieran hacer valer. Si no se
+          completa dentro de los dos (2) meses siguientes al requerimiento, podrá entenderse
+          desistido en los términos aplicables.
+        </p>
+        <p>
+          Cuando exista una base de datos o registro operativo habilitado para recibir reclamos
+          reales, el reclamo completo deberá identificarse allí como «reclamo en trámite» y con su
+          motivo dentro de los dos (2) días hábiles siguientes, manteniendo esa leyenda hasta su
+          decisión. El procedimiento y el registro necesarios para cumplir esta obligación deben
+          implementarse y verificarse antes de activar formularios reales; el sitio actual en modo
+          demo no recibe ni registra reclamos. Si no es posible responder oportunamente, se
+          informarán los motivos y una fecha que no podrá superar ocho (8) días hábiles adicionales.
+        </p>
+        <p>
+          Antes de acudir a la Superintendencia de Industria y Comercio, el titular deberá agotar
+          el trámite de consulta o reclamo ante el responsable, cuando así lo exija la normativa
+          aplicable.
+        </p>
+        <p>El canal previsto para estas solicitudes es:</p>
+        <p><strong>info@sokatechnologies.com</strong></p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>9. Cookies y tecnologías de seguridad</h2>
+        <p>
+          El sitio puede utilizar tecnologías necesarias para su operación y seguridad, incluyendo
+          servicios de prevención de spam.
+        </p>
+        <p>
+          Antes de la publicación definitiva se verificará qué cookies o identificadores utilizan
+          efectivamente el sitio y sus proveedores, y si corresponde implementar un aviso o
+          mecanismo de consentimiento adicional.
+        </p>
+        <p>
+          Antes de activar formularios reales se revisarán el texto de autorización, la forma de
+          obtener y conservar la prueba del consentimiento previo, expreso e informado, los medios
+          para revocarlo y la información específica de cada proveedor. Mientras esa revisión no
+          concluya, Contacto y Diagnóstico permanecen en modo demo y Auditoría se mantiene como
+          vista previa sin recepción real de solicitudes.
+        </p>
+      </article>
+
+      <article class="legal-card js-reveal-card" data-card-interaction>
+        <h2>10. Actualizaciones</h2>
+        <p>
+          Esta política podrá actualizarse cuando cambien nuestros servicios, proveedores,
+          actividades de tratamiento o situación jurídica.
+        </p>
+        <p>
+          <strong>Fecha de entrada en vigencia:</strong> [FECHA DE ENTRADA EN VIGENCIA].
+          <strong>Período de vigencia de las bases de datos:</strong>
+          [PERÍODO DE VIGENCIA DE LAS BASES DE DATOS]. Estos datos son distintos de la fecha de
+          publicación y del período de retención, y permanecen pendientes de decisión y revisión
+          jurídica.
+        </p>
+        <p>La versión vigente estará disponible en el sitio web de SokaTechnologies.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

@@ -8,13 +8,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Productos | SokaTechnologies"
-  description="Productos y herramientas propias de SokaTechnologies: Portik, AutoInventario y AutoWhatsapp, cada uno con madurez y alcance distintos."
+  description="Herramientas y demos de SokaTechnologies para necesidades operativas concretas, con alcance y límites descritos en cada ficha."
   canonicalPath="/productos/"
 >
   <PageHero
     eyebrow="Productos"
-    title="Productos propios con madurez y objetivos comerciales distintos."
-    body="Cada producto tiene un propósito y un estado de validación distinto. Portik está más cerca de un piloto; AutoInventario requiere revisión técnica; AutoWhatsapp opera bajo límites estrictos de cumplimiento."
+    title="Herramientas para necesidades operativas concretas."
+    body="Cada ficha explica su propósito, lo que puedes evaluar y los límites actuales de Portik, AutoInventario y AutoWhatsapp."
     primaryCtaLabel="Solicitar diagnóstico"
     primaryCtaHref="/diagnostico/"
     secondaryCtaLabel="Ver proyectos"
@@ -25,8 +25,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   <section class="section js-section">
     <SectionHeading
       eyebrow="Catálogo"
-      title="Cada producto se presenta desde su naturaleza real, no desde promesas infladas."
-      body="La intención es explicar qué puede evaluarse hoy, qué necesita validación adicional y qué límites comerciales o técnicos deben respetarse."
+      title="Qué puedes evaluar de cada producto."
+      body="Aquí puedes conocer qué se puede evaluar hoy, qué necesita validación adicional y qué límites comerciales o técnicos deben respetarse."
     />
     <div class="catalog-grid">
       {products.map((product) => <ProductCard product={product} />)}
@@ -35,7 +35,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
   <section class="final-panel section js-final-cta">
     <div class="final-shell">
-      <p class="eyebrow">Ruta comercial</p>
+      <p class="eyebrow">Siguiente paso</p>
       <h2>Si el producto correcto no está claro, conviene partir del problema operativo.</h2>
       <p>
         El diagnóstico permite decidir si el siguiente paso es Portik, una revisión técnica de
