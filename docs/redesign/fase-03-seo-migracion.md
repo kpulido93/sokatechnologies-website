@@ -8,7 +8,7 @@ Este documento prepara la migración y la revisión del lanzamiento. No instala 
 
 ## Configuración por entorno
 
-Astro 7.4.0 y Vite 8.3.4 se validaron con builds aislados en SSD. `astro.config.mjs` usa `loadEnv(process.env.NODE_ENV, process.cwd(), "PUBLIC_")`; el comando debe establecer `NODE_ENV` igual al modo cuando se usa un archivo `.env.<modo>`. Vite mantiene la precedencia de las variables del proceso sobre los archivos.
+Astro 7.4.0 y Vite 8.3.4 se validaron con builds aislados en SSD. `astro.config.mjs` usa `loadEnv` con el modo explícito de `--mode` (y solo usa `NODE_ENV` como fallback); así `--mode staging` sigue cargando `.env.staging` aunque `NODE_ENV` esté ausente o diga `production`. Las variables `PUBLIC_*` del proceso se superponen explícitamente a las de los archivos, conservando la precedencia de Vite.
 
 Comandos de referencia, siempre desde una copia aislada:
 
@@ -32,6 +32,15 @@ npm run build -- --mode production
 
 El segundo comando solo genera un candidato local de producción. No autoriza publicación ni activa formularios.
 
+Reproducción aislada de carga por modo, sin `PUBLIC_SITE_URL` en el proceso y usando una copia que contiene `.env.staging`:
+
+```bash
+env -u NODE_ENV -u PUBLIC_SITE_URL npm run build -- --mode staging
+env -u PUBLIC_SITE_URL NODE_ENV=production npm run build -- --mode staging
+```
+
+En ambos casos, `Astro.site`, canonical, `og:url` y sitemap resolvieron la URL de `.env.staging`. Una variable `PUBLIC_SITE_URL` del proceso no vacía sigue sobrescribiendo ese archivo.
+
 La carga de `PUBLIC_SITE_URL` se normaliza con `trim()` en la configuración y en `src/lib/seo.ts`. La política de indexación solo acepta el valor normalizado `true`; ausente, vacío, `false` o inválido generan `noindex,nofollow` y `Disallow: /`.
 
 La documentación oficial de Astro explica que `astro.config.mjs` se evalúa antes de `import.meta.env` y recomienda `loadEnv` para leer archivos `.env`; también documenta `--mode` para cargar archivos por modo: [Astro — variables de entorno](https://docs.astro.build/en/guides/environment-variables/). La precedencia de archivos y variables del proceso corresponde al comportamiento de [Vite — env y modes](https://vite.dev/guide/env-and-mode).
@@ -48,7 +57,7 @@ No se crearon archivos `.env` en Git. Los archivos de prueba sintéticos se mant
 
 Cada ruta generada comprueba un único canonical, `og:url` igual al canonical, imagen social existente, enlace de sitemap, JSON-LD con URLs del origen esperado y `robots` coherente. `worksFor.url` en el schema de `/nosotros/` se registra aparte como URL de identidad organizacional `https://sokatechnologies.com`; no se sustituye por el hostname de staging.
 
-La excepción de compatibilidad se conserva: `/casos/` responde como ruta Astro, pero su canonical es `/proyectos/` y no aparece en el sitemap.
+El checker usa `fast-xml-parser` y `fast-xml-validator` para seguir el índice y cada hijo del sitemap, exigir origen exacto, archivo existente y correspondencia deduplicada con las 22 URLs canónicas esperadas. También falla si cualquier bloque JSON-LD está malformado, aunque otro bloque de la misma página sea válido. La excepción de compatibilidad se conserva: `/casos/` responde como ruta Astro, pero su canonical es `/proyectos/` y no aparece en el sitemap.
 
 ## Inventario y migración
 
@@ -60,7 +69,8 @@ Decisiones principales:
 - `/sobre-nosotros/` propone `301` directo a `/nosotros/`, pendiente de aprobación.
 - `/casos-de-exito/` propone `301` directo a `/proyectos/`, pendiente de aprobación.
 - `/casos/` no debe crear una cadena: se debe elegir entre mantener la compatibilidad 200 con canonical o configurar un 301 directo.
-- Las rutas `/en/` requieren decisión de idioma, catálogo y slugs antes de crear rutas o redirecciones.
+- `/en/` enlaza actualmente cinco rutas que responden 200 en producción: `/en/servicios/`, `/en/soluciones/`, `/en/casos-de-exito/`, `/en/sobre-nosotros/` y `/en/contacto/`. Se conservan como están, sin traducir, retirar ni redirigir, hasta decidir idioma, catálogo y slugs. La evidencia detallada está en [`wordpress-english-routes.json`](../../artifacts/comparative-audit/phase-03/wordpress-english-routes.json).
+- Los aliases no enlazados `/en/services/`, `/en/about-us/` y `/en/contact/` se mantienen solo como observaciones públicas pendientes; no se convierten en destinos por suposición.
 - Las páginas, categorías, feeds y endpoints predeterminados de WordPress se proponen para retirada con 404/410 cuando se confirme que no existe consumidor. No se redirigen indiscriminadamente a Inicio.
 - Las rutas de administración (`/wp-login.php`, `/wp-admin/`, `/wp-includes/`) permanecen fuera de la migración pública y requieren una decisión operativa separada.
 

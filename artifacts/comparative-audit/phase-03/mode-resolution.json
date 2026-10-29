@@ -1,0 +1,41 @@
+[
+  {
+    "case": "NODE_ENV ausente; .env.staging",
+    "nodeEnv": null,
+    "processSiteUrl": null,
+    "expectedOrigin": "https://mode-file.example.test",
+    "routes": 23,
+    "canonical": "https://mode-file.example.test/",
+    "ogUrl": "https://mode-file.example.test/",
+    "sitemapChild": "https://mode-file.example.test/sitemap-0.xml",
+    "robots": "noindex,nofollow",
+    "sitemapUrls": 22,
+    "failures": []
+  },
+  {
+    "case": "NODE_ENV=production; --mode staging",
+    "nodeEnv": "production",
+    "processSiteUrl": null,
+    "expectedOrigin": "https://mode-file.example.test",
+    "routes": 23,
+    "canonical": "https://mode-file.example.test/",
+    "ogUrl": "https://mode-file.example.test/",
+    "sitemapChild": "https://mode-file.example.test/sitemap-0.xml",
+    "robots": "noindex,nofollow",
+    "sitemapUrls": 22,
+    "failures": []
+  },
+  {
+    "case": "PUBLIC_SITE_URL de proceso sobrescribe .env.staging",
+    "nodeEnv": "production",
+    "processSiteUrl": "https://process-override.example.test",
+    "expectedOrigin": "https://process-override.example.test",
+    "routes": 23,
+    "canonical": "https://process-override.example.test/",
+    "ogUrl": "https://process-override.example.test/",
+    "sitemapChild": "https://process-override.example.test/sitemap-0.xml",
+    "robots": "noindex,nofollow",
+    "sitemapUrls": 22,
+    "failures": []
+  }
+]

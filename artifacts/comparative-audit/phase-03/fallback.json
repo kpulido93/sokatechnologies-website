@@ -1,5 +1,5 @@
 {
-  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/outputs/fallback",
+  "dist": "dist",
   "expectedOrigin": "https://sokatechnologies.com",
   "expectIndexing": false,
   "routes": 23,
@@ -247,5 +247,58 @@
       "identityUrls": []
     }
   ],
+  "sitemap": {
+    "expectedUrls": [
+      "https://sokatechnologies.com/",
+      "https://sokatechnologies.com/auditoria/",
+      "https://sokatechnologies.com/contacto/",
+      "https://sokatechnologies.com/demos/ecommerce/",
+      "https://sokatechnologies.com/diagnostico/",
+      "https://sokatechnologies.com/nosotros/",
+      "https://sokatechnologies.com/politica-privacidad/",
+      "https://sokatechnologies.com/productos/",
+      "https://sokatechnologies.com/productos/autoinventario/",
+      "https://sokatechnologies.com/productos/autowhatsapp/",
+      "https://sokatechnologies.com/productos/portik/",
+      "https://sokatechnologies.com/proyectos/",
+      "https://sokatechnologies.com/servicios/",
+      "https://sokatechnologies.com/servicios/automatizaciones/",
+      "https://sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "https://sokatechnologies.com/servicios/dashboards/",
+      "https://sokatechnologies.com/servicios/infraestructura-soporte/",
+      "https://sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "https://sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "https://sokatechnologies.com/servicios/software-a-medida/",
+      "https://sokatechnologies.com/soluciones/",
+      "https://sokatechnologies.com/terminos/"
+    ],
+    "childLocations": [
+      "https://sokatechnologies.com/sitemap-0.xml"
+    ],
+    "publishedUrls": [
+      "https://sokatechnologies.com/",
+      "https://sokatechnologies.com/auditoria/",
+      "https://sokatechnologies.com/contacto/",
+      "https://sokatechnologies.com/demos/ecommerce/",
+      "https://sokatechnologies.com/diagnostico/",
+      "https://sokatechnologies.com/nosotros/",
+      "https://sokatechnologies.com/politica-privacidad/",
+      "https://sokatechnologies.com/productos/",
+      "https://sokatechnologies.com/productos/autoinventario/",
+      "https://sokatechnologies.com/productos/autowhatsapp/",
+      "https://sokatechnologies.com/productos/portik/",
+      "https://sokatechnologies.com/proyectos/",
+      "https://sokatechnologies.com/servicios/",
+      "https://sokatechnologies.com/servicios/automatizaciones/",
+      "https://sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "https://sokatechnologies.com/servicios/dashboards/",
+      "https://sokatechnologies.com/servicios/infraestructura-soporte/",
+      "https://sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "https://sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "https://sokatechnologies.com/servicios/software-a-medida/",
+      "https://sokatechnologies.com/soluciones/",
+      "https://sokatechnologies.com/terminos/"
+    ]
+  },
   "failures": []
 }

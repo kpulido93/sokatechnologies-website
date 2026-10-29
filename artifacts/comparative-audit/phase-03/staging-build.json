@@ -1,5 +1,5 @@
 {
-  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/outputs/staging-build",
+  "dist": "dist",
   "expectedOrigin": "https://prueba.sokatechnologies.com",
   "expectIndexing": false,
   "routes": 23,
@@ -247,5 +247,58 @@
       "identityUrls": []
     }
   ],
+  "sitemap": {
+    "expectedUrls": [
+      "https://prueba.sokatechnologies.com/",
+      "https://prueba.sokatechnologies.com/auditoria/",
+      "https://prueba.sokatechnologies.com/contacto/",
+      "https://prueba.sokatechnologies.com/demos/ecommerce/",
+      "https://prueba.sokatechnologies.com/diagnostico/",
+      "https://prueba.sokatechnologies.com/nosotros/",
+      "https://prueba.sokatechnologies.com/politica-privacidad/",
+      "https://prueba.sokatechnologies.com/productos/",
+      "https://prueba.sokatechnologies.com/productos/autoinventario/",
+      "https://prueba.sokatechnologies.com/productos/autowhatsapp/",
+      "https://prueba.sokatechnologies.com/productos/portik/",
+      "https://prueba.sokatechnologies.com/proyectos/",
+      "https://prueba.sokatechnologies.com/servicios/",
+      "https://prueba.sokatechnologies.com/servicios/automatizaciones/",
+      "https://prueba.sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "https://prueba.sokatechnologies.com/servicios/dashboards/",
+      "https://prueba.sokatechnologies.com/servicios/infraestructura-soporte/",
+      "https://prueba.sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "https://prueba.sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "https://prueba.sokatechnologies.com/servicios/software-a-medida/",
+      "https://prueba.sokatechnologies.com/soluciones/",
+      "https://prueba.sokatechnologies.com/terminos/"
+    ],
+    "childLocations": [
+      "https://prueba.sokatechnologies.com/sitemap-0.xml"
+    ],
+    "publishedUrls": [
+      "https://prueba.sokatechnologies.com/",
+      "https://prueba.sokatechnologies.com/auditoria/",
+      "https://prueba.sokatechnologies.com/contacto/",
+      "https://prueba.sokatechnologies.com/demos/ecommerce/",
+      "https://prueba.sokatechnologies.com/diagnostico/",
+      "https://prueba.sokatechnologies.com/nosotros/",
+      "https://prueba.sokatechnologies.com/politica-privacidad/",
+      "https://prueba.sokatechnologies.com/productos/",
+      "https://prueba.sokatechnologies.com/productos/autoinventario/",
+      "https://prueba.sokatechnologies.com/productos/autowhatsapp/",
+      "https://prueba.sokatechnologies.com/productos/portik/",
+      "https://prueba.sokatechnologies.com/proyectos/",
+      "https://prueba.sokatechnologies.com/servicios/",
+      "https://prueba.sokatechnologies.com/servicios/automatizaciones/",
+      "https://prueba.sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "https://prueba.sokatechnologies.com/servicios/dashboards/",
+      "https://prueba.sokatechnologies.com/servicios/infraestructura-soporte/",
+      "https://prueba.sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "https://prueba.sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "https://prueba.sokatechnologies.com/servicios/software-a-medida/",
+      "https://prueba.sokatechnologies.com/soluciones/",
+      "https://prueba.sokatechnologies.com/terminos/"
+    ]
+  },
   "failures": []
 }

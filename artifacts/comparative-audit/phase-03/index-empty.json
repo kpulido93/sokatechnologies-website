@@ -1,5 +1,5 @@
 {
-  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/outputs/index-empty",
+  "dist": "dist",
   "expectedOrigin": "https://index.example.test",
   "expectIndexing": false,
   "routes": 23,
@@ -247,5 +247,58 @@
       "identityUrls": []
     }
   ],
+  "sitemap": {
+    "expectedUrls": [
+      "https://index.example.test/",
+      "https://index.example.test/auditoria/",
+      "https://index.example.test/contacto/",
+      "https://index.example.test/demos/ecommerce/",
+      "https://index.example.test/diagnostico/",
+      "https://index.example.test/nosotros/",
+      "https://index.example.test/politica-privacidad/",
+      "https://index.example.test/productos/",
+      "https://index.example.test/productos/autoinventario/",
+      "https://index.example.test/productos/autowhatsapp/",
+      "https://index.example.test/productos/portik/",
+      "https://index.example.test/proyectos/",
+      "https://index.example.test/servicios/",
+      "https://index.example.test/servicios/automatizaciones/",
+      "https://index.example.test/servicios/consultoria-ti-devops/",
+      "https://index.example.test/servicios/dashboards/",
+      "https://index.example.test/servicios/infraestructura-soporte/",
+      "https://index.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://index.example.test/servicios/sitios-web-corporativos/",
+      "https://index.example.test/servicios/software-a-medida/",
+      "https://index.example.test/soluciones/",
+      "https://index.example.test/terminos/"
+    ],
+    "childLocations": [
+      "https://index.example.test/sitemap-0.xml"
+    ],
+    "publishedUrls": [
+      "https://index.example.test/",
+      "https://index.example.test/auditoria/",
+      "https://index.example.test/contacto/",
+      "https://index.example.test/demos/ecommerce/",
+      "https://index.example.test/diagnostico/",
+      "https://index.example.test/nosotros/",
+      "https://index.example.test/politica-privacidad/",
+      "https://index.example.test/productos/",
+      "https://index.example.test/productos/autoinventario/",
+      "https://index.example.test/productos/autowhatsapp/",
+      "https://index.example.test/productos/portik/",
+      "https://index.example.test/proyectos/",
+      "https://index.example.test/servicios/",
+      "https://index.example.test/servicios/automatizaciones/",
+      "https://index.example.test/servicios/consultoria-ti-devops/",
+      "https://index.example.test/servicios/dashboards/",
+      "https://index.example.test/servicios/infraestructura-soporte/",
+      "https://index.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://index.example.test/servicios/sitios-web-corporativos/",
+      "https://index.example.test/servicios/software-a-medida/",
+      "https://index.example.test/soluciones/",
+      "https://index.example.test/terminos/"
+    ]
+  },
   "failures": []
 }

@@ -15,6 +15,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test:seo": "node scripts/phase-03-seo-check.mjs",
+    "test:seo:fixtures": "node --test scripts/phase-03-seo-check.test.mjs",
     "test": "node --test worker/test/*.test.mjs",
     "test:local-ui": "node scripts/local-ui-smoke.mjs",
     "test:native-runtime": "vitest run --config vitest.native.config.mjs"
@@ -29,6 +30,8 @@
     "@cloudflare/vitest-plugin": "^1.4.8",
     "@msw/cloudflare": "^0.2.0",
     "@types/node": "^26.1.1",
+    "fast-xml-parser": "^5.11.2",
+    "fast-xml-validator": "^1.4.2",
     "msw": "^3.0.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.12"

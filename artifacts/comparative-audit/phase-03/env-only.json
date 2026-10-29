@@ -1,5 +1,5 @@
 {
-  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/outputs/env-only",
+  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/env-only/dist",
   "expectedOrigin": "https://dotenv.example.test",
   "expectIndexing": false,
   "routes": 23,
@@ -247,5 +247,58 @@
       "identityUrls": []
     }
   ],
+  "sitemap": {
+    "expectedUrls": [
+      "https://dotenv.example.test/",
+      "https://dotenv.example.test/auditoria/",
+      "https://dotenv.example.test/contacto/",
+      "https://dotenv.example.test/demos/ecommerce/",
+      "https://dotenv.example.test/diagnostico/",
+      "https://dotenv.example.test/nosotros/",
+      "https://dotenv.example.test/politica-privacidad/",
+      "https://dotenv.example.test/productos/",
+      "https://dotenv.example.test/productos/autoinventario/",
+      "https://dotenv.example.test/productos/autowhatsapp/",
+      "https://dotenv.example.test/productos/portik/",
+      "https://dotenv.example.test/proyectos/",
+      "https://dotenv.example.test/servicios/",
+      "https://dotenv.example.test/servicios/automatizaciones/",
+      "https://dotenv.example.test/servicios/consultoria-ti-devops/",
+      "https://dotenv.example.test/servicios/dashboards/",
+      "https://dotenv.example.test/servicios/infraestructura-soporte/",
+      "https://dotenv.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://dotenv.example.test/servicios/sitios-web-corporativos/",
+      "https://dotenv.example.test/servicios/software-a-medida/",
+      "https://dotenv.example.test/soluciones/",
+      "https://dotenv.example.test/terminos/"
+    ],
+    "childLocations": [
+      "https://dotenv.example.test/sitemap-0.xml"
+    ],
+    "publishedUrls": [
+      "https://dotenv.example.test/",
+      "https://dotenv.example.test/auditoria/",
+      "https://dotenv.example.test/contacto/",
+      "https://dotenv.example.test/demos/ecommerce/",
+      "https://dotenv.example.test/diagnostico/",
+      "https://dotenv.example.test/nosotros/",
+      "https://dotenv.example.test/politica-privacidad/",
+      "https://dotenv.example.test/productos/",
+      "https://dotenv.example.test/productos/autoinventario/",
+      "https://dotenv.example.test/productos/autowhatsapp/",
+      "https://dotenv.example.test/productos/portik/",
+      "https://dotenv.example.test/proyectos/",
+      "https://dotenv.example.test/servicios/",
+      "https://dotenv.example.test/servicios/automatizaciones/",
+      "https://dotenv.example.test/servicios/consultoria-ti-devops/",
+      "https://dotenv.example.test/servicios/dashboards/",
+      "https://dotenv.example.test/servicios/infraestructura-soporte/",
+      "https://dotenv.example.test/servicios/mantenimiento-mejora-continua/",
+      "https://dotenv.example.test/servicios/sitios-web-corporativos/",
+      "https://dotenv.example.test/servicios/software-a-medida/",
+      "https://dotenv.example.test/soluciones/",
+      "https://dotenv.example.test/terminos/"
+    ]
+  },
   "failures": []
 }

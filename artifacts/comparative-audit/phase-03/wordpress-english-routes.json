@@ -1,0 +1,106 @@
+{
+  "checkedAt": "2026-10-29T03:08:13.609Z",
+  "method": "GET fetch; redirects not followed; no credentials; linked paths extracted from public /en/",
+  "source": {
+    "path": "/en/",
+    "status": 200,
+    "linkedRoutes": [
+      "/en/casos-de-exito/",
+      "/en/comments/feed/",
+      "/en/contacto/",
+      "/en/feed/",
+      "/en/servicios/",
+      "/en/sobre-nosotros/",
+      "/en/soluciones/",
+      "/en/wp-json/",
+      "/en/wp-json/oembed/1.0/embed",
+      "/en/wp-json/wp/v2/pages/13"
+    ],
+    "contentRoutes": [
+      "/en/servicios/",
+      "/en/soluciones/",
+      "/en/casos-de-exito/",
+      "/en/sobre-nosotros/",
+      "/en/contacto/"
+    ],
+    "technicalOrGeneratedLinks": [
+      "/en/comments/feed/",
+      "/en/feed/",
+      "/en/wp-json/",
+      "/en/wp-json/oembed/1.0/embed",
+      "/en/wp-json/wp/v2/pages/13"
+    ]
+  },
+  "routes": {
+    "/en/casos-de-exito/": {
+      "status": 200,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": "https://sokatechnologies.com/en/casos-de-exito/"
+    },
+    "/en/comments/feed/": {
+      "status": 200,
+      "location": null,
+      "contentType": "application/rss+xml; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": null
+    },
+    "/en/contacto/": {
+      "status": 200,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": "https://sokatechnologies.com/en/contacto/"
+    },
+    "/en/feed/": {
+      "status": 200,
+      "location": null,
+      "contentType": "application/rss+xml; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": null
+    },
+    "/en/servicios/": {
+      "status": 200,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": "https://sokatechnologies.com/en/servicios/"
+    },
+    "/en/sobre-nosotros/": {
+      "status": 200,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": "https://sokatechnologies.com/en/sobre-nosotros/"
+    },
+    "/en/soluciones/": {
+      "status": 200,
+      "location": null,
+      "contentType": "text/html; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": "https://sokatechnologies.com/en/soluciones/"
+    },
+    "/en/wp-json/": {
+      "status": 200,
+      "location": null,
+      "contentType": "application/json; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": null
+    },
+    "/en/wp-json/oembed/1.0/embed": {
+      "status": 400,
+      "location": null,
+      "contentType": "application/json; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": null
+    },
+    "/en/wp-json/wp/v2/pages/13": {
+      "status": 200,
+      "location": null,
+      "contentType": "application/json; charset=UTF-8",
+      "server": "LiteSpeed",
+      "canonical": null
+    }
+  }
+}

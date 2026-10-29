@@ -2,10 +2,15 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 
-// Astro evaluates this file before Vite exposes import.meta.env. Set NODE_ENV
-// to the build mode when loading a mode-specific .env file.
-const mode = process.env.NODE_ENV ?? "development";
-const env = loadEnv(mode, process.cwd(), "PUBLIC_");
+// Astro evaluates this file before Vite exposes import.meta.env. Read the
+// explicit CLI mode first so --mode staging wins over NODE_ENV=production.
+const modeArgument = process.argv.find((argument) => argument.startsWith("--mode="));
+const modeIndex = process.argv.indexOf("--mode");
+const modeValue = modeIndex >= 0 ? process.argv[modeIndex + 1] : undefined;
+const mode = modeArgument?.slice("--mode=".length) || modeValue || process.env.NODE_ENV || "development";
+const fileEnv = loadEnv(mode, process.cwd(), "PUBLIC_");
+const processEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => key.startsWith("PUBLIC_")));
+const env = { ...fileEnv, ...processEnv };
 const siteUrl = env.PUBLIC_SITE_URL?.trim() || "https://sokatechnologies.com";
 
 export default defineConfig({
