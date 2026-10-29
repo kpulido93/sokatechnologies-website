@@ -4,7 +4,7 @@ import SectionHeading from "../components/SectionHeading.astro";
 import { featuredCaseStudies } from "../data/caseStudies";
 import { services } from "../data/services";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { noiseProblems, noiseResults, processSteps } from "../lib/site";
+import { noiseProblems, noiseResults, processSteps, siteMeta } from "../lib/site";
 ---
 
 <BaseLayout
@@ -22,8 +22,8 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
       </p>
 
       <div class="hero-actions">
-        <a class="button button-primary js-hero-cta" href="/diagnostico/" data-link-shift>
-          Solicitar diagnóstico
+        <a class="button button-primary js-hero-cta" href={siteMeta.contactHref} data-link-shift>
+          Abrir conversación
         </a>
         <a class="button button-ghost js-hero-cta" href="/proyectos/" data-link-shift>
           Ver proyectos
@@ -201,7 +201,7 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
           La conversación empieza por el proceso y sus dificultades. El objetivo es elegir una
           ruta técnica proporcional, con pruebas, documentación y continuidad.
         </p>
-        <a class="button button-ghost" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-ghost" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
       </article>
     </div>
   </section>
@@ -214,8 +214,8 @@ import { noiseProblems, noiseResults, processSteps } from "../lib/site";
         Evaluemos si el siguiente paso es automatizar, integrar, desarrollar software o fortalecer
         infraestructura.
       </p>
-      <a class="button button-primary" href="/diagnostico/" data-link-shift>
-        Solicitar diagnóstico
+      <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>
+        Abrir conversación
       </a>
     </div>
   </section>

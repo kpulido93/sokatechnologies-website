@@ -35,11 +35,12 @@ const errorId = `${formId}-error`;
 const noteId = `${formId}-note`;
 const fallbackAction = `mailto:${fallbackEmail}`;
 const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
+const formEyebrow = formType === "contact" ? "Simulación de contacto" : "Simulación de diagnóstico";
 ---
 
 <section class="contact-panel js-reveal">
   <div class="contact-copy">
-    <p class="eyebrow">Diagnóstico B2B</p>
+    <p class="eyebrow">{formEyebrow}</p>
     <h2>{title}</h2>
     <p>{body}</p>
     <ul class="contact-guidelines">

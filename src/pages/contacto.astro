@@ -18,32 +18,56 @@ import { siteMeta } from "../lib/site";
     </p>
   </section>
 
-  <section class="section contact-channels" aria-labelledby="contact-channels-title">
+  <section class="section contact-direct" aria-labelledby="contact-direct-title">
     <div class="section-heading">
-      <p class="eyebrow">Canales institucionales</p>
-      <h2 id="contact-channels-title">Encuéntranos en {siteMeta.regions}.</h2>
-      <p>Usa estos datos para continuar una conversación comercial o solicitar orientación inicial.</p>
+      <p class="eyebrow">Contacto directo</p>
+      <h2 id="contact-direct-title">Elige cómo iniciar la conversación.</h2>
+      <p>
+        Puedes escribir o llamar para compartir el contexto general de tu empresa y revisar si tiene
+        sentido avanzar a un diagnóstico, una propuesta, un piloto o una revisión técnica.
+      </p>
     </div>
-    <div class="contact-channel-grid">
-      <article class="trust-card">
-        <p class="eyebrow">Ubicación</p>
-        <h3>{siteMeta.regions}</h3>
-      </article>
-      <article class="trust-card">
-        <p class="eyebrow">Teléfono</p>
-        <h3><a href={siteMeta.phoneHref}>{siteMeta.phone}</a></h3>
-      </article>
-      <article class="trust-card">
-        <p class="eyebrow">Correo</p>
-        <h3><a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a></h3>
-      </article>
+    <div class="contact-direct-grid">
+      <a
+        class="contact-direct-action"
+        href={`mailto:${siteMeta.email}`}
+        aria-label={`Escribir por correo a ${siteMeta.email}`}
+      >
+        <span class="eyebrow">Correo</span>
+        <strong>Escribir por correo</strong>
+        <span>{siteMeta.email}</span>
+      </a>
+      <a
+        class="contact-direct-action"
+        href={siteMeta.phoneHref}
+        aria-label={`Llamar al ${siteMeta.phone}`}
+      >
+        <span class="eyebrow">Teléfono</span>
+        <strong>Llamar</strong>
+        <span>{siteMeta.phone}</span>
+      </a>
     </div>
+    <p class="contact-location"><span class="eyebrow">Ubicación</span> {siteMeta.regions}</p>
+  </section>
+
+  <section class="section contact-share" aria-labelledby="contact-share-title">
+    <div class="section-heading">
+      <p class="eyebrow">Información útil</p>
+      <h2 id="contact-share-title">Qué puedes compartir para comenzar.</h2>
+      <p>No necesitas preparar una especificación completa. El contexto general ayuda a orientar la primera conversación.</p>
+    </div>
+    <ul class="contact-share-list">
+      <li>Qué proceso, servicio o área quieres mejorar.</li>
+      <li>Qué sucede hoy y qué herramientas, archivos o integraciones participan.</li>
+      <li>Qué resultado esperas y qué restricciones técnicas u operativas debemos considerar.</li>
+    </ul>
+    <p class="form-note">No compartas contraseñas, tokens, llaves privadas, accesos ni datos sensibles.</p>
   </section>
 
   <ContactForm
     formType="contact"
-    title="Solicita una conversación inicial"
-    body="Comparte el contexto general del problema, el área afectada, las herramientas actuales y la urgencia. No envíes credenciales, datos sensibles ni accesos."
+    title="Simulación local del formulario de contacto"
+    body="Esta vista permite revisar los campos de una solicitud, pero no recibe solicitudes comerciales. Para iniciar una conversación, usa el correo o el teléfono de arriba."
     buttonLabel="Enviar solicitud inicial"
   />
 

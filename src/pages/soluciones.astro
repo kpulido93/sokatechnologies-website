@@ -2,6 +2,7 @@
 import SectionHeading from "../components/SectionHeading.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { solutionNeeds } from "../data/solutions";
+import { siteMeta } from "../lib/site";
 ---
 
 <BaseLayout
@@ -18,7 +19,7 @@ import { solutionNeeds } from "../data/solutions";
         entender el proceso, las herramientas y las restricciones reales.
       </p>
       <div class="hero-actions">
-        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
         <a class="button button-ghost" href="/servicios/" data-link-shift>Ver servicios</a>
       </div>
     </section>
