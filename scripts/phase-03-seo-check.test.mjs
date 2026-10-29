@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import test from "node:test";
-import { runSeoCheck } from "./phase-03-seo-check.mjs";
+import { runSeoCheck, validateRobotsPolicy } from "./phase-03-seo-check.mjs";
 
-const dist = join(process.cwd(), "dist");
+const dist = process.env.SEO_STAGING_DIST || join(process.cwd(), "dist");
 const expectedOrigin = "https://prueba.sokatechnologies.com";
 const fixtureParent = process.env.SEO_FIXTURE_ROOT || join(process.cwd(), ".phase-03-seo-fixtures-");
 const fixtureRoot = await mkdtemp(fixtureParent);
@@ -21,6 +21,42 @@ const fixture = async (name) => {
 
 const runFixture = (target) => runSeoCheck({ dist: target, expectedOrigin, expectIndexing: false });
 const assertFailure = (result, text) => assert.ok(result.failures.some((failure) => failure.includes(text)), result.failures.join("\n"));
+const productionOrigin = "https://sokatechnologies.com";
+const checkRobots = (robots, expectIndexing, origin = expectIndexing ? productionOrigin : expectedOrigin) =>
+  validateRobotsPolicy({ robots, expectedOrigin: origin, expectIndexing });
+
+test("acepta la política completa de staging para User-agent: *", async () => {
+  const target = await fixture("robots-staging-valid");
+  const result = runFixture(target);
+  assert.deepEqual(result.robots.failures, []);
+  assert.deepEqual(result.failures, []);
+});
+
+test("rechaza Disallow: /wp-admin/ aunque contenga el prefijo raíz", () => {
+  const result = checkRobots("User-agent: *\nDisallow: /wp-admin/\n", false);
+  assert.ok(result.failures.includes("robots no coincide con la política completa del artefacto"));
+});
+
+test("rechaza el bloqueo raíz limitado a un bot específico", () => {
+  const result = checkRobots("User-agent: Googlebot\nDisallow: /\n", false);
+  assert.ok(result.failures.includes("robots no coincide con la política completa del artefacto"));
+});
+
+test("acepta la política completa del candidato de producción", () => {
+  const result = checkRobots(
+    `User-agent: *\nAllow: /\nSitemap: ${productionOrigin}/sitemap-index.xml\n`,
+    true
+  );
+  assert.deepEqual(result.failures, []);
+});
+
+test("rechaza una política de producción incompatible con su sitemap", () => {
+  const result = checkRobots(
+    "User-agent: *\nAllow: /\nSitemap: https://foreign.example.test/sitemap-index.xml\n",
+    true
+  );
+  assert.ok(result.failures.includes("robots no coincide con la política completa del artefacto"));
+});
 
 test("rechaza una ruta con un JSON-LD roto aunque otro bloque sea válido", async () => {
   const target = await fixture("jsonld-malformed");

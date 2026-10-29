@@ -9,8 +9,8 @@ Base: `812cb0eb3fbae9992e1a09b71ef5d81852e8c71f` en `feature/web-demo-2026-gsap`
 | Comprobación | Resultado |
 |---|---|
 | Inventario compartido | PASS — 23 rutas, sin faltantes ni sobrantes |
-| Checker SEO staging | PASS — origen de prueba, canonical/OG/JSON-LD, sitemap, robots y noindex |
-| Checker candidato producción | PASS local — origen principal, canonical/OG/JSON-LD, sitemap, robots e indexación explícita |
+| Checker SEO staging | PASS nueva ejecución — origen de prueba, canonical/OG/JSON-LD, sitemap, robots exacto para `User-agent: *` y noindex |
+| Checker candidato producción | PASS nueva ejecución local — origen principal, canonical/OG/JSON-LD, sitemap y política robots exacta con indexación explícita |
 | `.env` solamente | PASS — `https://dotenv.example.test`, noindex |
 | Archivo `.env.staging` | PASS — `https://mode.example.test`, indexación true explícita |
 | Proceso sobre archivo | PASS — `https://process.example.test`, noindex |
@@ -21,6 +21,7 @@ Base: `812cb0eb3fbae9992e1a09b71ef5d81852e8c71f` en `feature/web-demo-2026-gsap`
 | JSON-LD negativo | PASS — 1 bloque roto + 1 válido produce fallo específico por ruta |
 | Sitemap XML negativo | PASS — índice vacío, XML inválido, hijo ausente, URL faltante y origen ajeno producen fallo |
 | Sitemap XML positivo | PASS — parser valida índice, hijos, origen y 22 URLs canónicas deduplicadas sin `/casos/` |
+| Robots negativo | PASS — `/wp-admin/`, User-agent específico y sitemap de origen ajeno producen fallo; no se usan subcadenas |
 | Inventario inglés | PASS — cinco rutas enlazadas desde `/en/`, estado 200 público y sin cambios de idioma |
 | Formularios | PASS — demo, endpoints públicos vacíos; no se habilitó backend |
 | Prueba de permisos aislada | PASS — publicación y restauración conservan raíz 755, propietario/grupo y contenido |
@@ -30,7 +31,7 @@ Base: `812cb0eb3fbae9992e1a09b71ef5d81852e8c71f` en `feature/web-demo-2026-gsap`
 | `npm run check` | PASS — 117 archivos, 0 errores, advertencias ni hints |
 | Build staging | PASS — `npm run build -- --mode staging`, 23 páginas generadas |
 | `npm run test:seo` | PASS — `SEO_EXPECTED_ORIGIN` de staging y `SEO_EXPECT_INDEXING=false` |
-| `npm run test:seo:fixtures` | PASS — 6 pruebas negativas nuevas |
+| `npm run test:seo:fixtures` | PASS — 11 fixtures: 6 regresiones anteriores y 5 regresiones nuevas de robots |
 | `git diff --check` | PASS |
 
 Comandos finales ejecutados desde el worktree SSD:
@@ -38,17 +39,25 @@ Comandos finales ejecutados desde el worktree SSD:
 ```bash
 npm test
 npm run check
-NODE_ENV=staging PUBLIC_SITE_URL=https://prueba.sokatechnologies.com \
-  PUBLIC_SITE_INDEXING=false PUBLIC_FORM_PROVIDER=demo \
-  PUBLIC_CONTACT_FORM_ENDPOINT= PUBLIC_TURNSTILE_SITE_KEY= \
+env -u PUBLIC_SITE_URL -u PUBLIC_SITE_INDEXING -u PUBLIC_FORM_PROVIDER \
+  -u PUBLIC_CONTACT_FORM_ENDPOINT -u PUBLIC_TURNSTILE_SITE_KEY \
+  NODE_ENV=production ASTRO_TELEMETRY_DISABLED=1 \
   npm run build -- --mode staging
-SEO_DIST=dist SEO_EXPECTED_ORIGIN=https://prueba.sokatechnologies.com \
-  SEO_EXPECT_INDEXING=false npm run test:seo
-npm run test:seo:fixtures
+( cd /srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/robots-p2-20261029/staging && \
+  SEO_DIST=dist SEO_EXPECTED_ORIGIN=https://prueba.sokatechnologies.com \
+  SEO_EXPECT_INDEXING=false npm run test:seo )
+( cd /srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/robots-p2-20261029/production && \
+  SEO_DIST=dist SEO_EXPECTED_ORIGIN=https://sokatechnologies.com \
+  SEO_EXPECT_INDEXING=true npm run test:seo )
+SEO_STAGING_DIST=/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/robots-p2-20261029/staging/dist \
+  SEO_FIXTURE_ROOT=/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/robots-p2-20261029/fixtures/ \
+  npm run test:seo:fixtures
 git diff --check
 ```
 
-Los reportes de cada build son [`env-only.json`](./env-only.json), [`mode-file.json`](./mode-file.json), [`process-override.json`](./process-override.json), [`fallback.json`](./fallback.json), [`staging-build.json`](./staging-build.json) y [`production-candidate.json`](./production-candidate.json); todos registran 23 rutas, 22 URLs de sitemap y cero fallos. La matriz de cinco valores está en [`indexing-values.json`](./indexing-values.json). La reproducción específica de modo está en [`mode-resolution.json`](./mode-resolution.json) y las negativas nuevas en [`negative-fixtures.json`](./negative-fixtures.json).
+La ejecución histórica de fase 3 documentada inicialmente usó `NODE_ENV=staging`; no se usa como evidencia de esta corrección. Las nuevas ejecuciones reproducibles usan `NODE_ENV=production --mode staging`, sin `PUBLIC_SITE_URL` de proceso, sobre una copia SSD con `.env.staging`. Los reportes anteriores siguen disponibles para comparación.
+
+Los reportes de cada build son [`env-only.json`](./env-only.json), [`mode-file.json`](./mode-file.json), [`process-override.json`](./process-override.json), [`fallback.json`](./fallback.json), [`staging-build.json`](./staging-build.json) y [`production-candidate.json`](./production-candidate.json); todos registran 23 rutas, 22 URLs de sitemap y cero fallos. La matriz de cinco valores está en [`indexing-values.json`](./indexing-values.json). La reproducción específica de modo está en [`mode-resolution.json`](./mode-resolution.json), las negativas acumuladas en [`negative-fixtures.json`](./negative-fixtures.json) y la ejecución nueva de robots en [`robots-validation.json`](./robots-validation.json).
 
 ## Consultas públicas
 

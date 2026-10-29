@@ -13,13 +13,10 @@ Astro 7.4.0 y Vite 8.3.4 se validaron con builds aislados en SSD. `astro.config.
 Comandos de referencia, siempre desde una copia aislada:
 
 ```bash
-NODE_ENV=staging \
-PUBLIC_SITE_URL=https://prueba.sokatechnologies.com \
-PUBLIC_SITE_INDEXING=false \
-PUBLIC_FORM_PROVIDER=demo \
-PUBLIC_CONTACT_FORM_ENDPOINT= \
-PUBLIC_TURNSTILE_SITE_KEY= \
-npm run build -- --mode staging
+env -u PUBLIC_SITE_URL -u PUBLIC_SITE_INDEXING -u PUBLIC_FORM_PROVIDER \
+  -u PUBLIC_CONTACT_FORM_ENDPOINT -u PUBLIC_TURNSTILE_SITE_KEY \
+  NODE_ENV=production ASTRO_TELEMETRY_DISABLED=1 \
+  npm run build -- --mode staging
 
 NODE_ENV=production \
 PUBLIC_SITE_URL=https://sokatechnologies.com \
@@ -40,6 +37,8 @@ env -u PUBLIC_SITE_URL NODE_ENV=production npm run build -- --mode staging
 ```
 
 En ambos casos, `Astro.site`, canonical, `og:url` y sitemap resolvieron la URL de `.env.staging`. Una variable `PUBLIC_SITE_URL` del proceso no vacía sigue sobrescribiendo ese archivo.
+
+La evidencia histórica de la primera ejecución de fase 3 que usó `NODE_ENV=staging` se conserva como contexto y no como resultado de esta corrección. La nueva ejecución usa `NODE_ENV=production --mode staging`, con el origen únicamente en `.env.staging`; el artefacto candidato de producción se construyó por separado con `NODE_ENV=production --mode production` y `PUBLIC_SITE_URL=https://sokatechnologies.com`.
 
 La carga de `PUBLIC_SITE_URL` se normaliza con `trim()` en la configuración y en `src/lib/seo.ts`. La política de indexación solo acepta el valor normalizado `true`; ausente, vacío, `false` o inválido generan `noindex,nofollow` y `Disallow: /`.
 
@@ -83,6 +82,8 @@ Son controles distintos:
 - `robots.txt` comunica instrucciones de rastreo; no es autenticación ni control de acceso.
 - `noindex` se entrega en HTML y pide no indexar una página ya accesible.
 - Una restricción HTTP, autenticación o firewall impide el acceso y debe verificarse por separado.
+
+El checker del artefacto no busca subcadenas: analiza grupos `User-agent` y directivas completas y compara la política normalizada con la salida esperada. Staging exige exactamente `User-agent: *` + `Disallow: /`; producción exige `User-agent: *` + `Allow: /` + `Sitemap: https://sokatechnologies.com/sitemap-index.xml`. Las regresiones cubren `Disallow: /wp-admin/`, un bloqueo raíz para un bot específico y un sitemap de producción de origen ajeno.
 
 La consulta pública observó producción WordPress con `server: LiteSpeed`, `robots.txt` que solo bloquea `/wp-admin/` y sin línea de sitemap, mientras staging responde mediante Cloudflare con reglas administradas de Content Signals y `Disallow: /`. Esto evidencia una transformación del origen en staging; no se modifica en esta fase.
 

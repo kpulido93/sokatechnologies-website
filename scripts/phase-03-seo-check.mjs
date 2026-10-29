@@ -79,6 +79,62 @@ const safeDistPath = (dist, pathname) => {
   return candidate === root || relative(root, candidate).startsWith("..") ? null : candidate;
 };
 
+export const parseRobotsPolicy = (robots) => {
+  const groups = [];
+  const errors = [];
+  let currentGroup = null;
+
+  for (const [index, rawLine] of robots.split(/\r?\n/).entries()) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+    const match = line.match(/^([^:]+):\s*(.*)$/);
+    if (!match) {
+      errors.push(`línea ${index + 1} no es una directiva completa`);
+      continue;
+    }
+
+    const name = match[1].trim().toLowerCase();
+    const value = match[2].trim();
+    if (name === "user-agent") {
+      if (!currentGroup || currentGroup.directives.length > 0) {
+        currentGroup = { userAgents: [], directives: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.userAgents.push(value);
+      continue;
+    }
+    if (!currentGroup) {
+      errors.push(`línea ${index + 1} aparece antes de User-agent`);
+      continue;
+    }
+    currentGroup.directives.push({ name, value });
+  }
+
+  return { groups, errors };
+};
+
+const expectedRobotsPolicy = (expectedOrigin, expectIndexing) => [
+  {
+    userAgents: ["*"],
+    directives: expectIndexing
+      ? [
+          { name: "allow", value: "/" },
+          { name: "sitemap", value: `${expectedOrigin}/sitemap-index.xml` }
+        ]
+      : [{ name: "disallow", value: "/" }]
+  }
+];
+
+export const validateRobotsPolicy = ({ robots, expectedOrigin, expectIndexing }) => {
+  const actual = parseRobotsPolicy(robots);
+  const expected = expectedRobotsPolicy(expectedOrigin, expectIndexing);
+  const failures = actual.errors.map((error) => `robots.txt: ${error}`);
+  if (JSON.stringify(actual.groups) !== JSON.stringify(expected)) {
+    failures.push("robots no coincide con la política completa del artefacto");
+  }
+  return { expected, actual: actual.groups, errors: actual.errors, failures };
+};
+
 const validateSitemaps = ({ dist, expectedOrigin, routeInventory, check }) => {
   const expectedUrls = new Set(
     routeInventory.expectedRoutes
@@ -206,14 +262,14 @@ export const runSeoCheck = ({
 
   const robotsPath = join(dist, "robots.txt");
   check(existsSync(robotsPath), "robots.txt ausente");
+  let robotsResult = { expected: expectedRobotsPolicy(expectedOrigin, expectIndexing), actual: [], errors: [], failures: [] };
   if (existsSync(robotsPath)) {
-    const robots = readFileSync(robotsPath, "utf8");
-    check(
+    robotsResult = validateRobotsPolicy({
+      robots: readFileSync(robotsPath, "utf8"),
+      expectedOrigin,
       expectIndexing
-        ? robots.includes("Allow: /") && robots.includes(`${expectedOrigin}/sitemap-index.xml`)
-        : robots.includes("Disallow: /") && !robots.includes("Allow: /"),
-      "robots no coincide con la política del artefacto"
-    );
+    });
+    robotsResult.failures.forEach((failure) => check(false, failure));
   }
 
   const sitemap = validateSitemaps({ dist, expectedOrigin, routeInventory, check });
@@ -224,6 +280,7 @@ export const runSeoCheck = ({
     routes: routeInventory.generatedRoutes.length,
     routeInventory,
     routeResults,
+    robots: robotsResult,
     sitemap,
     failures
   };

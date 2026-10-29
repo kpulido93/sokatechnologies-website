@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-10-29T03:31:53Z",
+  "sourceCommit": "b43f568c26b86e4c272402b067e5c69b513bacf2",
+  "builds": {
+    "staging": {
+      "mode": "staging",
+      "nodeEnv": "production",
+      "processSiteUrl": null,
+      "expectedOrigin": "https://prueba.sokatechnologies.com",
+      "routes": 23,
+      "sitemapUrls": 22,
+      "checkerFailures": 0,
+      "robots": {
+        "userAgents": ["*"],
+        "directives": [{"name": "disallow", "value": "/"}]
+      },
+      "indexing": false
+    },
+    "productionCandidate": {
+      "mode": "production",
+      "nodeEnv": "production",
+      "processSiteUrl": "https://sokatechnologies.com",
+      "expectedOrigin": "https://sokatechnologies.com",
+      "routes": 23,
+      "sitemapUrls": 22,
+      "checkerFailures": 0,
+      "robots": {
+        "userAgents": ["*"],
+        "directives": [
+          {"name": "allow", "value": "/"},
+          {"name": "sitemap", "value": "https://sokatechnologies.com/sitemap-index.xml"}
+        ]
+      },
+      "indexing": true
+    }
+  },
+  "checkerCommands": [
+    "( cd <SSD>/robots-p2-20261029/staging && SEO_DIST=dist SEO_EXPECTED_ORIGIN=https://prueba.sokatechnologies.com SEO_EXPECT_INDEXING=false npm run test:seo )",
+    "( cd <SSD>/robots-p2-20261029/production && SEO_DIST=dist SEO_EXPECTED_ORIGIN=https://sokatechnologies.com SEO_EXPECT_INDEXING=true npm run test:seo )"
+  ],
+  "fixtureSuite": {
+    "command": "SEO_STAGING_DIST=<SSD>/robots-p2-20261029/staging/dist SEO_FIXTURE_ROOT=<SSD>/robots-p2-20261029/fixtures/ npm run test:seo:fixtures",
+    "passed": 11,
+    "failed": 0,
+    "cases": [
+      "staging exacto",
+      "Disallow /wp-admin/ rechazado",
+      "User-agent específico rechazado",
+      "producción exacta",
+      "sitemap de producción ajeno rechazado",
+      "JSON-LD malformado",
+      "índice XML vacío",
+      "XML inválido",
+      "hijo ausente",
+      "URL faltante",
+      "URL de origen ajeno"
+    ]
+  }
+}
