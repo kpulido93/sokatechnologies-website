@@ -51,8 +51,8 @@ const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
 
   <form
     class="contact-form"
-    method="post"
-    action={fallbackAction}
+    method={isLiveMode ? "post" : undefined}
+    action={isLiveMode ? fallbackAction : undefined}
     enctype="application/x-www-form-urlencoded"
     data-form-mode={isLiveMode ? "live" : "demo"}
     data-form-provider={isLiveMode ? provider : "demo"}
@@ -223,7 +223,11 @@ const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
     }
 
     <div class="form-actions">
-      <button class="button button-primary" type="submit">{submitLabel}</button>
+      <button
+        class="button button-primary"
+        type={isLiveMode ? "submit" : "button"}
+        data-form-submit
+      >{submitLabel}</button>
       <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
         Escribir por correo
       </a>
@@ -261,7 +265,7 @@ const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
     const successNode = document.getElementById(form.dataset.successId ?? "");
     const errorNode = document.getElementById(form.dataset.errorId ?? "");
     const mode = form.dataset.formMode ?? "demo";
-    const submitButton = form.querySelector('button[type="submit"]');
+    const submitButton = form.querySelector<HTMLButtonElement>("[data-form-submit]");
     const originalLabel = submitButton instanceof HTMLButtonElement ? submitButton.textContent : "";
     let submitting = false;
     const createIdempotencyKey = () => {
@@ -277,6 +281,10 @@ const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
     let previousPayloadFingerprint: string | null = null;
     let waitingForTurnstile = false;
     let turnstilePoll: number | null = null;
+
+    if (mode === "demo" && submitButton instanceof HTMLButtonElement) {
+      submitButton.addEventListener("click", () => form.requestSubmit());
+    }
 
     const hasTurnstileToken = () =>
       mode !== "live" ||

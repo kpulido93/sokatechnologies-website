@@ -429,8 +429,12 @@ const handleAuditForm = (form: HTMLFormElement) => {
   const loadingNode = form.dataset.loadingId ? (document.getElementById(form.dataset.loadingId) as HTMLElement | null) : null;
   const issuesNode = form.dataset.issuesId ? (document.getElementById(form.dataset.issuesId) as HTMLElement | null) : null;
   const previewNode = form.dataset.previewId ? (document.getElementById(form.dataset.previewId) as HTMLElement | null) : null;
-  const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const submitButton = form.querySelector<HTMLButtonElement>("[data-audit-submit]");
   const defaultSubmitText = submitButton?.textContent ?? "Ver simulación de prueba";
+
+  if (mode === "demo" && submitButton instanceof HTMLButtonElement) {
+    submitButton.addEventListener("click", () => form.requestSubmit());
+  }
 
   const resetStatus = (clearErrors = true) => {
     setVisibility(successNode, false);

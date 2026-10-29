@@ -1,0 +1,63 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { solutionNeeds } from "../data/solutions";
+---
+
+<BaseLayout
+  title="Soluciones por necesidad | SokaTechnologies"
+  description="Explora rutas de software, datos, integración, infraestructura y web según la necesidad operativa que quieres resolver."
+  canonicalPath="/soluciones/"
+>
+  <div class="interior-page solutions-page">
+    <section class="page-hero section">
+      <p class="eyebrow">Soluciones por necesidad</p>
+      <h1>Empieza por el problema que quieres ordenar.</h1>
+      <p>
+        Elige una necesidad y revisa los servicios relacionados. El alcance se define después de
+        entender el proceso, las herramientas y las restricciones reales.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-ghost" href="/servicios/" data-link-shift>Ver servicios</a>
+      </div>
+    </section>
+
+    <section class="section js-section" aria-labelledby="solution-needs-title">
+      <SectionHeading
+        eyebrow="Seis necesidades frecuentes"
+        title="Una entrada breve hacia el servicio adecuado."
+        body="Estas rutas orientan la conversación; no sustituyen un diagnóstico ni prometen una solución cerrada."
+      />
+
+      <div class="solution-grid">
+        {solutionNeeds.map((need) => (
+          <article class="solution-card js-reveal-card" data-card-interaction>
+            <p class="eyebrow">{need.slug.replaceAll("-", " ")}</p>
+            <h2>{need.title}</h2>
+            <p>{need.body}</p>
+            <ul class="solution-links">
+              {need.services.map((service) => (
+                <li><a href={service.href} data-link-shift>{service.label}</a></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section js-section">
+      <div class="detail-card solution-follow-up js-reveal-card" data-card-interaction>
+        <p class="eyebrow">Continuidad</p>
+        <h2>Mantenimiento y acompañamiento también forman parte de la conversación.</h2>
+        <p>
+          Cuando una solución ya existe, podemos revisar soporte, documentación y mejora continua
+          según el alcance acordado. No implica un plan, SLA ni disponibilidad 24/7 por defecto.
+        </p>
+        <a class="button button-ghost" href="/servicios/mantenimiento-mejora-continua/" data-link-shift>
+          Ver mantenimiento y mejora continua
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

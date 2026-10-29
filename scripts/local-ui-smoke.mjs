@@ -16,6 +16,7 @@ const viewports = [
 const routes = [
   "/",
   "/servicios/",
+  "/soluciones/",
   "/servicios/software-a-medida/",
   "/servicios/automatizaciones/",
   "/servicios/dashboards/",
@@ -119,7 +120,7 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         const style = getComputedStyle(node);
         return !node.hidden && !node.closest("[hidden]") && style.display !== "none" && style.visibility !== "hidden";
       };
-      const overflowSelectors = ["main", ".page-shell", ".site-header", ".hero", ".contact-form", ".faq-stack", ".detail-grid", ".catalog-grid"];
+      const overflowSelectors = ["main", ".page-shell", ".site-header", ".hero", ".contact-form", ".faq-stack", ".detail-grid", ".catalog-grid", ".solution-grid", ".solution-card"];
       const internalOverflow = overflowSelectors.flatMap((selector) =>
         Array.from(document.querySelectorAll(selector)).filter(visible).map((node) => ({
           selector,
@@ -168,7 +169,20 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         portraitImage.getAttribute("srcset") && portraitImage.getAttribute("sizes")
       );
       let mobileHeader = { checked: false, failures: [] };
-      if (["mobile-360", "mobile", "mobile-390", "tablet"].includes(currentViewport) && ["/contacto/", "/diagnostico/", "/auditoria/"].includes(currentRoute)) {
+      let mobileFieldCoverage = { checked: false, minimumRatio: 1, failures: [] };
+      if (currentViewport.startsWith("mobile") && form instanceof HTMLFormElement) {
+        const formWidth = form.getBoundingClientRect().width;
+        const controls = Array.from(form.querySelectorAll("input:not([type=hidden]):not([name=website]):not([type=checkbox]), select, textarea"))
+          .filter((control) => control instanceof HTMLElement && visible(control));
+        const ratios = controls.map((control) => control.getBoundingClientRect().width / formWidth);
+        const minimumRatio = ratios.length ? Math.min(...ratios) : 0;
+        mobileFieldCoverage = {
+          checked: true,
+          minimumRatio,
+          failures: ratios.map((ratio, index) => ({ index, ratio })).filter(({ ratio }) => ratio < 0.8)
+        };
+      }
+      if ((currentViewport.startsWith("mobile") || currentViewport === "tablet") && ["/contacto/", "/diagnostico/", "/auditoria/"].includes(currentRoute)) {
         const header = document.querySelector(".site-header");
         const headerRect = header?.getBoundingClientRect();
         const failures = [];
@@ -203,6 +217,7 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         heroImageLayout,
         founderPortrait,
         mobileHeader,
+        mobileFieldCoverage,
         formMode,
         title: document.title
       };
@@ -224,7 +239,7 @@ const checkFormErrors = async (client, sessionId, selector) =>
       const trapRect = trap?.getBoundingClientRect();
       const demoNotice = form.querySelector(".form-demo-notice");
       const firstVisibleField = form.querySelector(".field-grid input:not([type=hidden]), .field-grid select, .field-grid textarea, .field-block input, .field-block select, .field-block textarea");
-      const demoButton = form.querySelector('button[type="submit"]');
+      const demoButton = form.querySelector("button[data-form-submit], button[data-audit-submit]");
       return {
         found: true,
         errorCount: errors.filter((node) => node.textContent.trim()).length,
@@ -237,6 +252,7 @@ const checkFormErrors = async (client, sessionId, selector) =>
         honeypotTabbable: honeypot instanceof HTMLElement && honeypot.tabIndex >= 0,
         demoNoticeBeforeFields: Boolean(demoNotice && firstVisibleField && (demoNotice.compareDocumentPosition(firstVisibleField) & Node.DOCUMENT_POSITION_FOLLOWING)),
         demoButtonLabel: demoButton?.textContent?.toLowerCase().includes("prueba") || demoButton?.textContent?.toLowerCase().includes("validación") || false,
+        demoButtonType: demoButton?.type || null,
         demoEndpointEmpty: !form.dataset.submitEndpoint
       };
     })()` ,
@@ -264,10 +280,16 @@ const checkFormFlow = async (client, sessionId, selector) =>
       });
       const firstErrorFocused = Boolean(firstInvalid && document.activeElement === firstInvalid);
       const originalFetch = window.fetch;
+      const originalSubmit = HTMLFormElement.prototype.submit;
       let fetchCalls = 0;
+      let nativeSubmitCalls = 0;
       window.fetch = (...args) => {
         fetchCalls += 1;
         return originalFetch(...args);
+      };
+      HTMLFormElement.prototype.submit = function (...args) {
+        nativeSubmitCalls += 1;
+        return originalSubmit.apply(this, args);
       };
       const values = {
         name: "Persona de prueba",
@@ -287,6 +309,7 @@ const checkFormFlow = async (client, sessionId, selector) =>
       form.requestSubmit();
       await new Promise((resolve) => setTimeout(resolve, 0));
       window.fetch = originalFetch;
+      HTMLFormElement.prototype.submit = originalSubmit;
       const successNode = document.getElementById(form.dataset.successId || "");
       const errorNode = document.getElementById(form.dataset.errorId || "");
       return {
@@ -297,6 +320,7 @@ const checkFormFlow = async (client, sessionId, selector) =>
         transitionToSuccess: Boolean(successNode && !successNode.hidden && errorNode?.hidden),
         remainingFieldErrors: form.querySelectorAll('[aria-invalid="true"], .field-error:not([hidden])').length,
         fetchCalls,
+        nativeSubmitCalls,
         demoMode: form.dataset.formMode === "demo"
       };
     })()` ,
@@ -474,7 +498,7 @@ const checkMobileMenu = async (client, sessionId) =>
       });
       const opened = toggle.getAttribute("aria-expanded") === "true";
       const firstLinkFocused = document.activeElement === links[0];
-      const allNavigationLinksVisible = links.length >= 5;
+      const allNavigationLinksVisible = links.length > 0 && links.length === navigation.querySelectorAll("a").length;
       document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
       await new Promise((resolve) => setTimeout(resolve, 0));
       return {
@@ -594,6 +618,24 @@ const checkProjects = async (client, sessionId) =>
     sessionId
   );
 
+const checkSolutions = async (client, sessionId) =>
+  evaluate(
+    client,
+    `(() => {
+      const cards = Array.from(document.querySelectorAll(".solution-card"));
+      const links = cards.map((card) => Array.from(card.querySelectorAll("a[href^='/servicios/']")).length);
+      const followUp = document.querySelector(".solution-follow-up");
+      return {
+        cards: cards.length,
+        links,
+        allRelated: links.length === 6 && links.every((count) => count > 0),
+        followUp: Boolean(followUp && /Mantenimiento y acompañamiento/i.test(followUp.textContent || "")),
+        compact: Boolean(document.querySelector(".solutions-page"))
+      };
+    })()`,
+    sessionId
+  );
+
 const checkFounderPortrait = async (client, sessionId) =>
   evaluate(
     client,
@@ -657,7 +699,7 @@ const checkKeyboard = async (client, sessionId) => {
 };
 
 const capture = async (client, sessionId, route, viewport) => {
-  const capturePrimary = ["/", "/proyectos/", "/nosotros/", "/auditoria/"].includes(route) && ["desktop", "tablet", "mobile"].includes(viewport.name);
+  const capturePrimary = ["/", "/soluciones/", "/proyectos/", "/nosotros/", "/auditoria/"].includes(route) && ["desktop", "tablet", "mobile"].includes(viewport.name);
   const captureForm = ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) &&
     (viewport.name === "desktop" || (route === "/contacto/" && viewport.name === "mobile"));
   if (!capturePrimary && !captureForm) return;
@@ -807,7 +849,7 @@ const main = async () => {
       await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
       const formResult = await checkFormErrors(client, sessionId, selector);
       const demoRequired = ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route);
-      if (strict && (!formResult.found || formResult.errorCount === 0 || formResult.invalidCount === 0 || !formResult.associated || !formResult.honeypotHidden || formResult.honeypotTabbable || !formResult.demoNoticeBeforeFields || !formResult.demoButtonLabel || (demoRequired && !formResult.demoEndpointEmpty))) {
+      if (strict && (!formResult.found || formResult.errorCount === 0 || formResult.invalidCount === 0 || !formResult.associated || !formResult.honeypotHidden || formResult.honeypotTabbable || !formResult.demoNoticeBeforeFields || !formResult.demoButtonLabel || (demoRequired && (formResult.demoButtonType !== "button" || !formResult.demoEndpointEmpty)))) {
         throw new Error(`Form error association failed for ${route}: ${JSON.stringify(formResult)}`);
       }
       if (route === "/auditoria/") {
@@ -829,9 +871,11 @@ const main = async () => {
     }
 
     const responsiveViewports = [
+      { name: "mobile-320", width: 320, height: 812 },
       { name: "mobile-360", width: 360, height: 812 },
       { name: "mobile", width: 375, height: 812 },
       { name: "mobile-390", width: 390, height: 844 },
+      { name: "mobile-430", width: 430, height: 900 },
       { name: "tablet", width: 768, height: 1024 }
     ];
     const responsiveResults = [];
@@ -877,6 +921,14 @@ const main = async () => {
       throw new Error(`Projects content check failed: ${JSON.stringify(projectsResult)}`);
     }
 
+    await client.send("Page.navigate", { url: new URL("/soluciones/", baseUrl).toString() }, sessionId);
+    await sleep(350);
+    await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
+    const solutionsResult = await checkSolutions(client, sessionId);
+    if (strict && (solutionsResult.cards !== 6 || !solutionsResult.allRelated || !solutionsResult.followUp || !solutionsResult.compact)) {
+      throw new Error(`Solutions content check failed: ${JSON.stringify(solutionsResult)}`);
+    }
+
     await client.send("Page.navigate", { url: new URL("/nosotros/", baseUrl).toString() }, sessionId);
     await sleep(350);
     await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
@@ -909,13 +961,14 @@ const main = async () => {
     const homeMapFailures = allResults.filter((result) => result.route === "/" && !result.homeMap);
     const founderPortraitFailures = allResults.filter((result) => !result.founderPortrait);
     const mobileHeaderFailures = allResults.filter((result) => result.mobileHeader?.failures?.length > 0);
+    const mobileFieldCoverageFailures = allResults.filter((result) => result.mobileFieldCoverage?.failures?.length > 0);
     const demoModeFailures = results.filter(({ route, formMode }) =>
       ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && formMode !== "demo"
     );
     const mobileMenuFailures = mobileMenuResults.filter((result) => !result.found || !result.opened || !result.firstLinkFocused || !result.allNavigationLinksVisible || !result.escapeClosed || !result.focusReturned || !result.noOverflow);
     const identityFailures = identityResults.filter((result) => !result.logoLoaded || !result.logoDimensions || !result.logoAccessibleName || !result.logoCircular || !result.favicon || !result.contactData || !result.noOfficialWhatsapp);
-    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || mobileMenuFailures.length > 0 || identityFailures.length > 0 || keyboardFocus === "BODY")) {
-      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, mobileMenuFailures, identityFailures, keyboardFocus })}`);
+    if (strict && (overflowFailures.length > 0 || focusFailures.length > 0 || demoModeFailures.length > 0 || homeMapFailures.length > 0 || founderPortraitFailures.length > 0 || mobileHeaderFailures.length > 0 || mobileFieldCoverageFailures.length > 0 || mobileMenuFailures.length > 0 || identityFailures.length > 0 || keyboardFocus === "BODY")) {
+      throw new Error(`Visual/accessibility smoke failed: ${JSON.stringify({ overflowFailures, focusFailures, demoModeFailures, homeMapFailures, founderPortraitFailures, mobileHeaderFailures, mobileFieldCoverageFailures, mobileMenuFailures, identityFailures, keyboardFocus })}`);
     }
 
     console.log(JSON.stringify({
@@ -933,6 +986,7 @@ const main = async () => {
       homeMapFailures: homeMapFailures.length,
       founderPortraitFailures: founderPortraitFailures.length,
       mobileHeaderFailures: mobileHeaderFailures.length,
+      mobileFieldCoverageFailures: mobileFieldCoverageFailures.length,
       formFlowResults,
       auditDemoFlowResult,
       auditDemoFlowResults,
@@ -942,6 +996,7 @@ const main = async () => {
       identityResults,
       identityFailures: identityFailures.length,
       projectsResult,
+      solutionsResult,
       screenshots: screenshotDir
     }, null, 2));
   } finally {

@@ -16,7 +16,7 @@ const previewId = `${formId}-preview`;
 <form
   id={formId}
   class="contact-form audit-form js-reveal"
-  method="post"
+  method="get"
   data-mode="demo"
   data-form-mode="demo"
   data-endpoint="/api/audit"
@@ -189,7 +189,7 @@ const previewId = `${formId}-preview`;
   </label>
 
   <div class="form-actions">
-    <button class="button button-primary" type="submit">Ver simulación de prueba</button>
+    <button class="button button-primary" type="button" data-audit-submit>Ver simulación de prueba</button>
     <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
       Escribir por correo
     </a>
