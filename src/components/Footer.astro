@@ -1,5 +1,6 @@
 ---
 import { footerGroups, siteMeta } from "../lib/site";
+import WhatsAppLink from "./WhatsAppLink.astro";
 ---
 
 <footer class="site-footer">
@@ -17,6 +18,7 @@ import { footerGroups, siteMeta } from "../lib/site";
         <span aria-hidden="true"> · </span>
         <a href={`mailto:${siteMeta.email}`}>{siteMeta.email}</a>
       </p>
+      <WhatsAppLink variant="footer" />
     </div>
 
     <div class="footer-grid">

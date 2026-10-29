@@ -1,5 +1,6 @@
 ---
 import ContactForm from "../components/ContactForm.astro";
+import WhatsAppLink from "../components/WhatsAppLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteMeta } from "../lib/site";
 ---
@@ -17,7 +18,8 @@ import { siteMeta } from "../lib/site";
       si tiene sentido avanzar a diagnóstico, propuesta, piloto o revisión técnica.
     </p>
     <div class="hero-actions">
-      <a class="button button-primary" href={`mailto:${siteMeta.email}`}>Escribir por correo</a>
+      <WhatsAppLink />
+      <a class="button button-ghost" href={`mailto:${siteMeta.email}`}>Escribir por correo</a>
       <a class="button button-ghost" href={siteMeta.phoneHref}>Llamar</a>
     </div>
   </section>
@@ -32,6 +34,18 @@ import { siteMeta } from "../lib/site";
       </p>
     </div>
     <div class="contact-direct-grid">
+      <a
+        class="contact-direct-action"
+        href={siteMeta.whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Escribir por WhatsApp al ${siteMeta.phone} (se abre en otra pestaña)`}
+        data-whatsapp-link
+      >
+        <span class="eyebrow">WhatsApp</span>
+        <strong>Escribir por WhatsApp</strong>
+        <span>{siteMeta.phone}</span>
+      </a>
       <a
         class="contact-direct-action"
         href={`mailto:${siteMeta.email}`}
@@ -51,6 +65,7 @@ import { siteMeta } from "../lib/site";
         <span>{siteMeta.phone}</span>
       </a>
     </div>
+    <p class="form-note">WhatsApp se abre fuera del sitio. Tú decides cuándo enviar el mensaje.</p>
     <p class="contact-location"><span class="eyebrow">Ubicación</span> {siteMeta.regions}</p>
   </section>
 

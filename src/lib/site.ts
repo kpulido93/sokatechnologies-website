@@ -22,13 +22,17 @@ export type SectorItem = {
   body: string;
 };
 
+const contactNumber = "573212554930";
+const whatsappMessage = "Hola, quiero conversar con SokaTechnologies sobre un proyecto.";
+
 export const siteMeta = {
   name: "SokaTechnologies",
   shortName: "Soka",
   tagline: "Conectamos sistemas, optimizamos procesos y convertimos datos en decisiones.",
   email: "info@sokatechnologies.com",
   phone: "+57 321 2554930",
-  phoneHref: "tel:+573212554930",
+  phoneHref: `tel:+${contactNumber}`,
+  whatsappHref: `https://wa.me/${contactNumber}?text=${encodeURIComponent(whatsappMessage)}`,
   regions: "Colombia",
   contactHref: "/contacto/#contacto-directo",
   diagnosisHref: "/diagnostico/"
