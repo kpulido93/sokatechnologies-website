@@ -1,5 +1,5 @@
 ---
-# Documento interno conservado fuera de `src/pages`; no forma parte del build público.
+# Plantilla pública de trabajo — no es una política aprobada ni un documento privado.
 import PageHero from "../components/PageHero.astro";
 import { legalPages } from "../data/legal";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -38,18 +38,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <article class="legal-card js-reveal-card" data-card-interaction>
         <h2>1. Responsable del tratamiento</h2>
         <p>
-          SokaTechnologies es una marca de servicios tecnológicos operada actualmente por la
-          persona natural <strong>[NOMBRE LEGAL COMPLETO]</strong>, domiciliada en Colombia, con
-          domicilio en <strong>[DOMICILIO COMPLETO EN COLOMBIA]</strong>,
-          <strong>[CIUDAD Y DEPARTAMENTO]</strong>, dirección de contacto
-          <strong>[DIRECCIÓN DE CONTACTO]</strong> y teléfono
-          <strong>[TELÉFONO DE CONTACTO]</strong>.
+          El responsable del tratamiento, su identificación, domicilio y datos de contacto deben
+          completarse y validarse antes de usar este texto como política definitiva:
+          <strong>[COMPLETAR Y VALIDAR LOS DATOS DEL RESPONSABLE]</strong>.
         </p>
         <p>
-          La identificación o NIT, si aplica, es
-          <strong>[NÚMERO DE IDENTIFICACIÓN O NIT, SI APLICA]</strong>. Estos datos de
-          identificación, domicilio, dirección, teléfono y situación jurídica deben completarse y
-          verificarse antes de publicar esta política como definitiva.
+          La identificación tributaria, si aplica, debe registrarse únicamente después de su
+          confirmación: <strong>[COMPLETAR Y VALIDAR IDENTIFICACIÓN, SI APLICA]</strong>.
         </p>
         <p>
           La persona encargada de atender consultas y reclamos es
