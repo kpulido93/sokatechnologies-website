@@ -1659,6 +1659,11 @@ body:has(.menu-toggle[aria-expanded="true"]) .whatsapp-float {
   visibility: hidden;
 }
 
+/* Direct contact actions stay in the form flow; the floating link must not cover fields or results. */
+body:has(form) .whatsapp-float {
+  visibility: hidden;
+}
+
 .whatsapp-footer {
   margin-top: 1rem;
   color: #51df87;

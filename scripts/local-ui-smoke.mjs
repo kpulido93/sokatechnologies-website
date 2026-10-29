@@ -582,18 +582,23 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
       const whatsappLinks = Array.from(document.querySelectorAll("a[data-whatsapp-link]"));
       const float = document.querySelector(".whatsapp-float");
       const floatRect = float?.getBoundingClientRect();
+      const floatShouldBeVisible = !document.querySelector("form");
       const officialWhatsapp = whatsappLinks.length >= 2 && whatsappLinks.every((link) => {
         const url = new URL(link.href);
         return url.origin === "https://wa.me" && url.pathname === "/573212554930" &&
           url.searchParams.get("text") === "Hola, quiero conversar con SokaTechnologies sobre un proyecto." &&
           link.target === "_blank" && link.relList.contains("noopener") && link.relList.contains("noreferrer");
       });
-      const whatsappVisible = float instanceof HTMLElement && getComputedStyle(float).visibility === "visible" &&
-        floatRect.width >= 44 && floatRect.height >= 44 && floatRect.left >= 0 &&
-        floatRect.right <= innerWidth && floatRect.top >= 0 && floatRect.bottom <= innerHeight;
-      let whatsappFocus = false;
+      const whatsappVisible = float instanceof HTMLElement && (
+        floatShouldBeVisible
+          ? getComputedStyle(float).visibility === "visible" &&
+            floatRect.width >= 44 && floatRect.height >= 44 && floatRect.left >= 0 &&
+            floatRect.right <= innerWidth && floatRect.top >= 0 && floatRect.bottom <= innerHeight
+          : getComputedStyle(float).visibility === "hidden"
+      );
+      let whatsappFocus = !floatShouldBeVisible;
       let whatsappFormClear = true;
-      if (float instanceof HTMLElement) {
+      if (float instanceof HTMLElement && floatShouldBeVisible) {
         float.focus();
         whatsappFocus = document.activeElement === float && getComputedStyle(float).outlineStyle !== "none";
         const field = document.querySelector('form input:not([type="hidden"]):not([tabindex="-1"]), form textarea');
