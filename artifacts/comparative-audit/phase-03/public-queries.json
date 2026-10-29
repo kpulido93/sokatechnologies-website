@@ -1,0 +1,835 @@
+{
+  "checkedAt": "2026-10-29T02:46:23.978Z",
+  "method": "GET fetch; redirects not followed; no credentials; finite known-path set",
+  "origins": {
+    "https://sokatechnologies.com": {
+      "/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/servicios/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/servicios/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/contacto/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/contacto/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/soluciones/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/soluciones/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/sobre-nosotros/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/sobre-nosotros/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/casos-de-exito/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/casos-de-exito/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/casos/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/casos-de-exito/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": "https://sokatechnologies.com/en/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/en/",
+          "/en/servicios/",
+          "/en/soluciones/",
+          "/en/casos-de-exito/",
+          "/en/sobre-nosotros/",
+          "/en/contacto/"
+        ]
+      },
+      "/en/services/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/en/",
+          "/en/servicios/",
+          "/en/soluciones/",
+          "/en/casos-de-exito/",
+          "/en/sobre-nosotros/",
+          "/en/contacto/"
+        ]
+      },
+      "/en/about-us/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/en/",
+          "/en/servicios/",
+          "/en/soluciones/",
+          "/en/casos-de-exito/",
+          "/en/sobre-nosotros/",
+          "/en/contacto/"
+        ]
+      },
+      "/en/contact/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/en/contacto/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/robots.txt": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap_index.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/wp-sitemap.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap-index.xml": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/",
+          "/servicios/",
+          "/soluciones/",
+          "/casos-de-exito/",
+          "/sobre-nosotros/",
+          "/contacto/"
+        ]
+      },
+      "/sitemaps.xml": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/xml; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 3,
+        "locs": [
+          "https://sokatechnologies.com/post-sitemap1.xml",
+          "https://sokatechnologies.com/page-sitemap1.xml",
+          "https://sokatechnologies.com/category-sitemap1.xml"
+        ],
+        "internalLinks": []
+      }
+    },
+    "https://www.sokatechnologies.com": {
+      "/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/servicios/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/servicios/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/contacto/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/contacto/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/soluciones/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/soluciones/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sobre-nosotros/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sobre-nosotros/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/casos-de-exito/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/casos-de-exito/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/casos/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/casos-de-exito/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/en/",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/services/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/en/services/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/about-us/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/en/about-us/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/contact/": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/en/contacto/",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/robots.txt": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/robots.txt",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap_index.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/wp-sitemap.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemaps.xml",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap-index.xml": {
+        "status": 301,
+        "headers": {
+          "content-type": "text/html; charset=UTF-8",
+          "location": "https://sokatechnologies.com/sitemap-index.xml",
+          "server": "LiteSpeed",
+          "cache-control": "no-cache, must-revalidate, max-age=0, no-store, private"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemaps.xml": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/xml; charset=UTF-8",
+          "server": "LiteSpeed",
+          "cache-control": "public, max-age=0"
+        },
+        "canonical": null,
+        "locCount": 3,
+        "locs": [
+          "https://sokatechnologies.com/post-sitemap1.xml",
+          "https://sokatechnologies.com/page-sitemap1.xml",
+          "https://sokatechnologies.com/category-sitemap1.xml"
+        ],
+        "internalLinks": []
+      }
+    },
+    "https://prueba.sokatechnologies.com": {
+      "/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": "https://prueba.sokatechnologies.com/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/sitemap-index.xml",
+          "/_astro/logo-sokatechnologies.DQ1wbc8Y.png",
+          "/_astro/BaseLayout.sEfebx5l.css",
+          "/",
+          "/servicios/",
+          "/proyectos/",
+          "/nosotros/",
+          "/contacto/",
+          "/diagnostico/",
+          "/servicios/software-a-medida/",
+          "/servicios/automatizaciones/",
+          "/servicios/dashboards/",
+          "/servicios/consultoria-ti-devops/",
+          "/servicios/sitios-web-corporativos/",
+          "/servicios/infraestructura-soporte/",
+          "/servicios/mantenimiento-mejora-continua/",
+          "/cdn-cgi/l/email-protection#bad3d4dcd5fac9d5d1dbcedfd9d2d4d5d6d5ddd3dfc994d9d5d7",
+          "/politica-privacidad/",
+          "/terminos/",
+          "/cdn-cgi/l/email-protection#30595e565f70435f5b51445553585e5f5c5f575955431e535f5d"
+        ]
+      },
+      "/servicios/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": "https://prueba.sokatechnologies.com/servicios/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/sitemap-index.xml",
+          "/_astro/logo-sokatechnologies.DQ1wbc8Y.png",
+          "/_astro/BaseLayout.sEfebx5l.css",
+          "/",
+          "/servicios/",
+          "/proyectos/",
+          "/nosotros/",
+          "/contacto/",
+          "/diagnostico/",
+          "/soluciones/",
+          "/servicios/software-a-medida/",
+          "/servicios/automatizaciones/",
+          "/servicios/dashboards/",
+          "/servicios/consultoria-ti-devops/",
+          "/servicios/sitios-web-corporativos/",
+          "/servicios/infraestructura-soporte/",
+          "/servicios/mantenimiento-mejora-continua/",
+          "/cdn-cgi/l/email-protection#3e575058517e4d51555f4a5b5d565051525159575b4d105d5153",
+          "/politica-privacidad/",
+          "/terminos/",
+          "/cdn-cgi/l/email-protection#660f0800092615090d071203050e08090a09010f03154805090b"
+        ]
+      },
+      "/contacto/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": "https://prueba.sokatechnologies.com/contacto/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/sitemap-index.xml",
+          "/_astro/logo-sokatechnologies.DQ1wbc8Y.png",
+          "/_astro/BaseLayout.sEfebx5l.css",
+          "/",
+          "/servicios/",
+          "/proyectos/",
+          "/nosotros/",
+          "/contacto/",
+          "/diagnostico/",
+          "/cdn-cgi/l/email-protection#e980878f86a99a8682889d8c8a81878685868e808c9ac78a8684",
+          "/politica-privacidad/",
+          "/cdn-cgi/l/email-protection#4d24232b220d3e22262c39282e25232221222a24283e632e2220",
+          "/cdn-cgi/l/email-protection#f891969e97b88b9793998c9d9b90969794979f919d8bd69b9795",
+          "/servicios/software-a-medida/",
+          "/servicios/automatizaciones/",
+          "/servicios/dashboards/",
+          "/servicios/consultoria-ti-devops/",
+          "/servicios/sitios-web-corporativos/",
+          "/servicios/infraestructura-soporte/",
+          "/servicios/mantenimiento-mejora-continua/",
+          "/terminos/",
+          "/cdn-cgi/l/email-protection#375e5951587744585c564352545f59585b58505e52441954585a"
+        ]
+      },
+      "/soluciones/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": "https://prueba.sokatechnologies.com/soluciones/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/sitemap-index.xml",
+          "/_astro/logo-sokatechnologies.DQ1wbc8Y.png",
+          "/_astro/BaseLayout.sEfebx5l.css",
+          "/",
+          "/servicios/",
+          "/proyectos/",
+          "/nosotros/",
+          "/contacto/",
+          "/diagnostico/",
+          "/servicios/automatizaciones/",
+          "/servicios/software-a-medida/",
+          "/servicios/dashboards/",
+          "/servicios/consultoria-ti-devops/",
+          "/servicios/infraestructura-soporte/",
+          "/servicios/mantenimiento-mejora-continua/",
+          "/servicios/sitios-web-corporativos/",
+          "/cdn-cgi/l/email-protection#cda4a3aba28dbea2a6acb9a8aea5a3a2a1a2aaa4a8bee3aea2a0",
+          "/politica-privacidad/",
+          "/terminos/",
+          "/cdn-cgi/l/email-protection#a8c1c6cec7e8dbc7c3c9dccdcbc0c6c7c4c7cfc1cddb86cbc7c5"
+        ]
+      },
+      "/sobre-nosotros/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/casos-de-exito/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/casos/": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": "https://prueba.sokatechnologies.com/proyectos/",
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": [
+          "/sitemap-index.xml",
+          "/_astro/logo-sokatechnologies.DQ1wbc8Y.png",
+          "/_astro/BaseLayout.sEfebx5l.css",
+          "/",
+          "/servicios/",
+          "/proyectos/",
+          "/nosotros/",
+          "/contacto/",
+          "/diagnostico/",
+          "/cdn-cgi/l/email-protection#2c45424a436c5f43474d58494f44424340434b45495f024f4341",
+          "/servicios/software-a-medida/",
+          "/servicios/automatizaciones/",
+          "/servicios/dashboards/",
+          "/servicios/consultoria-ti-devops/",
+          "/servicios/sitios-web-corporativos/",
+          "/servicios/infraestructura-soporte/",
+          "/servicios/mantenimiento-mejora-continua/",
+          "/politica-privacidad/",
+          "/terminos/",
+          "/cdn-cgi/l/email-protection#640d0a020b24170b0f051001070c0a0b080b030d01174a070b09"
+        ]
+      },
+      "/en/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/services/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/about-us/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/en/contact/": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/robots.txt": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "server": "cloudflare",
+          "cf-cache-status": "HIT",
+          "cache-control": "max-age=14400"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap.xml": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap_index.xml": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/wp-sitemap.xml": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      },
+      "/sitemap-index.xml": {
+        "status": 200,
+        "headers": {
+          "content-type": "text/xml",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 1,
+        "locs": [
+          "https://prueba.sokatechnologies.com/sitemap-0.xml"
+        ],
+        "internalLinks": []
+      },
+      "/sitemaps.xml": {
+        "status": 404,
+        "headers": {
+          "content-type": "text/html",
+          "server": "cloudflare",
+          "cf-cache-status": "DYNAMIC"
+        },
+        "canonical": null,
+        "locCount": 0,
+        "locs": [],
+        "internalLinks": []
+      }
+    }
+  },
+  "failures": []
+}

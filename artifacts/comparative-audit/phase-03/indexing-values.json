@@ -1,0 +1,36 @@
+[
+  {
+    "label": "absent",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false
+  },
+  {
+    "label": "empty",
+    "input": "",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false
+  },
+  {
+    "label": "false",
+    "input": "false",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false
+  },
+  {
+    "label": "invalid",
+    "input": "yes",
+    "htmlRobots": "noindex,nofollow",
+    "robotsTxt": "User-agent: *\nDisallow: /",
+    "indexEnabled": false
+  },
+  {
+    "label": "true",
+    "input": "true",
+    "htmlRobots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "robotsTxt": "User-agent: *\nAllow: /\nSitemap: https://index.example.test/sitemap-index.xml",
+    "indexEnabled": true
+  }
+]

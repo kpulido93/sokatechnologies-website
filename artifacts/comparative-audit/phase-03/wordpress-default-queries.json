@@ -1,0 +1,150 @@
+{
+  "checkedAt": "2026-10-29T02:47:34.826Z",
+  "method": "GET fetch; redirects not followed; no credentials",
+  "origins": {
+    "https://sokatechnologies.com": {
+      "/feed/": {
+        "status": 200,
+        "location": null,
+        "contentType": "application/rss+xml; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/comments/feed/": {
+        "status": 200,
+        "location": null,
+        "contentType": "application/rss+xml; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/wp-json/": {
+        "status": 200,
+        "location": null,
+        "contentType": "application/json; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/xmlrpc.php": {
+        "status": 405,
+        "location": null,
+        "contentType": "text/plain;charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/wp-login.php": {
+        "status": 200,
+        "location": null,
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/wp-admin/": {
+        "status": 302,
+        "location": "https://sokatechnologies.com/wp-login.php?redirect_to=https%3A%2F%2Fsokatechnologies.com%2Fwp-admin%2F&reauth=1",
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/wp-includes/": {
+        "status": 200,
+        "location": null,
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/2026/05/13/hello-world/": {
+        "status": 200,
+        "location": null,
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/sample-page/": {
+        "status": 200,
+        "location": null,
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      },
+      "/category/uncategorized/": {
+        "status": 200,
+        "location": null,
+        "contentType": "text/html; charset=UTF-8",
+        "server": "LiteSpeed",
+        "cfCacheStatus": null
+      }
+    },
+    "https://prueba.sokatechnologies.com": {
+      "/feed/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/comments/feed/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/wp-json/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/xmlrpc.php": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/wp-login.php": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/wp-admin/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/wp-includes/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/2026/05/13/hello-world/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/sample-page/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      },
+      "/category/uncategorized/": {
+        "status": 404,
+        "location": null,
+        "contentType": "text/html",
+        "server": "cloudflare",
+        "cfCacheStatus": "DYNAMIC"
+      }
+    }
+  }
+}

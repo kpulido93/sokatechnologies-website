@@ -1,0 +1,251 @@
+{
+  "dist": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-03-lab/outputs/fallback",
+  "expectedOrigin": "https://sokatechnologies.com",
+  "expectIndexing": false,
+  "routes": 23,
+  "routeInventory": {
+    "generatedRoutes": [
+      "/",
+      "/auditoria/",
+      "/casos/",
+      "/contacto/",
+      "/demos/ecommerce/",
+      "/diagnostico/",
+      "/nosotros/",
+      "/politica-privacidad/",
+      "/productos/",
+      "/productos/autoinventario/",
+      "/productos/autowhatsapp/",
+      "/productos/portik/",
+      "/proyectos/",
+      "/servicios/",
+      "/servicios/automatizaciones/",
+      "/servicios/consultoria-ti-devops/",
+      "/servicios/dashboards/",
+      "/servicios/infraestructura-soporte/",
+      "/servicios/mantenimiento-mejora-continua/",
+      "/servicios/sitios-web-corporativos/",
+      "/servicios/software-a-medida/",
+      "/soluciones/",
+      "/terminos/"
+    ],
+    "expectedRoutes": [
+      "/",
+      "/servicios/",
+      "/soluciones/",
+      "/servicios/software-a-medida/",
+      "/servicios/automatizaciones/",
+      "/servicios/dashboards/",
+      "/servicios/consultoria-ti-devops/",
+      "/servicios/sitios-web-corporativos/",
+      "/servicios/infraestructura-soporte/",
+      "/servicios/mantenimiento-mejora-continua/",
+      "/productos/",
+      "/productos/portik/",
+      "/productos/autoinventario/",
+      "/productos/autowhatsapp/",
+      "/contacto/",
+      "/diagnostico/",
+      "/auditoria/",
+      "/casos/",
+      "/demos/ecommerce/",
+      "/nosotros/",
+      "/politica-privacidad/",
+      "/proyectos/",
+      "/terminos/"
+    ],
+    "missingRoutes": [],
+    "unexpectedRoutes": [],
+    "classifications": {
+      "/": "commercial",
+      "/auditoria/": "demo",
+      "/casos/": "compatibility",
+      "/contacto/": "commercial",
+      "/demos/ecommerce/": "demo",
+      "/diagnostico/": "commercial",
+      "/nosotros/": "commercial",
+      "/politica-privacidad/": "compatibility",
+      "/productos/": "commercial",
+      "/productos/autoinventario/": "commercial",
+      "/productos/autowhatsapp/": "commercial",
+      "/productos/portik/": "commercial",
+      "/proyectos/": "commercial",
+      "/servicios/": "commercial",
+      "/servicios/automatizaciones/": "commercial",
+      "/servicios/consultoria-ti-devops/": "commercial",
+      "/servicios/dashboards/": "commercial",
+      "/servicios/infraestructura-soporte/": "commercial",
+      "/servicios/mantenimiento-mejora-continua/": "commercial",
+      "/servicios/sitios-web-corporativos/": "commercial",
+      "/servicios/software-a-medida/": "commercial",
+      "/soluciones/": "commercial",
+      "/terminos/": "compatibility"
+    }
+  },
+  "routeResults": [
+    {
+      "route": "/",
+      "canonical": "https://sokatechnologies.com/",
+      "ogUrl": "https://sokatechnologies.com/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/auditoria/",
+      "canonical": "https://sokatechnologies.com/auditoria/",
+      "ogUrl": "https://sokatechnologies.com/auditoria/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/casos/",
+      "canonical": "https://sokatechnologies.com/proyectos/",
+      "ogUrl": "https://sokatechnologies.com/proyectos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/contacto/",
+      "canonical": "https://sokatechnologies.com/contacto/",
+      "ogUrl": "https://sokatechnologies.com/contacto/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/demos/ecommerce/",
+      "canonical": "https://sokatechnologies.com/demos/ecommerce/",
+      "ogUrl": "https://sokatechnologies.com/demos/ecommerce/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/diagnostico/",
+      "canonical": "https://sokatechnologies.com/diagnostico/",
+      "ogUrl": "https://sokatechnologies.com/diagnostico/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/nosotros/",
+      "canonical": "https://sokatechnologies.com/nosotros/",
+      "ogUrl": "https://sokatechnologies.com/nosotros/",
+      "robots": "noindex,nofollow",
+      "identityUrls": [
+        "https://sokatechnologies.com"
+      ]
+    },
+    {
+      "route": "/politica-privacidad/",
+      "canonical": "https://sokatechnologies.com/politica-privacidad/",
+      "ogUrl": "https://sokatechnologies.com/politica-privacidad/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/",
+      "canonical": "https://sokatechnologies.com/productos/",
+      "ogUrl": "https://sokatechnologies.com/productos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/autoinventario/",
+      "canonical": "https://sokatechnologies.com/productos/autoinventario/",
+      "ogUrl": "https://sokatechnologies.com/productos/autoinventario/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/autowhatsapp/",
+      "canonical": "https://sokatechnologies.com/productos/autowhatsapp/",
+      "ogUrl": "https://sokatechnologies.com/productos/autowhatsapp/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/productos/portik/",
+      "canonical": "https://sokatechnologies.com/productos/portik/",
+      "ogUrl": "https://sokatechnologies.com/productos/portik/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/proyectos/",
+      "canonical": "https://sokatechnologies.com/proyectos/",
+      "ogUrl": "https://sokatechnologies.com/proyectos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/",
+      "canonical": "https://sokatechnologies.com/servicios/",
+      "ogUrl": "https://sokatechnologies.com/servicios/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/automatizaciones/",
+      "canonical": "https://sokatechnologies.com/servicios/automatizaciones/",
+      "ogUrl": "https://sokatechnologies.com/servicios/automatizaciones/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/consultoria-ti-devops/",
+      "canonical": "https://sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "ogUrl": "https://sokatechnologies.com/servicios/consultoria-ti-devops/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/dashboards/",
+      "canonical": "https://sokatechnologies.com/servicios/dashboards/",
+      "ogUrl": "https://sokatechnologies.com/servicios/dashboards/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/infraestructura-soporte/",
+      "canonical": "https://sokatechnologies.com/servicios/infraestructura-soporte/",
+      "ogUrl": "https://sokatechnologies.com/servicios/infraestructura-soporte/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/mantenimiento-mejora-continua/",
+      "canonical": "https://sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "ogUrl": "https://sokatechnologies.com/servicios/mantenimiento-mejora-continua/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/sitios-web-corporativos/",
+      "canonical": "https://sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "ogUrl": "https://sokatechnologies.com/servicios/sitios-web-corporativos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/servicios/software-a-medida/",
+      "canonical": "https://sokatechnologies.com/servicios/software-a-medida/",
+      "ogUrl": "https://sokatechnologies.com/servicios/software-a-medida/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/soluciones/",
+      "canonical": "https://sokatechnologies.com/soluciones/",
+      "ogUrl": "https://sokatechnologies.com/soluciones/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    },
+    {
+      "route": "/terminos/",
+      "canonical": "https://sokatechnologies.com/terminos/",
+      "ogUrl": "https://sokatechnologies.com/terminos/",
+      "robots": "noindex,nofollow",
+      "identityUrls": []
+    }
+  ],
+  "failures": []
+}
