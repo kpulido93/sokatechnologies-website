@@ -1,31 +1,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { createPublicRouteInventory } from "./public-route-inventory.mjs";
 
 const dist = join(process.cwd(), "dist");
-const expectedRoutes = [
-  "/",
-  "/servicios/",
-  "/servicios/software-a-medida/",
-  "/servicios/automatizaciones/",
-  "/servicios/dashboards/",
-  "/servicios/consultoria-ti-devops/",
-  "/servicios/sitios-web-corporativos/",
-  "/servicios/infraestructura-soporte/",
-  "/servicios/mantenimiento-mejora-continua/",
-  "/productos/",
-  "/productos/portik/",
-  "/productos/autoinventario/",
-  "/productos/autowhatsapp/",
-  "/contacto/",
-  "/diagnostico/",
-  "/auditoria/",
-  "/casos/",
-  "/demos/ecommerce/",
-  "/nosotros/",
-  "/politica-privacidad/",
-  "/proyectos/",
-  "/terminos/"
-];
+const routeInventory = createPublicRouteInventory(dist);
+const expectedRoutes = routeInventory.generatedRoutes;
 
 const failures = [];
 const check = (condition, message) => {
@@ -55,6 +34,9 @@ check(
 );
 
 check(existsSync(dist), "dist no existe; ejecuta el build antes de esta comprobación");
+check(expectedRoutes.length > 0, "no se encontraron páginas HTML públicas generadas");
+check(routeInventory.missingRoutes.length === 0, `faltan rutas esperadas: ${routeInventory.missingRoutes.join(", ")}`);
+check(routeInventory.unexpectedRoutes.length === 0, `hay rutas públicas no clasificadas: ${routeInventory.unexpectedRoutes.join(", ")}`);
 if (failures.length === 0) {
   for (const route of expectedRoutes) {
     check(existsSync(htmlPath(route)), `falta HTML para ${route}`);
@@ -65,9 +47,11 @@ if (failures.length === 0) {
   }
 
   const generatedHtml = expectedRoutes.map(htmlFor).join("\n");
-  const generatedFiles = readdirSync(join(dist, "_astro"), { recursive: true, withFileTypes: true })
-    .filter((entry) => entry.isFile())
-    .map((entry) => join(entry.parentPath, entry.name));
+  const generatedFiles = existsSync(join(dist, "_astro"))
+    ? readdirSync(join(dist, "_astro"), { recursive: true, withFileTypes: true })
+        .filter((entry) => entry.isFile())
+        .map((entry) => join(entry.parentPath, entry.name))
+    : [];
   const generatedBundles = generatedFiles
     .filter((file) => /\.(?:js|css|map)$/.test(file))
     .map((file) => readFileSync(file, "utf8"))
@@ -80,6 +64,7 @@ if (failures.length === 0) {
   const contact = htmlFor("/contacto/");
   const audit = htmlFor("/auditoria/");
   const ecommerce = htmlFor("/demos/ecommerce/");
+  const solutions = htmlFor("/soluciones/");
   check(contact.includes("Colombia"), "contacto: ubicación ausente");
   check(contact.includes("+57 321 2554930") && contact.includes("tel:+573212554930"), "contacto: teléfono o tel ausente");
   check(contact.includes("mailto:info@sokatechnologies.com"), "contacto: mailto ausente");
@@ -89,6 +74,10 @@ if (failures.length === 0) {
   check(audit.includes("no visita ni escanea") && audit.includes("Completar simulación"), "auditoría: límites o CTA demo ausentes");
   check(audit.includes("data-form-mode=\"demo\""), "auditoría: modo demo ausente");
   check(ecommerce.includes("sin backend real") && ecommerce.includes("sin datos de terceros"), "e-commerce: límites demo ausentes");
+  check(solutions.includes("Empieza por el problema que quieres ordenar."), "soluciones: encabezado ausente");
+  check((solutions.match(/class="solution-card/g) ?? []).length === 6, "soluciones: no aparecen las seis necesidades");
+  check(solutions.includes("Mantenimiento y acompañamiento"), "soluciones: mantenimiento y acompañamiento ausentes");
+  check((solutions.match(/href="\/servicios\//g) ?? []).length >= 6, "soluciones: relaciones con servicios ausentes");
   const products = htmlFor("/productos/");
   check(products.includes("Herramientas para necesidades operativas concretas."), "productos: encabezado público ausente");
   check(products.includes("Qué puedes evaluar de cada producto."), "productos: sección orientada al visitante ausente");
@@ -101,5 +90,5 @@ if (failures.length > 0) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join("\n"));
   process.exitCode = 1;
 } else {
-  console.log(`PASS: ${expectedRoutes.length} rutas, canonical exacto (incluida /casos/ → /proyectos/), noindex, identidad, schema, legal público y demos verificados.`);
+  console.log(`PASS: ${expectedRoutes.length} rutas descubiertas y alineadas con el inventario esperado (${Object.values(routeInventory.classifications).join(", ")}), canonical exacto (incluida /casos/ → /proyectos/), noindex, identidad, schema, legal público, soluciones y demos verificados.`);
 }

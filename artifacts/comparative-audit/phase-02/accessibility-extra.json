@@ -1,0 +1,48 @@
+{
+  "browser": "Chrome/156.0.8078.47",
+  "noJs": {
+    "heading": true,
+    "demoNotice": true,
+    "formVisible": true,
+    "noNativeSubmitButton": true
+  },
+  "reducedMotion": {
+    "mediaMatches": true,
+    "transitionDuration": "1e-05s",
+    "animationDuration": "1e-05s",
+    "contentVisible": true
+  },
+  "zoom": {
+    "rootOverflow": false,
+    "headingVisible": true,
+    "fieldsVisible": true,
+    "coveredControls": []
+  },
+  "contrast": [
+    {
+      "selector": "body",
+      "missing": false,
+      "ratio": null
+    },
+    {
+      "selector": "h1",
+      "missing": false,
+      "ratio": null
+    },
+    {
+      "selector": ".hero-body",
+      "missing": false,
+      "ratio": null
+    },
+    {
+      "selector": ".button-primary",
+      "missing": false,
+      "ratio": null
+    },
+    {
+      "selector": ".form-demo-notice",
+      "missing": true,
+      "ratio": null
+    }
+  ]
+}
