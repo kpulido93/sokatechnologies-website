@@ -1,9 +1,5 @@
-
-> sokatechnologies-web-demo@0.1.0 test:local-ui
-> node scripts/local-ui-smoke.mjs
-
 {
-  "baseUrl": "http://127.0.0.1:4326",
+  "baseUrl": "http://127.0.0.1:4330",
   "strict": true,
   "routes": 23,
   "routeInventory": {
@@ -283,59 +279,6 @@
       "fetchCalls": 0,
       "nativeSubmitCalls": 0,
       "demoMode": true
-    }
-  ],
-  "formErrorResults": [
-    {
-      "route": "/contacto/",
-      "found": true,
-      "errorCount": 5,
-      "invalidCount": 5,
-      "associated": true,
-      "honeypotHidden": true,
-      "honeypotTabbable": false,
-      "demoNoticeBeforeFields": true,
-      "demoButtonLabel": true,
-      "demoButtonType": "button",
-      "demoButtonCount": 1,
-      "demoButtonMarkup": [
-        "<button class=\"button button-primary\" type=\"button\" data-form-submit=\"\">Validar solicitud de prueba</button>"
-      ],
-      "demoEndpointEmpty": true
-    },
-    {
-      "route": "/diagnostico/",
-      "found": true,
-      "errorCount": 5,
-      "invalidCount": 5,
-      "associated": true,
-      "honeypotHidden": true,
-      "honeypotTabbable": false,
-      "demoNoticeBeforeFields": true,
-      "demoButtonLabel": true,
-      "demoButtonType": "button",
-      "demoButtonCount": 1,
-      "demoButtonMarkup": [
-        "<button class=\"button button-primary\" type=\"button\" data-form-submit=\"\">Validar solicitud de prueba</button>"
-      ],
-      "demoEndpointEmpty": true
-    },
-    {
-      "route": "/auditoria/",
-      "found": true,
-      "errorCount": 8,
-      "invalidCount": 8,
-      "associated": true,
-      "honeypotHidden": true,
-      "honeypotTabbable": false,
-      "demoNoticeBeforeFields": true,
-      "demoButtonLabel": true,
-      "demoButtonType": "button",
-      "demoButtonCount": 1,
-      "demoButtonMarkup": [
-        "<button class=\"button button-primary\" type=\"button\" data-audit-submit=\"\">Ver simulación de prueba</button>"
-      ],
-      "demoEndpointEmpty": true
     }
   ],
   "buttonActivationResults": [

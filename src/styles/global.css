@@ -1660,6 +1660,10 @@ form,
   margin-top: 1.5rem;
 }
 
+#contacto-directo {
+  scroll-margin-top: 7rem;
+}
+
 .contact-direct-action {
   display: flex;
   min-height: 10rem;

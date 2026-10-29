@@ -29,20 +29,36 @@ const isAllowedEndpoint = (value: string) => {
 };
 
 const isLiveMode = provider === "worker" && isAllowedEndpoint(submitEndpoint) && Boolean(turnstileSiteKey);
+const formMode = isLiveMode ? "live" : "demo";
 const formId = `${formType}-form`;
 const successId = `${formId}-success`;
 const errorId = `${formId}-error`;
 const noteId = `${formId}-note`;
 const fallbackAction = `mailto:${fallbackEmail}`;
-const submitLabel = isLiveMode ? buttonLabel : "Validar solicitud de prueba";
-const formEyebrow = formType === "contact" ? "Simulación de contacto" : "Simulación de diagnóstico";
+const modeCopy = formMode === "live"
+  ? {
+      eyebrow: formType === "contact" ? "Contacto" : "Diagnóstico B2B",
+      title,
+      body,
+      notice: "Envío seguro: la solicitud se valida en un Worker y se entrega por correo sin exponer credenciales.",
+      submitLabel: buttonLabel,
+      success: "Solicitud enviada correctamente. Te contactaremos usando el correo indicado."
+    }
+  : {
+      eyebrow: formType === "contact" ? "Simulación de contacto" : "Simulación de diagnóstico",
+      title: formType === "contact" ? "Simulación local del formulario de contacto" : "Simulación local de solicitud de diagnóstico",
+      body: "Esta vista permite revisar los campos de una solicitud, pero no recibe solicitudes comerciales. Para iniciar una conversación, usa el correo o el teléfono de Contacto.",
+      notice: "Modo demo: esta validación de prueba revisa los campos, pero no envía solicitudes ni almacena datos.",
+      submitLabel: "Validar solicitud de prueba",
+      success: "Validación local completada. El formulario está en modo demo y no se envió ninguna solicitud. Escríbenos al correo corporativo para contactarnos."
+    };
 ---
 
 <section class="contact-panel js-reveal">
   <div class="contact-copy">
-    <p class="eyebrow">{formEyebrow}</p>
-    <h2>{title}</h2>
-    <p>{body}</p>
+    <p class="eyebrow">{modeCopy.eyebrow}</p>
+    <h2>{modeCopy.title}</h2>
+    <p>{modeCopy.body}</p>
     <ul class="contact-guidelines">
       <li>No envíes contraseñas, tokens, llaves privadas ni accesos.</li>
       <li>Describe el problema, el proceso afectado y las herramientas actuales.</li>
@@ -52,26 +68,24 @@ const formEyebrow = formType === "contact" ? "Simulación de contacto" : "Simula
 
   <form
     class="contact-form"
-    method={isLiveMode ? "post" : undefined}
-    action={isLiveMode ? fallbackAction : undefined}
+    method={formMode === "live" ? "post" : undefined}
+    action={formMode === "live" ? fallbackAction : undefined}
     enctype="application/x-www-form-urlencoded"
-    data-form-mode={isLiveMode ? "live" : "demo"}
-    data-form-provider={isLiveMode ? provider : "demo"}
-    data-submit-endpoint={isLiveMode ? submitEndpoint : ""}
+    data-form-mode={formMode}
+    data-form-provider={formMode === "live" ? provider : "demo"}
+    data-submit-endpoint={formMode === "live" ? submitEndpoint : ""}
     data-success-id={successId}
     data-error-id={errorId}
     aria-describedby={`${noteId} ${successId} ${errorId}`}
   >
     <input type="hidden" name="formType" value={formType} />
-    <input type="hidden" name="formContext" value={title} />
+    <input type="hidden" name="formContext" value={modeCopy.title} />
     <input type="hidden" name="noticeVersion" value={consentCatalog.noticeVersion} />
     <input type="hidden" name="authorizationVersion" value={authorization.version} />
     <input type="hidden" name="authorizationHash" value={authorization.hash} />
 
     <p id={noteId} class="form-note form-demo-notice">
-      {isLiveMode
-        ? "Envío seguro: la solicitud se valida en un Worker y se entrega por correo sin exponer credenciales."
-        : "Modo demo: esta validación de prueba revisa los campos, pero no envía solicitudes ni almacena datos."}
+      {modeCopy.notice}
     </p>
 
     <label class="form-trap" aria-hidden="true" inert>
@@ -215,7 +229,7 @@ const formEyebrow = formType === "contact" ? "Simulación de contacto" : "Simula
     </label>
 
     {
-      isLiveMode && turnstileSiteKey && (
+      formMode === "live" && turnstileSiteKey && (
         <>
           <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="lead" data-theme="auto"></div>
           <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -226,18 +240,16 @@ const formEyebrow = formType === "contact" ? "Simulación de contacto" : "Simula
     <div class="form-actions">
       <button
         class="button button-primary"
-        type={isLiveMode ? "submit" : "button"}
+        type={formMode === "live" ? "submit" : "button"}
         data-form-submit
-      >{submitLabel}</button>
+      >{modeCopy.submitLabel}</button>
       <a class="button button-ghost" href={`mailto:${fallbackEmail}`} data-link-shift>
         Escribir por correo
       </a>
     </div>
 
     <p id={successId} class="form-status" role="status" aria-live="polite" hidden>
-      {isLiveMode
-        ? "Solicitud enviada correctamente. Te contactaremos usando el correo indicado."
-        : "Validación local completada. El formulario está en modo demo y no se envió ninguna solicitud. Escríbenos al correo corporativo para contactarnos."}
+      {modeCopy.success}
     </p>
 
     <p id={errorId} class="form-status form-status-error" role="alert" aria-live="assertive" hidden>

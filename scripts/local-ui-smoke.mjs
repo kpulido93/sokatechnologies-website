@@ -577,8 +577,8 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
       const brand = document.querySelector(".brand");
       const logo = brand?.querySelector(".brand-mark");
       const favicon = document.querySelector('link[rel="icon"]');
-      const phone = document.querySelector('a[href="tel:+573212554930"]');
-      const email = document.querySelector('a[href="mailto:info@sokatechnologies.com"]');
+      const phoneLinks = Array.from(document.querySelectorAll('a[href="tel:+573212554930"]'));
+      const emailLinks = Array.from(document.querySelectorAll('a[href="mailto:info@sokatechnologies.com"]'));
       const hasOfficialWhatsapp = Array.from(document.querySelectorAll("a[href]"))
         .some((link) => /(?:wa\.me|whatsapp)/i.test(link.getAttribute("href") || ""));
       return {
@@ -591,8 +591,8 @@ const checkIdentityAndContact = async (client, sessionId, route, viewport) =>
         favicon: favicon?.getAttribute("href")?.includes("logo-sokatechnologies") && favicon?.getAttribute("type") === "image/png",
         contactData: ${JSON.stringify(route)} !== "/contacto/" || Boolean(
           document.body.textContent?.includes("Colombia") &&
-          phone?.textContent?.includes("+57 321 2554930") &&
-          email?.textContent?.includes("info@sokatechnologies.com")
+          phoneLinks.some((link) => link.textContent?.includes("+57 321 2554930")) &&
+          emailLinks.some((link) => link.textContent?.includes("info@sokatechnologies.com"))
         ),
         noOfficialWhatsapp: !hasOfficialWhatsapp
       };

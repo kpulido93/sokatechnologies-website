@@ -16,9 +16,13 @@ import { siteMeta } from "../lib/site";
       La primera conversación busca entender el problema, revisar el contexto operativo y definir
       si tiene sentido avanzar a diagnóstico, propuesta, piloto o revisión técnica.
     </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href={`mailto:${siteMeta.email}`}>Escribir por correo</a>
+      <a class="button button-ghost" href={siteMeta.phoneHref}>Llamar</a>
+    </div>
   </section>
 
-  <section class="section contact-direct" aria-labelledby="contact-direct-title">
+  <section id="contacto-directo" class="section contact-direct" aria-labelledby="contact-direct-title">
     <div class="section-heading">
       <p class="eyebrow">Contacto directo</p>
       <h2 id="contact-direct-title">Elige cómo iniciar la conversación.</h2>
@@ -66,8 +70,8 @@ import { siteMeta } from "../lib/site";
 
   <ContactForm
     formType="contact"
-    title="Simulación local del formulario de contacto"
-    body="Esta vista permite revisar los campos de una solicitud, pero no recibe solicitudes comerciales. Para iniciar una conversación, usa el correo o el teléfono de arriba."
+    title="Solicita una conversación inicial"
+    body="Comparte el contexto general del problema, el área afectada, las herramientas actuales y cualquier restricción importante. No envíes credenciales, datos sensibles ni accesos."
     buttonLabel="Enviar solicitud inicial"
   />
 
