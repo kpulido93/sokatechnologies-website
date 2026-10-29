@@ -1,24 +1,10 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { createPublicRouteInventory } from "./public-route-inventory.mjs";
 
 const dist = join(process.cwd(), "dist");
-const collectHtmlFiles = (directory) =>
-  readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(directory, entry.name);
-    return entry.isDirectory() ? collectHtmlFiles(file) : entry.isFile() && entry.name.endsWith(".html") ? [file] : [];
-  });
-const routeFromHtmlFile = (file) => {
-  const relative = file.slice(dist.length + 1).replaceAll("\\", "/");
-  if (relative === "index.html") return "/";
-  if (!relative.endsWith("/index.html")) return null;
-  return `/${relative.slice(0, -"index.html".length)}`;
-};
-const expectedRoutes = existsSync(dist)
-  ? collectHtmlFiles(dist)
-      .map(routeFromHtmlFile)
-      .filter((route) => route && !route.startsWith("/api/"))
-      .sort()
-  : [];
+const routeInventory = createPublicRouteInventory(dist);
+const expectedRoutes = routeInventory.generatedRoutes;
 
 const failures = [];
 const check = (condition, message) => {
@@ -49,6 +35,8 @@ check(
 
 check(existsSync(dist), "dist no existe; ejecuta el build antes de esta comprobación");
 check(expectedRoutes.length > 0, "no se encontraron páginas HTML públicas generadas");
+check(routeInventory.missingRoutes.length === 0, `faltan rutas esperadas: ${routeInventory.missingRoutes.join(", ")}`);
+check(routeInventory.unexpectedRoutes.length === 0, `hay rutas públicas no clasificadas: ${routeInventory.unexpectedRoutes.join(", ")}`);
 if (failures.length === 0) {
   for (const route of expectedRoutes) {
     check(existsSync(htmlPath(route)), `falta HTML para ${route}`);
@@ -102,5 +90,5 @@ if (failures.length > 0) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join("\n"));
   process.exitCode = 1;
 } else {
-  console.log(`PASS: ${expectedRoutes.length} rutas descubiertas, canonical exacto (incluida /casos/ → /proyectos/), noindex, identidad, schema, legal público, soluciones y demos verificados.`);
+  console.log(`PASS: ${expectedRoutes.length} rutas descubiertas y alineadas con el inventario esperado (${Object.values(routeInventory.classifications).join(", ")}), canonical exacto (incluida /casos/ → /proyectos/), noindex, identidad, schema, legal público, soluciones y demos verificados.`);
 }

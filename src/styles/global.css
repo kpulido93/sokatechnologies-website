@@ -1681,7 +1681,22 @@ form,
 }
 
 .solutions-page > .page-hero {
-  padding-block: clamp(1.5rem, 3vw, 3rem);
+  margin-top: 0.75rem;
+  padding: clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.25rem, 3vw, 3rem);
+}
+
+.solutions-page > .page-hero h1 {
+  max-width: 40rem;
+  font-size: clamp(2.5rem, 4.8vw, 4.3rem);
+}
+
+.solutions-page > .page-hero > p:not(.eyebrow) {
+  max-width: 42rem;
+  margin-block: 1rem 0;
+}
+
+.solutions-page > .page-hero .hero-actions {
+  margin-top: 1.1rem;
 }
 
 .interior-page > .page-hero h1 {
@@ -1694,6 +1709,23 @@ form,
 
 .interior-page > .section {
   padding-block: clamp(3.2rem, 7vw, 5.8rem);
+}
+
+.solutions-page > .section {
+  padding-block: 1.5rem;
+}
+
+.solutions-page > .section .section-heading {
+  max-width: 40rem;
+  margin-bottom: 1.2rem;
+}
+
+.solutions-page > .section .section-heading h2 {
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+}
+
+.solutions-page > .section .section-heading p:last-child {
+  margin-top: 0.7rem;
 }
 
 .interior-page .section-heading {
@@ -2140,6 +2172,15 @@ form,
   .interior-page > .page-hero h1 {
     font-size: clamp(1.9rem, 8.7vw, 2.75rem);
     overflow-wrap: anywhere;
+  }
+
+  .solutions-page > .page-hero {
+    margin-top: 0.5rem;
+    padding: 1rem;
+  }
+
+  .solutions-page > .section {
+    padding-block: 2rem;
   }
 
   .header-cta {

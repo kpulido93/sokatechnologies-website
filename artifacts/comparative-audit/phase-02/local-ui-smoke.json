@@ -2,6 +2,36 @@
   "baseUrl": "http://127.0.0.1:4328",
   "strict": true,
   "routes": 23,
+  "routeInventory": {
+    "expected": 23,
+    "missing": [],
+    "unexpected": [],
+    "classifications": {
+      "/": "commercial",
+      "/auditoria/": "demo",
+      "/casos/": "compatibility",
+      "/contacto/": "commercial",
+      "/demos/ecommerce/": "demo",
+      "/diagnostico/": "commercial",
+      "/nosotros/": "commercial",
+      "/politica-privacidad/": "compatibility",
+      "/productos/": "commercial",
+      "/productos/autoinventario/": "commercial",
+      "/productos/autowhatsapp/": "commercial",
+      "/productos/portik/": "commercial",
+      "/proyectos/": "commercial",
+      "/servicios/": "commercial",
+      "/servicios/automatizaciones/": "commercial",
+      "/servicios/consultoria-ti-devops/": "commercial",
+      "/servicios/dashboards/": "commercial",
+      "/servicios/infraestructura-soporte/": "commercial",
+      "/servicios/mantenimiento-mejora-continua/": "commercial",
+      "/servicios/sitios-web-corporativos/": "commercial",
+      "/servicios/software-a-medida/": "commercial",
+      "/soluciones/": "commercial",
+      "/terminos/": "compatibility"
+    }
+  },
   "viewports": [
     "desktop=1440x900",
     "tablet=768x1024",
@@ -25,6 +55,206 @@
   "founderPortraitFailures": 0,
   "mobileHeaderFailures": 0,
   "mobileFieldCoverageFailures": 0,
+  "mobileFieldCoverage": [
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile-320",
+      "checked": true,
+      "pageWidth": 304,
+      "formWidth": 274.8125,
+      "minimumFieldWidth": 245.625,
+      "minimumFormRatio": 0.8937912212872413,
+      "minimumPageRatio": 0.8079769736842105,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile-320",
+      "checked": true,
+      "pageWidth": 304,
+      "formWidth": 274.8125,
+      "minimumFieldWidth": 245.625,
+      "minimumFormRatio": 0.8937912212872413,
+      "minimumPageRatio": 0.8079769736842105,
+      "failures": []
+    },
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile-320",
+      "checked": true,
+      "pageWidth": 304,
+      "formWidth": 274.8125,
+      "minimumFieldWidth": 245.625,
+      "minimumFormRatio": 0.8937912212872413,
+      "minimumPageRatio": 0.8079769736842105,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile-360",
+      "checked": true,
+      "pageWidth": 344,
+      "formWidth": 314.8125,
+      "minimumFieldWidth": 285.625,
+      "minimumFormRatio": 0.9072860829859043,
+      "minimumPageRatio": 0.8303052325581395,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile-360",
+      "checked": true,
+      "pageWidth": 344,
+      "formWidth": 314.8125,
+      "minimumFieldWidth": 285.625,
+      "minimumFormRatio": 0.9072860829859043,
+      "minimumPageRatio": 0.8303052325581395,
+      "failures": []
+    },
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile-360",
+      "checked": true,
+      "pageWidth": 344,
+      "formWidth": 314.8125,
+      "minimumFieldWidth": 285.625,
+      "minimumFormRatio": 0.9072860829859043,
+      "minimumPageRatio": 0.8303052325581395,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile",
+      "checked": true,
+      "pageWidth": 359,
+      "formWidth": 329.8125,
+      "minimumFieldWidth": 300.625,
+      "minimumFormRatio": 0.911502747773356,
+      "minimumPageRatio": 0.8373955431754875,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile-390",
+      "checked": true,
+      "pageWidth": 374,
+      "formWidth": 344.8125,
+      "minimumFieldWidth": 315.625,
+      "minimumFormRatio": 0.915352546673917,
+      "minimumPageRatio": 0.8439171122994652,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile-390",
+      "checked": true,
+      "pageWidth": 374,
+      "formWidth": 344.8125,
+      "minimumFieldWidth": 315.625,
+      "minimumFormRatio": 0.915352546673917,
+      "minimumPageRatio": 0.8439171122994652,
+      "failures": []
+    },
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile-390",
+      "checked": true,
+      "pageWidth": 374,
+      "formWidth": 344.8125,
+      "minimumFieldWidth": 315.625,
+      "minimumFormRatio": 0.915352546673917,
+      "minimumPageRatio": 0.8439171122994652,
+      "failures": []
+    },
+    {
+      "route": "/contacto/",
+      "viewport": "mobile-430",
+      "checked": true,
+      "pageWidth": 414,
+      "formWidth": 384.8125,
+      "minimumFieldWidth": 355.625,
+      "minimumFormRatio": 0.9241513724216339,
+      "minimumPageRatio": 0.8589975845410628,
+      "failures": []
+    },
+    {
+      "route": "/diagnostico/",
+      "viewport": "mobile-430",
+      "checked": true,
+      "pageWidth": 414,
+      "formWidth": 384.8125,
+      "minimumFieldWidth": 355.625,
+      "minimumFormRatio": 0.9241513724216339,
+      "minimumPageRatio": 0.8589975845410628,
+      "failures": []
+    },
+    {
+      "route": "/auditoria/",
+      "viewport": "mobile-430",
+      "checked": true,
+      "pageWidth": 414,
+      "formWidth": 384.8125,
+      "minimumFieldWidth": 355.625,
+      "minimumFormRatio": 0.9241513724216339,
+      "minimumPageRatio": 0.8589975845410628,
+      "failures": []
+    }
+  ],
   "formFlowResults": [
     {
       "route": "/contacto/",
@@ -49,6 +279,38 @@
       "fetchCalls": 0,
       "nativeSubmitCalls": 0,
       "demoMode": true
+    }
+  ],
+  "buttonActivationResults": [
+    {
+      "route": "/contacto/",
+      "found": true,
+      "focusedAfterClick": true,
+      "clickCalls": 2,
+      "keyboardClick": true,
+      "requestSubmitCalls": 3,
+      "directRequestSubmit": true,
+      "success": true
+    },
+    {
+      "route": "/diagnostico/",
+      "found": true,
+      "focusedAfterClick": true,
+      "clickCalls": 2,
+      "keyboardClick": true,
+      "requestSubmitCalls": 3,
+      "directRequestSubmit": true,
+      "success": true
+    },
+    {
+      "route": "/auditoria/",
+      "found": true,
+      "focusedAfterClick": true,
+      "clickCalls": 2,
+      "keyboardClick": true,
+      "requestSubmitCalls": 3,
+      "directRequestSubmit": true,
+      "success": true
     }
   ],
   "auditDemoFlowResult": {
@@ -377,7 +639,11 @@
     ],
     "allRelated": true,
     "followUp": true,
-    "compact": true
+    "heroHeight": 458.46875,
+    "heroViewportRatio": 0.5094097222222222,
+    "needsTop": 790.359375,
+    "needsVisible": true,
+    "ariaLabelledByValid": true
   },
   "screenshots": "/srv/fast-storage/labs/sokatechnologies-website/d1-native/phase-02-worktree/artifacts/comparative-audit/phase-02/after"
 }

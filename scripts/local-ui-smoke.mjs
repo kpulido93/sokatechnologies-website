@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
+import { createPublicRouteInventory } from "./public-route-inventory.mjs";
 
 const baseUrl = process.env.BASE_URL || "http://127.0.0.1:4323";
 const chrome = process.env.CHROME_BIN || "/snap/bin/chromium";
@@ -13,41 +14,6 @@ const viewports = [
   { name: "tablet", width: 768, height: 1024 },
   { name: "mobile", width: 375, height: 812 }
 ];
-const routes = [
-  "/",
-  "/servicios/",
-  "/soluciones/",
-  "/servicios/software-a-medida/",
-  "/servicios/automatizaciones/",
-  "/servicios/dashboards/",
-  "/servicios/consultoria-ti-devops/",
-  "/servicios/sitios-web-corporativos/",
-  "/servicios/infraestructura-soporte/",
-  "/servicios/mantenimiento-mejora-continua/",
-  "/productos/",
-  "/productos/portik/",
-  "/productos/autoinventario/",
-  "/productos/autowhatsapp/",
-  "/contacto/",
-  "/diagnostico/",
-  "/auditoria/",
-  "/casos/",
-  "/demos/ecommerce/",
-  "/nosotros/",
-  "/politica-privacidad/",
-  "/proyectos/",
-  "/terminos/"
-];
-const faqRoutes = [
-  "/servicios/software-a-medida/",
-  "/servicios/automatizaciones/",
-  "/servicios/dashboards/",
-  "/servicios/consultoria-ti-devops/",
-  "/servicios/sitios-web-corporativos/",
-  "/servicios/infraestructura-soporte/",
-  "/servicios/mantenimiento-mejora-continua/"
-];
-
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 const freePort = () =>
@@ -169,17 +135,32 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         portraitImage.getAttribute("srcset") && portraitImage.getAttribute("sizes")
       );
       let mobileHeader = { checked: false, failures: [] };
-      let mobileFieldCoverage = { checked: false, minimumRatio: 1, failures: [] };
+      let mobileFieldCoverage = {
+        checked: false,
+        pageWidth: 0,
+        formWidth: 0,
+        minimumFieldWidth: 0,
+        minimumFormRatio: 1,
+        minimumPageRatio: 1,
+        failures: []
+      };
       if (currentViewport.startsWith("mobile") && form instanceof HTMLFormElement) {
+        const pageShell = document.querySelector(".page-shell");
+        const pageWidth = pageShell?.getBoundingClientRect().width || document.documentElement.clientWidth;
         const formWidth = form.getBoundingClientRect().width;
         const controls = Array.from(form.querySelectorAll("input:not([type=hidden]):not([name=website]):not([type=checkbox]), select, textarea"))
           .filter((control) => control instanceof HTMLElement && visible(control));
-        const ratios = controls.map((control) => control.getBoundingClientRect().width / formWidth);
-        const minimumRatio = ratios.length ? Math.min(...ratios) : 0;
+        const widths = controls.map((control) => control.getBoundingClientRect().width);
+        const formRatios = widths.map((width) => width / formWidth);
+        const pageRatios = widths.map((width) => width / pageWidth);
         mobileFieldCoverage = {
           checked: true,
-          minimumRatio,
-          failures: ratios.map((ratio, index) => ({ index, ratio })).filter(({ ratio }) => ratio < 0.8)
+          pageWidth,
+          formWidth,
+          minimumFieldWidth: widths.length ? Math.min(...widths) : 0,
+          minimumFormRatio: formRatios.length ? Math.min(...formRatios) : 0,
+          minimumPageRatio: pageRatios.length ? Math.min(...pageRatios) : 0,
+          failures: pageRatios.map((ratio, index) => ({ index, ratio })).filter(({ ratio }) => ratio < 0.8)
         };
       }
       if ((currentViewport.startsWith("mobile") || currentViewport === "tablet") && ["/contacto/", "/diagnostico/", "/auditoria/"].includes(currentRoute)) {
@@ -326,6 +307,80 @@ const checkFormFlow = async (client, sessionId, selector) =>
     })()` ,
     sessionId
   );
+
+const checkDemoButtonActivation = async (client, sessionId, selector) => {
+  const setup = await evaluate(
+    client,
+    `(async () => {
+      const form = document.querySelector(${JSON.stringify(selector)});
+      const button = form?.querySelector("button[data-form-submit], button[data-audit-submit]");
+      if (!(form instanceof HTMLFormElement) || !(button instanceof HTMLButtonElement)) return { found: false };
+      const values = {
+        name: "Persona de prueba",
+        company: "Empresa de prueba",
+        email: "demo@example.invalid",
+        summary: "Descripción de prueba suficientemente larga para validar el flujo demo.",
+        websiteUrl: "https://example.invalid",
+        country: "Colombia",
+        companyType: "Servicios B2B",
+        mainProblem: "Descripción de prueba suficientemente larga para validar la simulación local."
+      };
+      Array.from(form.querySelectorAll("input[name], select[name], textarea[name]")).forEach((control) => {
+        if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) return;
+        if (control.type === "checkbox") control.checked = true;
+        else if (control.name === "companyType") control.value = control.querySelector("option:not([value=''])")?.value || "Empresa";
+        else if (values[control.name]) control.value = values[control.name];
+        control.dispatchEvent(new Event("input", { bubbles: true }));
+        control.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      let clickCalls = 0;
+      let requestSubmitCalls = 0;
+      const originalRequestSubmit = HTMLFormElement.prototype.requestSubmit;
+      button.addEventListener("click", () => { clickCalls += 1; });
+      HTMLFormElement.prototype.requestSubmit = function (...args) {
+        requestSubmitCalls += 1;
+        return originalRequestSubmit.apply(this, args);
+      };
+      window.__sokaDemoButtonActivation = { form, button, originalRequestSubmit, get clickCalls() { return clickCalls; }, get requestSubmitCalls() { return requestSubmitCalls; } };
+      button.focus();
+      button.click();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      return { found: true, focusedAfterClick: document.activeElement === button, clickCalls, requestSubmitCalls };
+    })()` ,
+    sessionId
+  );
+  if (!setup?.found) return setup;
+
+  await client.send("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 }, sessionId);
+  await client.send("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13 }, sessionId);
+  await client.send("Input.dispatchKeyEvent", { type: "keyDown", key: " ", code: "Space", windowsVirtualKeyCode: 32 }, sessionId);
+  await client.send("Input.dispatchKeyEvent", { type: "keyUp", key: " ", code: "Space", windowsVirtualKeyCode: 32 }, sessionId);
+  await sleep(0);
+
+  return evaluate(
+    client,
+    `(async () => {
+      const activation = window.__sokaDemoButtonActivation;
+      if (!activation) return { found: false };
+      const requestSubmitCallsBeforeDirectRequest = activation.requestSubmitCalls;
+      activation.form.requestSubmit();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      const result = {
+        found: true,
+        focusedAfterClick: document.activeElement === activation.button,
+        clickCalls: activation.clickCalls,
+        keyboardClick: activation.clickCalls > ${Number(setup.clickCalls || 0)},
+        requestSubmitCalls: activation.requestSubmitCalls,
+        directRequestSubmit: activation.requestSubmitCalls > requestSubmitCallsBeforeDirectRequest,
+        success: Boolean(document.getElementById(activation.form.dataset.successId || "")?.hidden === false)
+      };
+      HTMLFormElement.prototype.requestSubmit = activation.originalRequestSubmit;
+      delete window.__sokaDemoButtonActivation;
+      return result;
+    })()` ,
+    sessionId
+  );
+};
 
 const checkAuditDemoFlow = async (client, sessionId, scenario = "generic") =>
   evaluate(
@@ -625,12 +680,18 @@ const checkSolutions = async (client, sessionId) =>
       const cards = Array.from(document.querySelectorAll(".solution-card"));
       const links = cards.map((card) => Array.from(card.querySelectorAll("a[href^='/servicios/']")).length);
       const followUp = document.querySelector(".solution-follow-up");
+      const hero = document.querySelector(".solutions-page > .page-hero")?.getBoundingClientRect();
+      const grid = document.querySelector(".solution-grid")?.getBoundingClientRect();
       return {
         cards: cards.length,
         links,
         allRelated: links.length === 6 && links.every((count) => count > 0),
         followUp: Boolean(followUp && /Mantenimiento y acompañamiento/i.test(followUp.textContent || "")),
-        compact: Boolean(document.querySelector(".solutions-page"))
+        heroHeight: hero?.height || 0,
+        heroViewportRatio: hero ? hero.height / window.innerHeight : 1,
+        needsTop: grid?.top || 0,
+        needsVisible: Boolean(grid && grid.top < window.innerHeight && grid.bottom > grid.top),
+        ariaLabelledByValid: Boolean(document.querySelector('.solutions-page [aria-labelledby="solution-needs-title"]') && document.getElementById("solution-needs-title"))
       };
     })()`,
     sessionId
@@ -701,7 +762,7 @@ const checkKeyboard = async (client, sessionId) => {
 const capture = async (client, sessionId, route, viewport) => {
   const capturePrimary = ["/", "/soluciones/", "/proyectos/", "/nosotros/", "/auditoria/"].includes(route) && ["desktop", "tablet", "mobile"].includes(viewport.name);
   const captureForm = ["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) &&
-    (viewport.name === "desktop" || (route === "/contacto/" && viewport.name === "mobile"));
+    (viewport.name === "desktop" || ["mobile", "mobile-320"].includes(viewport.name));
   if (!capturePrimary && !captureForm) return;
   mkdirSync(screenshotDir, { recursive: true });
   const name = route === "/" ? "home" : route.slice(1, -1).replaceAll("/", "-");
@@ -722,6 +783,13 @@ const capture = async (client, sessionId, route, viewport) => {
   if (["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && viewport.name === "desktop") {
     await evaluate(client, 'document.querySelector(".form-demo-notice")?.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });', sessionId);
     await sleep(800);
+    const formScreenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
+    writeFileSync(join(screenshotDir, `${name}-form-${viewport.name}.png`), Buffer.from(formScreenshot.data, "base64"));
+    await evaluate(client, "window.scrollTo({ top: 0, behavior: \"instant\" });", sessionId);
+  }
+  if (["/contacto/", "/diagnostico/", "/auditoria/"].includes(route) && ["mobile", "mobile-320"].includes(viewport.name)) {
+    await evaluate(client, 'document.querySelector(".form-demo-notice")?.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });', sessionId);
+    await sleep(400);
     const formScreenshot = await client.send("Page.captureScreenshot", { format: "png" }, sessionId);
     writeFileSync(join(screenshotDir, `${name}-form-${viewport.name}.png`), Buffer.from(formScreenshot.data, "base64"));
     await evaluate(client, "window.scrollTo({ top: 0, behavior: \"instant\" });", sessionId);
@@ -783,6 +851,13 @@ const capture = async (client, sessionId, route, viewport) => {
 };
 
 const main = async () => {
+  const routeInventory = createPublicRouteInventory(join(process.cwd(), "dist"));
+  const routes = routeInventory.generatedRoutes;
+  const faqRoutes = routes.filter((route) => route.startsWith("/servicios/") && route !== "/servicios/");
+  if (strict && (routeInventory.missingRoutes.length > 0 || routeInventory.unexpectedRoutes.length > 0)) {
+    throw new Error(`Route inventory mismatch: ${JSON.stringify({ missing: routeInventory.missingRoutes, unexpected: routeInventory.unexpectedRoutes })}`);
+  }
+  if (routes.length === 0) throw new Error("No generated public routes found; run the build before the UI smoke.");
   await waitFor(async () => (await fetch(baseUrl)).ok);
   const port = await freePort();
   const profile = mkdtempSync(join(tmpdir(), "soka-chromium-"));
@@ -841,6 +916,7 @@ const main = async () => {
     }
 
     const formFlowResults = [];
+    const buttonActivationResults = [];
     let auditDemoFlowResult = null;
     const auditDemoFlowResults = [];
     for (const [route, selector] of [["/contacto/", ".contact-form"], ["/diagnostico/", ".contact-form"], ["/auditoria/", ".audit-form"]]) {
@@ -861,11 +937,21 @@ const main = async () => {
           }
         }
         auditDemoFlowResult = auditDemoFlowResults[0];
+        const buttonActivation = await checkDemoButtonActivation(client, sessionId, selector);
+        buttonActivationResults.push({ route, ...buttonActivation });
+        if (strict && (!buttonActivation.found || !buttonActivation.focusedAfterClick || !buttonActivation.keyboardClick || !buttonActivation.directRequestSubmit || !buttonActivation.success)) {
+          throw new Error(`Demo button activation failed for ${route}: ${JSON.stringify(buttonActivation)}`);
+        }
       } else if (demoRequired) {
         const flowResult = await checkFormFlow(client, sessionId, selector);
         formFlowResults.push({ route, ...flowResult });
         if (strict && (!flowResult.found || flowResult.invalidCount === 0 || !flowResult.associated || !flowResult.firstErrorFocused || !flowResult.transitionToSuccess || flowResult.remainingFieldErrors !== 0 || flowResult.fetchCalls !== 0 || !flowResult.demoMode)) {
           throw new Error(`FORM-02 demo flow failed for ${route}: ${JSON.stringify(flowResult)}`);
+        }
+        const buttonActivation = await checkDemoButtonActivation(client, sessionId, selector);
+        buttonActivationResults.push({ route, ...buttonActivation });
+        if (strict && (!buttonActivation.found || !buttonActivation.focusedAfterClick || !buttonActivation.keyboardClick || !buttonActivation.directRequestSubmit || !buttonActivation.success)) {
+          throw new Error(`Demo button activation failed for ${route}: ${JSON.stringify(buttonActivation)}`);
         }
       }
     }
@@ -892,6 +978,7 @@ const main = async () => {
         await sleep(350);
         await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
         responsiveResults.push(await pageChecks(client, sessionId, route, viewport));
+        if (viewport.name === "mobile-320") await capture(client, sessionId, route, viewport);
       }
       await client.send("Page.navigate", { url: new URL("/", baseUrl).toString() }, sessionId);
       await sleep(350);
@@ -925,7 +1012,7 @@ const main = async () => {
     await sleep(350);
     await waitFor(() => evaluate(client, "document.readyState === 'complete'", sessionId));
     const solutionsResult = await checkSolutions(client, sessionId);
-    if (strict && (solutionsResult.cards !== 6 || !solutionsResult.allRelated || !solutionsResult.followUp || !solutionsResult.compact)) {
+    if (strict && (solutionsResult.cards !== 6 || !solutionsResult.allRelated || !solutionsResult.followUp || !solutionsResult.needsVisible || solutionsResult.heroViewportRatio > 0.7 || !solutionsResult.ariaLabelledByValid)) {
       throw new Error(`Solutions content check failed: ${JSON.stringify(solutionsResult)}`);
     }
 
@@ -975,6 +1062,12 @@ const main = async () => {
       baseUrl,
       strict,
       routes: routes.length,
+      routeInventory: {
+        expected: routeInventory.expectedRoutes.length,
+        missing: routeInventory.missingRoutes,
+        unexpected: routeInventory.unexpectedRoutes,
+        classifications: routeInventory.classifications
+      },
       viewports: viewports.map(({ name, width, height }) => `${name}=${width}x${height}`),
       responsiveViewports: responsiveViewports.map(({ name, width, height }) => `${name}=${width}x${height}`),
       faqCount,
@@ -987,7 +1080,11 @@ const main = async () => {
       founderPortraitFailures: founderPortraitFailures.length,
       mobileHeaderFailures: mobileHeaderFailures.length,
       mobileFieldCoverageFailures: mobileFieldCoverageFailures.length,
+      mobileFieldCoverage: allResults
+        .filter((result) => result.mobileFieldCoverage?.checked)
+        .map(({ route, viewport, mobileFieldCoverage }) => ({ route, viewport, ...mobileFieldCoverage })),
       formFlowResults,
+      buttonActivationResults,
       auditDemoFlowResult,
       auditDemoFlowResults,
       desktopAuditDemoFlowResult,
