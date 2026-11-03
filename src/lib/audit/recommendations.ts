@@ -67,7 +67,7 @@ const RECOMMENDATION_LIBRARY: Record<SokaRecommendationType, Omit<SokaRecommenda
     type: "automation",
     title: automationService.title,
     summary:
-      "Si el caso revela tareas repetitivas, handoff manual o confirmaciones fuera de sistema, puede convenir automatizar antes de seguir sumando pasos manuales.",
+      "Si el caso revela tareas repetitivas, entregas manuales entre áreas o confirmaciones fuera de sistema, puede convenir automatizar antes de seguir sumando pasos manuales.",
     ctaLabel: automationService.ctaLabel,
     ctaHref: automationService.ctaHref,
     relatedAreas: ["automation", "conversion"],
@@ -235,7 +235,7 @@ export const buildSokaRecommendations = ({
       selected,
       "automation",
       88,
-      "El caso sugiere trabajo manual, confirmaciones aisladas o handoff operativo que podría simplificarse con reglas y automatización."
+      "El caso sugiere trabajo manual, confirmaciones aisladas o entregas entre áreas que podrían simplificarse con reglas y automatización."
     );
   }
 
@@ -325,7 +325,7 @@ export const buildSokaRecommendations = ({
       selected,
       "diagnostic",
       76,
-      "La señal actual sugiere que conviene priorizar un diagnóstico corto para decidir si la ruta correcta es web, automatización, reporting o infraestructura."
+      "La señal actual sugiere que conviene priorizar un diagnóstico corto para decidir si la ruta correcta es web, automatización, reportes o infraestructura."
     );
   }
 

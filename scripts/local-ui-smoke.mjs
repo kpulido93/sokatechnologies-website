@@ -28,16 +28,20 @@ const freePort = () =>
 
 const waitFor = async (check, timeout = 10000) => {
   const startedAt = Date.now();
+  let lastError;
   while (Date.now() - startedAt < timeout) {
     try {
       const value = await check();
       if (value) return value;
-    } catch {
+    } catch (error) {
+      lastError = error;
       // The local browser is still starting.
     }
     await sleep(100);
   }
-  throw new Error("Timed out waiting for the local browser or preview.");
+  throw new Error(
+    `Timed out waiting for the local browser or preview.${lastError instanceof Error ? ` ${lastError.message}` : ""}`
+  );
 };
 
 class CdpClient {
@@ -146,7 +150,8 @@ const pageChecks = async (client, sessionId, route, viewport) =>
       };
       if (currentViewport.startsWith("mobile") && form instanceof HTMLFormElement) {
         const pageShell = document.querySelector(".page-shell");
-        const pageWidth = pageShell?.getBoundingClientRect().width || document.documentElement.clientWidth;
+        const pageWidth = document.documentElement.clientWidth;
+        const pageShellWidth = pageShell?.getBoundingClientRect().width || 0;
         const formWidth = form.getBoundingClientRect().width;
         const controls = Array.from(form.querySelectorAll("input:not([type=hidden]):not([name=website]):not([type=checkbox]), select, textarea"))
           .filter((control) => control instanceof HTMLElement && visible(control));
@@ -156,6 +161,7 @@ const pageChecks = async (client, sessionId, route, viewport) =>
         mobileFieldCoverage = {
           checked: true,
           pageWidth,
+          pageShellWidth,
           formWidth,
           minimumFieldWidth: widths.length ? Math.min(...widths) : 0,
           minimumFormRatio: formRatios.length ? Math.min(...formRatios) : 0,
@@ -262,15 +268,33 @@ const checkFormFlow = async (client, sessionId, selector) =>
       const firstErrorFocused = Boolean(firstInvalid && document.activeElement === firstInvalid);
       const originalFetch = window.fetch;
       const originalSubmit = HTMLFormElement.prototype.submit;
+      const originalOpen = XMLHttpRequest.prototype.open;
+      const originalSend = XMLHttpRequest.prototype.send;
+      const originalBeacon = navigator.sendBeacon;
       let fetchCalls = 0;
+      let xhrCalls = 0;
+      let beaconCalls = 0;
       let nativeSubmitCalls = 0;
-      window.fetch = (...args) => {
+      window.fetch = async (...args) => {
         fetchCalls += 1;
-        return originalFetch(...args);
+        return new Response(JSON.stringify({ ok: false }), { status: 418 });
       };
+      XMLHttpRequest.prototype.open = function (...args) {
+        xhrCalls += 1;
+        return undefined;
+      };
+      XMLHttpRequest.prototype.send = function (...args) {
+        return undefined;
+      };
+      try {
+        navigator.sendBeacon = (...args) => {
+          beaconCalls += 1;
+          return false;
+        };
+      } catch {}
       HTMLFormElement.prototype.submit = function (...args) {
         nativeSubmitCalls += 1;
-        return originalSubmit.apply(this, args);
+        return undefined;
       };
       const values = {
         name: "Persona de prueba",
@@ -291,6 +315,9 @@ const checkFormFlow = async (client, sessionId, selector) =>
       await new Promise((resolve) => setTimeout(resolve, 0));
       window.fetch = originalFetch;
       HTMLFormElement.prototype.submit = originalSubmit;
+      XMLHttpRequest.prototype.open = originalOpen;
+      XMLHttpRequest.prototype.send = originalSend;
+      try { navigator.sendBeacon = originalBeacon; } catch {}
       const successNode = document.getElementById(form.dataset.successId || "");
       const errorNode = document.getElementById(form.dataset.errorId || "");
       return {
@@ -301,6 +328,8 @@ const checkFormFlow = async (client, sessionId, selector) =>
         transitionToSuccess: Boolean(successNode && !successNode.hidden && errorNode?.hidden),
         remainingFieldErrors: form.querySelectorAll('[aria-invalid="true"], .field-error:not([hidden])').length,
         fetchCalls,
+        xhrCalls,
+        beaconCalls,
         nativeSubmitCalls,
         demoMode: form.dataset.formMode === "demo"
       };
@@ -899,6 +928,7 @@ const main = async () => {
     "--disable-dev-shm-usage",
     "--noerrdialogs",
     "--no-first-run",
+    "--remote-allow-origins=*",
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profile}`,
     "about:blank"
@@ -976,7 +1006,7 @@ const main = async () => {
       } else if (demoRequired) {
         const flowResult = await checkFormFlow(client, sessionId, selector);
         formFlowResults.push({ route, ...flowResult });
-        if (strict && (!flowResult.found || flowResult.invalidCount === 0 || !flowResult.associated || !flowResult.firstErrorFocused || !flowResult.transitionToSuccess || flowResult.remainingFieldErrors !== 0 || flowResult.fetchCalls !== 0 || !flowResult.demoMode)) {
+        if (strict && (!flowResult.found || flowResult.invalidCount === 0 || !flowResult.associated || !flowResult.firstErrorFocused || !flowResult.transitionToSuccess || flowResult.remainingFieldErrors !== 0 || flowResult.fetchCalls !== 0 || flowResult.xhrCalls !== 0 || flowResult.beaconCalls !== 0 || flowResult.nativeSubmitCalls !== 0 || !flowResult.demoMode)) {
           throw new Error(`FORM-02 demo flow failed for ${route}: ${JSON.stringify(flowResult)}`);
         }
         const buttonActivation = await checkDemoButtonActivation(client, sessionId, selector);

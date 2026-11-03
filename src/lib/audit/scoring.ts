@@ -219,7 +219,7 @@ const FINDING_RULES: FindingRule[] = [
     area: "automation",
     severity: "high",
     scoreImpact: 21,
-    title: "El caso sugiere seguimiento o handoff demasiado manual alrededor del sitio.",
+    title: "El caso sugiere seguimiento o entrega entre áreas demasiado manual alrededor del sitio.",
     summary:
       "Cuando el problema declarado habla de tareas repetitivas, confirmaciones manuales o procesos desconectados, conviene explorar automatización e integración.",
     evidence: ["seguimiento manual", "tareas repetitivas", "flujo desconectado"],
@@ -233,7 +233,7 @@ const FINDING_RULES: FindingRule[] = [
     scoreImpact: 12,
     title: "Falta visibilidad operativa clara sobre solicitudes o desempeño.",
     summary:
-      "Si la conversación gira alrededor de reportes, KPIs o falta de visibilidad, la web puede ser solo un síntoma de una necesidad mayor de reporting.",
+      "Si la conversación gira alrededor de reportes, KPIs o falta de visibilidad, la web puede ser solo un síntoma de una necesidad mayor de reportes.",
     evidence: ["reportes manuales", "sin KPIs", "datos dispersos"],
     tags: ["dashboard", "reporting", "kpi"],
     keywords: ["dashboard", "reporte", "reportes", "kpi", "indicadores", "metricas", "métricas", "datos"]

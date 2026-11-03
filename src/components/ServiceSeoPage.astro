@@ -4,7 +4,7 @@ import SectionHeading from "./SectionHeading.astro";
 import type { ServiceContent } from "../data/types";
 import { absoluteUrl, createFaqSchema, createServiceSchema } from "../lib/seo";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { processSteps } from "../lib/site";
+import { processSteps, siteMeta } from "../lib/site";
 
 interface Props {
   service: ServiceContent;
@@ -30,8 +30,8 @@ const schemas = [
       eyebrow={service.title}
       title={service.heroTitle}
       body={service.heroBody}
-      primaryCtaLabel={service.primaryCtaLabel}
-      primaryCtaHref={service.primaryCtaHref}
+      primaryCtaLabel="Abrir conversación"
+      primaryCtaHref={siteMeta.contactHref}
       secondaryCtaLabel={service.secondaryCtaLabel}
       secondaryCtaHref={service.secondaryCtaHref}
       signals={service.tags}
@@ -149,7 +149,7 @@ const schemas = [
         <p class="eyebrow">Diagnóstico</p>
         <h2>{service.finalCtaTitle}</h2>
         <p>{service.finalCtaBody}</p>
-        <a class="button button-primary" href="/diagnostico/" data-link-shift>Solicitar diagnóstico</a>
+        <a class="button button-primary" href={siteMeta.contactHref} data-link-shift>Abrir conversación</a>
       </div>
     </section>
   </div>

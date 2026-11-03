@@ -18,7 +18,7 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
       <h3 id={titleId}>Simulación basada en tus respuestas</h3>
     </div>
     <p class="catalog-status" data-audit-meta>
-      Completa el formulario para generar una orientación local. La URL no se evalúa ni se escanea.
+      Completa el formulario para generar una orientación local. La URL no se visita ni se escanea.
     </p>
   </div>
 
@@ -31,7 +31,7 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
       label="Lectura general"
       valueAttr="data-audit-overall-score"
       noteAttr="data-audit-overall-note"
-      initialNote="Priorización inicial basada en señales visibles y contexto declarado."
+      initialNote="Orientación inicial basada en el contexto declarado."
     />
     <AuditScoreCard
       label="Encaje consultivo"
@@ -79,10 +79,10 @@ const whatsappHref = import.meta.env.PUBLIC_CONTACT_WHATSAPP_URL?.trim() || "";
   </div>
 
   <div class="audit-report-actions">
-    <a class="button button-primary" href="/diagnostico/" data-link-shift>
-      Solicitar diagnóstico
+    <a class="button button-primary" href="/contacto/#contacto-directo" data-link-shift>
+      Abrir conversación
     </a>
-    <a class="button button-secondary" href="/contacto/" data-link-shift>
+    <a class="button button-secondary" href="/contacto/#contacto-directo" data-link-shift>
       Solicitar una llamada
     </a>
     {whatsappHref && (
