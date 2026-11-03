@@ -48,6 +48,19 @@ La primera ejecución del smoke no se marca como PASS: falló porque Chromium re
 
 Las capturas se generaron después de las validaciones de demo. La inspección visual confirmó contenido completo, columnas legibles, ausencia de recortes internos y separación clara entre simulación y contacto.
 
+## Revalidación del P2 de modo de formulario
+
+Revisión local adicional sobre el HEAD de esta rama: `src/pages/diagnostico.astro` ya no añade un aviso independiente que contradiga el modo efectivo. `ContactForm.astro` mantiene la única resolución de modo (`worker` + endpoint permitido + clave Turnstile = `live`; cualquier otra combinación = `demo`) y renderiza título, descripción, eyebrow, aviso y botón desde esa misma fuente.
+
+| Escenario | Resultado |
+|---|---|
+| Demo explícito | PASS: copy demo, atributos `data-form-mode="demo"` y endpoint vacío |
+| Worker incompleto | PASS: permanece demo |
+| Worker sintético válido | PASS: copy y atributos live coherentes en build aislado; no se realizaron solicitudes |
+| Smoke local posterior al ajuste | PASS: 23 rutas, 21 FAQ, foco/overflow/cobertura responsive y formularios demo sin red; [`p2-local-ui-smoke.json`](./p2-local-ui-smoke.json) |
+
+Esta es evidencia de revisión local del código y no sustituye la revisión remota de Codex del nuevo HEAD.
+
 ## Pendientes y límites
 
 - No se ejecutaron Firefox, Safari/WebKit real, dispositivos físicos, lector de pantalla real ni zoom físico del navegador. El smoke solo acredita Chromium for Testing y emulación de viewport.
