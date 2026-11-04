@@ -18,8 +18,8 @@ export const caseStudies: CaseStudyContent[] = [
     ],
     tags: ["plataforma web", "integración de datos", "CRM", "software a medida"],
     servicesApplied: ["software a medida", "integraciones", "datos", "CRM"],
-    ctaLabel: "Solicitar diagnóstico",
-    ctaHref: "/diagnostico/",
+    ctaLabel: "Abrir conversación",
+    ctaHref: "/contacto/#contacto-directo",
     visibility: "public",
     confidentialityNote:
       "Proyecto directo de SokaTechnologies. No se publican nombres, ubicaciones, datos operativos ni capturas del sistema.",
@@ -41,9 +41,9 @@ export const caseStudies: CaseStudyContent[] = [
       "evolución funcional posterior a la entrega"
     ],
     tags: ["frontend", "backend", "base de datos", "roles y reportes"],
-    servicesApplied: ["software a medida", "bases de datos", "roles", "reporting"],
-    ctaLabel: "Solicitar diagnóstico",
-    ctaHref: "/diagnostico/",
+    servicesApplied: ["software a medida", "bases de datos", "roles", "reportes"],
+    ctaLabel: "Abrir conversación",
+    ctaHref: "/contacto/#contacto-directo",
     visibility: "public",
     confidentialityNote:
       "Proyecto directo de SokaTechnologies. No se publican identidad, ubicación, sector regulado ni información sensible.",

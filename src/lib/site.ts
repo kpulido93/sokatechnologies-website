@@ -41,6 +41,7 @@ export const siteMeta = {
 export const navItems: NavItem[] = [
   { href: "/", label: "Inicio" },
   { href: "/servicios/", label: "Servicios" },
+  { href: "/productos/", label: "Productos" },
   { href: "/proyectos/", label: "Proyectos" },
   { href: "/nosotros/", label: "Nosotros" },
   { href: "/contacto/", label: "Contacto" }
@@ -139,6 +140,7 @@ export const footerGroups = [
     links: [
       { href: "/", label: "Inicio" },
       { href: "/servicios/", label: "Servicios" },
+      { href: "/productos/", label: "Productos" },
       { href: "/proyectos/", label: "Proyectos" },
       { href: "/nosotros/", label: "Nosotros" }
     ]
@@ -162,8 +164,10 @@ export const footerGroups = [
   {
     title: "Contacto / Diagnóstico",
     links: [
-      { href: "/contacto/", label: "Abrir conversación" },
-      { href: "/diagnostico/", label: "Solicitar diagnóstico" },
+      { href: "/contacto/#contacto-directo", label: "Abrir conversación" },
+      { href: "/diagnostico/", label: "Diagnóstico (simulación)" },
+      { href: "/auditoria/", label: "Auditoría (simulación)" },
+      { href: "/demos/ecommerce/", label: "EcomDemo (simulación)" },
       { href: "/proyectos/", label: "Ver proyectos" },
       { href: `mailto:${siteMeta.email}`, label: siteMeta.email }
     ]

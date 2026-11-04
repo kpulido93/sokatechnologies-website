@@ -268,6 +268,7 @@ const modeCopy = formMode === "live"
   import {
     clearFieldError,
     clearFormFieldErrors,
+    focusFirstInvalidControl,
     isFormControl,
     setFieldError
   } from "../scripts/formFieldErrors";
@@ -379,6 +380,7 @@ const modeCopy = formMode === "live"
       if (!form.checkValidity()) {
         event.preventDefault();
         form.reportValidity();
+        focusFirstInvalidControl(form);
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
         return;
       }
