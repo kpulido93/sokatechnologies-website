@@ -1183,6 +1183,10 @@ form,
   align-items: start;
 }
 
+.contact-form {
+  scroll-margin-top: 8rem;
+}
+
 .contact-guidelines {
   display: grid;
   gap: 0.7rem;
