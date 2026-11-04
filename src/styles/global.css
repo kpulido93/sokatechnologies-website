@@ -9,13 +9,11 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 8rem;
-  overflow-x: clip;
 }
 
 body {
   margin: 0;
-  min-width: 320px;
-  overflow-x: clip;
+  min-width: 0;
   color: var(--color-text);
   color-scheme: dark;
   font-family: var(--font-body);
@@ -1185,6 +1183,10 @@ form,
   align-items: start;
 }
 
+.contact-form {
+  scroll-margin-top: 8rem;
+}
+
 .contact-guidelines {
   display: grid;
   gap: 0.7rem;
@@ -1271,9 +1273,13 @@ form,
 }
 
 .checkbox-copy {
-  display: grid;
+  display: block;
   min-width: 0;
-  gap: 0.45rem;
+}
+
+.checkbox-copy .field-error {
+  display: block;
+  margin-top: 0.45rem;
 }
 
 .form-actions {
@@ -2434,6 +2440,10 @@ body:has(form) .whatsapp-float {
   .contact-form {
     gap: 0.85rem;
     padding: 0.85rem;
+  }
+
+  .contact-form {
+    padding-inline: 0.5rem;
   }
 
   .contact-direct-grid {

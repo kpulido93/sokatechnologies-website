@@ -43,3 +43,19 @@ export const clearFormFieldErrors = (form: HTMLFormElement) => {
     if (isFormControl(element)) clearFieldError(element);
   });
 };
+
+export const focusFirstInvalidControl = (form: HTMLFormElement, preferredName?: string) => {
+  const preferred = preferredName ? form.elements.namedItem(preferredName) : null;
+  const controls = Array.from(form.elements).filter(
+    (element): element is FormControl =>
+      isFormControl(element) && !element.disabled && element.type !== "hidden" && element.tabIndex >= 0
+  );
+  const target = isFormControl(preferred) && preferred.tabIndex >= 0
+    ? preferred
+    : controls.find((control) => !control.validity.valid);
+
+  if (!target) return;
+
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({ block: "center", inline: "nearest" });
+};

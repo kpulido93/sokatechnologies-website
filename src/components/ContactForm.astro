@@ -68,6 +68,7 @@ const modeCopy = formMode === "live"
 
   <form
     class="contact-form"
+    id={formId}
     method={formMode === "live" ? "post" : undefined}
     action={formMode === "live" ? fallbackAction : undefined}
     enctype="application/x-www-form-urlencoded"
@@ -268,6 +269,7 @@ const modeCopy = formMode === "live"
   import {
     clearFieldError,
     clearFormFieldErrors,
+    focusFirstInvalidControl,
     isFormControl,
     setFieldError
   } from "../scripts/formFieldErrors";
@@ -379,6 +381,7 @@ const modeCopy = formMode === "live"
       if (!form.checkValidity()) {
         event.preventDefault();
         form.reportValidity();
+        focusFirstInvalidControl(form);
         setStatus(errorNode instanceof HTMLElement ? errorNode : null);
         return;
       }

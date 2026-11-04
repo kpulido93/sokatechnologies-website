@@ -11,7 +11,13 @@ import type {
   SokaRecommendation
 } from "../lib/audit/types";
 import { validateAuditInput } from "../lib/audit/validateAuditInput";
-import { clearFieldError, clearFormFieldErrors, isFormControl, setFieldError } from "./formFieldErrors";
+import {
+  clearFieldError,
+  clearFormFieldErrors,
+  focusFirstInvalidControl,
+  isFormControl,
+  setFieldError
+} from "./formFieldErrors";
 
 type AuditApiSuccess = {
   ok: true;
@@ -34,7 +40,7 @@ type AuditApiResponse = AuditApiSuccess | AuditApiError;
 
 const AREA_LABELS: Record<AuditAreaKey, string> = {
   seo: "SEO básico",
-  performance: "Performance",
+  performance: "Rendimiento",
   clarity: "Claridad comercial",
   conversion: "Conversión",
   trust: "Confianza",
@@ -49,7 +55,7 @@ const SEVERITY_LABELS: Record<AuditSeverity, string> = {
 };
 
 const PAGESPEED_CATEGORY_LABELS: Record<PageSpeedCategoryKey, string> = {
-  performance: "Performance",
+  performance: "Rendimiento",
   accessibility: "Accesibilidad",
   "best-practices": "Buenas prácticas",
   seo: "SEO técnico"
@@ -60,7 +66,7 @@ const DEMO_FINDING_TOPICS: Record<string, string> = {
   "conversion-contact-friction": "recorrido hacia contacto y conversión",
   "seo-structure-basics": "visibilidad y estructura pública",
   "performance-first-impression": "carga percibida y primer recorrido",
-  "automation-manual-follow-up": "seguimiento y handoff operativo",
+  "automation-manual-follow-up": "seguimiento y entrega entre áreas",
   "dashboard-visibility-gap": "visibilidad operativa y reportes",
   "trust-signals-weak": "señales públicas de confianza",
   "infrastructure-continuity-risk": "continuidad técnica y soporte",
@@ -84,9 +90,28 @@ const toDemoFinding = (finding: AuditFinding): AuditFinding => {
 
 const toDemoRecommendation = (recommendation: SokaRecommendation): SokaRecommendation => ({
   ...recommendation,
+  title: `Tema para explorar: ${recommendation.title}.`,
   summary: `Tema para conversar: ${recommendation.summary}`,
-  rationale: `Hipótesis derivada de tus respuestas: ${recommendation.rationale}`
+  rationale: `Hipótesis derivada de tus respuestas: ${recommendation.rationale}`,
+  ctaLabel: "Abrir conversación",
+  ctaHref: "/contacto/#contacto-directo"
 });
+
+const TAG_LABELS: Record<string, string> = {
+  performance: "rendimiento",
+  ux: "experiencia de usuario",
+  reporting: "reportes",
+  dashboard: "paneles",
+  automatizacion: "automatización",
+  operacion: "operación",
+  handoff: "entrega entre áreas",
+  conversion: "conversión",
+  cta: "llamada a la acción",
+  seo: "SEO",
+  kpi: "indicadores"
+};
+
+const displayTag = (tag: string) => TAG_LABELS[tag] ?? tag;
 
 const buildDemoReportSummary = (report: Pick<AuditReport, "findings" | "scoreCard" | "recommendations">) => {
   const dominantArea = report.scoreCard.dominantAreas[0] ?? "clarity";
@@ -231,7 +256,11 @@ const createFindingItem = (finding: AuditFinding) => {
   summary.className = "catalog-status";
   summary.textContent = finding.summary;
 
-  const labels = createTagRow([SEVERITY_LABELS[finding.severity], AREA_LABELS[finding.area], ...finding.tags]);
+  const labels = createTagRow([
+    SEVERITY_LABELS[finding.severity],
+    AREA_LABELS[finding.area],
+    ...finding.tags.map(displayTag)
+  ]);
 
   item.append(title, summary, labels);
   return item;
@@ -481,6 +510,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
 
     if (!form.checkValidity()) {
       form.reportValidity();
+      focusFirstInvalidControl(form);
       setVisibility(errorNode, true);
       return;
     }
@@ -493,6 +523,7 @@ const handleAuditForm = (form: HTMLFormElement) => {
     if (!validation.ok) {
       markInvalidFields(form, validation.issues);
       renderIssues(issuesNode, validation.issues);
+      focusFirstInvalidControl(form, validation.issues[0]?.field);
       setVisibility(errorNode, true);
       setVisibility(issuesNode, true);
       return;

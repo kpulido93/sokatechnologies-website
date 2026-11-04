@@ -19,11 +19,20 @@ const hasContactCta = (html) => /<a\b[^>]*href="\/contacto\/(?:#contacto-directo
 check(existsSync(dist), `dist ausente: ${dist}`);
 check(["demo", "live"].includes(expectedMode), `modo esperado no válido: ${expectedMode}`);
 
-const pages = Object.fromEntries(["/", "/servicios/", "/soluciones/", "/diagnostico/", "/contacto/"].map((route) => [route, htmlFor(route)]));
+const pages = Object.fromEntries(
+  ["/", "/servicios/", "/soluciones/", "/diagnostico/", "/contacto/", "/proyectos/", "/demos/ecommerce/"].map(
+    (route) => [route, htmlFor(route)]
+  )
+);
+const portik = htmlFor("/productos/portik/");
 
-for (const route of ["/", "/servicios/", "/soluciones/", "/diagnostico/"]) {
+for (const route of ["/", "/servicios/", "/soluciones/", "/diagnostico/", "/proyectos/", "/demos/ecommerce/"]) {
   check(hasContactCta(pages[route]), `${route}: CTA Abrir conversación no conduce a /contacto/`);
 }
+check(pages["/demos/ecommerce/"].includes("demo controlada"), "demo e-commerce: alcance de simulación ausente");
+check(portik.includes('href="/diagnostico/#diagnostico-form"'), "Portik: enlace a la simulación de diagnóstico ausente o incorrecto");
+check((pages["/diagnostico/"].match(/\bid="diagnostico-form"/g) ?? []).length === 1, "Diagnóstico: destino #diagnostico-form debe existir exactamente una vez");
+check(/<form\b[^>]*\bid="diagnostico-form"[^>]*>/i.test(pages["/diagnostico/"]), "Diagnóstico: el destino debe estar en el formulario");
 
 const contact = pages["/contacto/"];
 check((contact.match(/class="contact-direct-action"/g) ?? []).length === 3, "contacto: no hay exactamente tres acciones directas");

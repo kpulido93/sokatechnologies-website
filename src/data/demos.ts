@@ -28,8 +28,8 @@ export const demos: DemoContent[] = [
     heroTitle: "Una demo e-commerce para mostrar criterio de producto con datos ficticios.",
     heroBody:
       "EcomDemo se presenta como demostración controlada de experiencia de catálogo, fichas, checkout conceptual y operación visual, sin backend real ni datos de terceros.",
-    primaryCtaLabel: "Solicitar diagnóstico",
-    primaryCtaHref: "/diagnostico/",
+    primaryCtaLabel: "Abrir conversación",
+    primaryCtaHref: "/contacto/#contacto-directo",
     secondaryCtaLabel: "Ver servicios",
     secondaryCtaHref: "/servicios/",
     includes: [
@@ -66,7 +66,7 @@ export const demos: DemoContent[] = [
     ],
     tags: ["portik", "demo", "residencial", "piloto"],
     ctaLabel: "Solicitar demo de Portik",
-    ctaHref: "/contacto/",
+    ctaHref: "/contacto/#contacto-directo",
     visibility: "controlled",
     confidentialityNote: "Demo visual sin residentes, placas, reservas ni eventos reales.",
     metaTitle: "Portik demo | SokaTechnologies",
@@ -77,9 +77,9 @@ export const demos: DemoContent[] = [
     heroBody:
       "La demo muestra la lógica general del producto con módulos ficticios, paneles HTML/CSS y una explicación apta para conversaciones comerciales.",
     primaryCtaLabel: "Solicitar demo de Portik",
-    primaryCtaHref: "/contacto/",
-    secondaryCtaLabel: "Proponer piloto",
-    secondaryCtaHref: "/diagnostico/",
+    primaryCtaHref: "/contacto/#contacto-directo",
+    secondaryCtaLabel: "Ver simulación de diagnóstico",
+    secondaryCtaHref: "/diagnostico/#diagnostico-form",
     includes: [
       "módulos iniciales simulados",
       "panel operativo ficticio",
@@ -93,8 +93,8 @@ export const demos: DemoContent[] = [
   },
   {
     slug: "dashboard-demo",
-    title: "Dashboard demo",
-    headline: "Indicadores ficticios para explicar reporting operativo y gerencial.",
+    title: "Demo de paneles",
+    headline: "Indicadores ficticios para explicar reportes operativos y gerenciales.",
     summary:
       "Demo de paneles y reportes para mostrar estructura de KPIs, filtros y lectura ejecutiva sin usar datos de clientes.",
     problem:
@@ -104,27 +104,27 @@ export const demos: DemoContent[] = [
     outcomes: [
       "mejor conversación sobre KPIs",
       "demostración segura sin datos reales",
-      "base útil para propuestas de reporting"
+      "base útil para propuestas de reportes"
     ],
     tags: ["dashboard", "demo", "KPIs", "reportes"],
-    ctaLabel: "Solicitar diagnóstico",
-    ctaHref: "/diagnostico/",
+    ctaLabel: "Abrir conversación",
+    ctaHref: "/contacto/#contacto-directo",
     visibility: "public",
     confidentialityNote: "Los indicadores de la demo son ficticios y no representan resultados reales.",
-    metaTitle: "Dashboard demo | SokaTechnologies",
+    metaTitle: "Demo de paneles | SokaTechnologies",
     metaDescription:
-      "Demo de paneles y reportes con indicadores ficticios para conversaciones sobre reporting operativo y gerencial.",
+      "Demo de paneles y reportes con indicadores ficticios para conversaciones sobre lectura operativa y gerencial.",
     eyebrow: "Demo propia",
-    heroTitle: "Dashboard demo para hablar de decisiones, no de cifras inventadas.",
+    heroTitle: "Demo de paneles para hablar de decisiones, no de cifras inventadas.",
     heroBody:
       "Esta pieza sirve para explicar cómo ordenar indicadores y lectura ejecutiva sin mostrar fuentes reales ni métricas de clientes.",
-    primaryCtaLabel: "Solicitar diagnóstico",
-    primaryCtaHref: "/diagnostico/",
+    primaryCtaLabel: "Abrir conversación",
+    primaryCtaHref: "/contacto/#contacto-directo",
     secondaryCtaLabel: "Ver servicios",
     secondaryCtaHref: "/servicios/",
     includes: ["estructura de KPIs", "jerarquía visual", "narrativa gerencial"],
-    exclusions: ["datos reales", "promesas de performance", "integraciones activas", "exportaciones en vivo"],
-    finalCtaTitle: "El dashboard correcto depende del proceso y de la calidad del dato disponible.",
+    exclusions: ["datos reales", "promesas de rendimiento", "integraciones activas", "exportaciones en vivo"],
+    finalCtaTitle: "El panel correcto depende del proceso y de la calidad del dato disponible.",
     finalCtaBody:
       "Antes de diseñar un panel real conviene revisar fuentes, criterios de cálculo y decisiones que se quieren mejorar.",
     routeImplemented: false
@@ -145,8 +145,8 @@ export const demos: DemoContent[] = [
       "sin exponer credenciales ni integraciones"
     ],
     tags: ["automatización", "demo", "flujos", "integraciones"],
-    ctaLabel: "Solicitar diagnóstico",
-    ctaHref: "/diagnostico/",
+    ctaLabel: "Abrir conversación",
+    ctaHref: "/contacto/#contacto-directo",
     visibility: "public",
     confidentialityNote: "La demo no toca credenciales, APIs ni información sensible de terceros.",
     metaTitle: "Automatización demo | SokaTechnologies",
@@ -156,8 +156,8 @@ export const demos: DemoContent[] = [
     heroTitle: "Automatización demo para explicar criterio, no para exponer una integración real.",
     heroBody:
       "La pieza demuestra cómo ordenar reglas, estados y excepciones antes de hablar de conectores concretos o despliegues.",
-    primaryCtaLabel: "Solicitar diagnóstico",
-    primaryCtaHref: "/diagnostico/",
+    primaryCtaLabel: "Abrir conversación",
+    primaryCtaHref: "/contacto/#contacto-directo",
     secondaryCtaLabel: "Ver servicios",
     secondaryCtaHref: "/servicios/",
     includes: ["flujo de ejemplo", "estados simulados", "validaciones de ejemplo"],

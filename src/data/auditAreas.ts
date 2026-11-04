@@ -67,7 +67,7 @@ export const auditAreas: AuditCardContent[] = [
     eyebrow: "Automatización",
     title: "Oportunidades alrededor del proceso digital.",
     body:
-      "Tus respuestas pueden señalar tareas manuales, handoff repetitivo o seguimiento comercial que convenga ordenar.",
+      "Tus respuestas pueden señalar tareas manuales, entregas repetitivas entre áreas o seguimiento comercial que convenga ordenar.",
     items: ["seguimiento manual", "formularios aislados", "flujo entre web y operación"]
   },
   {
@@ -91,14 +91,14 @@ export const auditDeliverables: AuditCardContent[] = [
     eyebrow: "Siguiente paso",
     title: "Una ruta sugerida, no una venta forzada.",
     body:
-      "Si el problema es más profundo que la web, la auditoría debe orientar hacia la combinación correcta de servicios.",
-    items: ["rediseño web", "automatización o reporting", "diagnóstico técnico o continuidad"]
+      "Si el problema es más profundo que la web, la simulación puede orientar hacia la combinación correcta de servicios.",
+    items: ["rediseño web", "automatización o reportes", "diagnóstico técnico o continuidad"]
   },
   {
     eyebrow: "Límites claros",
     title: "Una revisión inicial con alcance controlado.",
     body:
-      "La auditoría gratuita sirve para abrir una conversación seria, no para reemplazar un proyecto completo ni una revisión de seguridad profunda.",
+      "La simulación inicial sirve para abrir una conversación seria, no para reemplazar un proyecto completo ni una revisión de seguridad profunda.",
     items: ["sin acceso a paneles", "sin código privado", "sin promesas garantizadas"]
   }
 ];
@@ -115,16 +115,16 @@ export const auditRecommendations: AuditCardContent[] = [
   },
   {
     eyebrow: "Ruta posible",
-    title: "Automatización del seguimiento o handoff comercial.",
+    title: "Automatización del seguimiento entre áreas.",
     body:
       "Si tus respuestas describen seguimiento manual, fricción entre formulario y operación o tareas repetitivas, puede convenir automatizar.",
-    items: ["confirmaciones", "handoff entre áreas", "menos pasos manuales"],
+    items: ["confirmaciones", "coordinación entre áreas", "menos pasos manuales"],
     ctaLabel: "Ver automatizaciones",
     ctaHref: "/servicios/automatizaciones/"
   },
   {
     eyebrow: "Ruta posible",
-    title: "Power BI y reporting para visibilidad real.",
+    title: "Power BI y reportes para visibilidad operativa.",
     body:
       "Si la fricción viene de poca visibilidad sobre leads, solicitudes o desempeño operativo, puede hacer falta ordenar indicadores.",
     items: ["KPIs claros", "menos reportes manuales", "lectura más ejecutiva"],
